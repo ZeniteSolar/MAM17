@@ -5,6 +5,7 @@
  */
 
 #include "main.h"
+#include "can_filters.h"
 
 uint8_t CTRL_CLK = 0;       // CLOCK de controle (frequencia definida pelo timer2)
 uint16_t D = 0;             // DUTY CYCLE do PWM
@@ -182,6 +183,11 @@ inline static void setup(void)
 
 #ifdef SLEEP_ON 
     set_sleep_mode(SLEEP_MODE_IDLE);                // configura sleep com o modo IDLE
+#endif
+    
+#ifdef CAN_ON
+    can_init(BITRATE_125_KBPS);
+    can_static_filter(can_filter);
 #endif
 
 	sei();				                            // liga a chave geral das interrupcoes

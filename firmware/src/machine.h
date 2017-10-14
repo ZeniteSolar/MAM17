@@ -17,7 +17,7 @@
 #include "adc.h"
 #include "usart.h"
 #include "dbg_vrb.h"
-
+#include "can.h"
 
 typedef enum state_machine{
     STATE_INITIALIZING,

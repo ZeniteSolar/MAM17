@@ -39,21 +39,30 @@
 #include "adc.h"
 #else
 #pragma message("ADC: OFF!")
-#endif
+#endif  /*ifdef ADC_ON*/
+
 #ifdef USART_ON
 #include "usart.h"
 #else
 #pragma message("USART: OFF!")
-#endif
+#endif /*ifdef USART_ON*/
+
 #ifdef MACHINE_ON
 #include "machine.h"
 #else
-#pragma message("MACHINE OFF!")
-#endif
+#pragma message("MACHINE: OFF!")
+#endif /*ifdef MACHINE_ON*/
+
 #ifdef WATCHDOG_ON
 #include "watchdog.h"
 #else
-#pragma message("WATCHDOG OFF!")
-#endif
+#pragma message("WATCHDOG: OFF!")
+#endif /*ifdef WATCHDOG_ON*/
+
+#ifdef CAN_ON
+#include "can.h"
+#else
+#pragma message("CAN: OFF!")
+#endif /*ifdef CAN_ON*/
 
 #endif /* ifndef _MAIN_H_ */
