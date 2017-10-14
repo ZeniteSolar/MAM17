@@ -11,7 +11,6 @@
 #include <avr/io.h>
 #include <avr/wdt.h>
 
-#include "ring_buffer.h"
 #include "conf.h"
 #include "adc.h"
 #include "usart.h"
@@ -76,7 +75,6 @@ uint8_t total_errors;   // Contagem de ERROS
 extern uint8_t led_div;
 
 // externs
-extern ring_buffer_t *rb_in, *rb_out;
 extern uint8_t mean;
 extern uint16_t D;
 extern uint8_t fault_count;

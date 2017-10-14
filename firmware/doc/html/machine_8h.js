@@ -35,8 +35,6 @@ var machine_8h =
     [ "fault_count", "machine_8h.html#aca3ed135b7ef5cf576eb30bd7a884eb6", null ],
     [ "led_div", "machine_8h.html#a65ca636d5eda5ea2aa111c34d6716079", null ],
     [ "mean", "machine_8h.html#aae2af3e6e02f87969844dcd3f9bd52cc", null ],
-    [ "rb_in", "machine_8h.html#a89050448fa0c22890c0e2c0c1bc58ddf", null ],
-    [ "rb_out", "machine_8h.html#a3d5d4d4a07b779f944be2858af85fd75", null ],
     [ "state_machine", "machine_8h.html#a64e6a4abbfe8307ec5b2a9824dc16e8c", null ],
     [ "system_flags", "machine_8h.html#a6cbd189ae26f13565831d116088c6710", null ],
     [ "total_errors", "machine_8h.html#aa3ec4a4452ff69fb2862f5ae0cfd8e4e", null ]

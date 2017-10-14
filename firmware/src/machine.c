@@ -166,6 +166,7 @@ inline void task_initializing(void)
 {
     set_led();
     set_pwm_off();
+    fault_count = 0;
 
     //check_buffers();
     //check_idle_current();

@@ -58,8 +58,8 @@ uint8_t zero_width(uint16_t duty_cycle)
 #define k2_             1                   // se maior ou igual a 7, usar uint32_t
 #define k_              1                   // se maior ou igual a 7, usar uint32_t
 #define CALC_D_DIV_COUNTS 2
-uint8_t calc_d_div = 0;
-uint32_t D_raw_target;
+volatile uint8_t calc_d_div = 0;
+volatile uint32_t D_raw_target;
 inline void calc_d(uint8_t out)
 {   
     static uint32_t D_raw = 0;
@@ -67,7 +67,9 @@ inline void calc_d(uint8_t out)
     if(!out){
         D = D_raw = D_raw_target = 0;
     }else if(out == 100){
-        D_raw_target = 0;
+        if(D_raw_target > 10) {
+            D_raw_target = D_raw_target -6;
+        }
     }else{ 
         D_raw_target = ma_adc0();
     }
@@ -83,15 +85,14 @@ inline void calc_d(uint8_t out)
             calc_d_div = 0;
         }
     }else if((D_raw >= D_raw_target)){
-        D_raw = ((D_raw << k_ ) +(D_raw_target -D_raw )) >> k_;
+        //D_raw = ((D_raw << k_ ) +(D_raw_target -D_raw )) >> k_;
+        D_raw = D_raw_target;
     }
-    
-    
 
     D = (D_raw*5) >> 1;                         // converte valores
 
     if(D > 636) D = 640;                        // limite maximo para não ficar em 99%
-    else if(D < 6) D = 0;                      // limite minimo para não ficar em 1% 
+    else if(D < 6) D = 0;                       // limite minimo para não ficar em 1% 
 
     
 

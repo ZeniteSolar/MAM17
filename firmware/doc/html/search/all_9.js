@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['set_5fstate_5ferror',['set_state_error',['../machine_8h.html#a1244d362d092f38a44ffeec46209b119',1,'machine.c']]],
-  ['set_5fstate_5fidle',['set_state_idle',['../machine_8h.html#ae243e45ac99d0ef7059fb518bbddfe27',1,'machine.c']]],
-  ['set_5fstate_5finitializing',['set_state_initializing',['../machine_8h.html#a7694088452e23de774589c5bb917dcb2',1,'machine.c']]],
-  ['set_5fstate_5frunning',['set_state_running',['../machine_8h.html#ad15ad32bb05427d6e0ac9cfdf4b68654',1,'machine.c']]],
-  ['system_5fflags',['system_flags',['../unionsystem__flags.html',1,'']]]
+  ['task_5ferror',['task_error',['../machine_8h.html#ac4366b47246a31f2d51fc86469424362',1,'machine.c']]],
+  ['task_5fidle',['task_idle',['../machine_8h.html#ad97fd16c2e90a12f5265d1c2728102c8',1,'machine.c']]],
+  ['task_5finitializing',['task_initializing',['../machine_8h.html#a6cb00718d655b4ce0a33ba15eff8b0fd',1,'machine.c']]],
+  ['task_5frunning',['task_running',['../machine_8h.html#af040179e007cd9ad43b63af2df2b3f4b',1,'machine.c']]]
 ];
