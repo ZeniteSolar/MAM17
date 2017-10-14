@@ -1,8 +1,10 @@
 /**
  * @file adc.h
  *
- * @brief Este arquivo implementa todo o ADC, baseado numa máquina de estados
- * para realizar a multiplexação.
+ * @defgroup ADC    ADC Module
+ *
+ * @brief This module implements a simple ADC using a state machine to mux
+ * between the adc channels.
  *
  */
 
@@ -16,13 +18,13 @@
 #include "../lib/cbuf.h"
 #include "../lib/log2.h"
 
-#define ADC_LAST_CHANNEL 4                  // quantidade de canais utilizados
+#define ADC_LAST_CHANNEL 4                  //*< quantity of channels used
 
 typedef volatile enum adc_channels{ 
     ADC0, ADC1 ,ADC2, ADC3, ADC4, ADC5  
-} adc_channels_t;                           // 
-static adc_channels_t ADC_CHANNEL = ADC0;   // canal escolhido
-uint8_t raw_adc[ADC_LAST_CHANNEL];          // vetor das leituras puras
+} adc_channels_t;                           //*< the adc_channel type 
+static adc_channels_t ADC_CHANNEL = ADC0;   //*< current chosen adc channel
+uint8_t raw_adc[ADC_LAST_CHANNEL];          //*< an array for raw measurements
 
 void adc_select_channel(adc_channels_t __ch);
 void adc_init(void);

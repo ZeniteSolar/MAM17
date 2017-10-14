@@ -1,3 +1,13 @@
+/**
+ * @file usart.h
+ *
+ * @defgroup USART USART Module
+ *
+ * @brief Simple usart using pooling method, with basic functions used for debug
+ * purpose.
+ *
+ */
+
 #ifndef _USART_H_
 #define _USART_H_
 

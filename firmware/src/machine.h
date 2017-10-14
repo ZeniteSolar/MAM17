@@ -1,7 +1,9 @@
 /**
  * @file machine.h
- * 
- * @brief Implementa as maquinas de estados do sistema
+ *
+ * @defgroup MACHINE State Machine Module
+ *
+ * @brief Implements the main state machine of the system.
  *
  */
 

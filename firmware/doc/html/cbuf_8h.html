@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: lib/cbuf.h File Reference</title>
+<title>Chopper PMDC 2017: lib/cbuf.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -28,7 +28,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">Chopper PMDC 2017
    </div>
   </td>
  </tr>
@@ -85,34 +85,47 @@ $(document).ready(function(){initNavTree('cbuf_8h.html','');});
 <div class="title">cbuf.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="cbuf_8h__dep__incl.png" border="0" usemap="#lib_2cbuf_8hdep" alt=""/></div>
+<map name="lib_2cbuf_8hdep" id="lib_2cbuf_8hdep">
+<area shape="rect" id="node2" href="adc_8h.html" title="src/adc.h" alt="" coords="120,80,196,107"/>
+<area shape="rect" id="node3" href="adc_8c.html" title="src/adc.c" alt="" coords="5,155,81,181"/>
+<area shape="rect" id="node4" href="machine_8h.html" title="src/machine.h" alt="" coords="106,155,210,181"/>
+<area shape="rect" id="node6" href="main_8h.html" title="src/main.h" alt="" coords="206,229,289,256"/>
+<area shape="rect" id="node5" href="machine_8c.html" title="src/machine.c" alt="" coords="78,229,182,256"/>
+<area shape="rect" id="node7" href="main_8c.html" title="src/main.c" alt="" coords="206,304,289,331"/>
+</map>
+</div>
+</div>
 <p><a href="cbuf_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ga01162d0b1861b0c80097676b6f283bef"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga01162d0b1861b0c80097676b6f283bef">CBUF_H</a></td></tr>
 <tr class="separator:ga01162d0b1861b0c80097676b6f283bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga417ec47b08d169767ad67e6053712b58"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga417ec47b08d169767ad67e6053712b58">CBUF_Init</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;cbuf.m_getIdx = cbuf.m_putIdx = 0</td></tr>
+<tr class="memitem:ga417ec47b08d169767ad67e6053712b58"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga417ec47b08d169767ad67e6053712b58">CBUF_Init</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;<a class="el" href="structcbuf.html#a491b0fc06d3aa58b9813f61ef045105e">cbuf.m_getIdx</a> = <a class="el" href="structcbuf.html#afdab558b8012dbcb7223a1eb3056e484">cbuf.m_putIdx</a> = 0</td></tr>
 <tr class="separator:ga417ec47b08d169767ad67e6053712b58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga14b3d7264a17a274c0cf93c2214ffff8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga14b3d7264a17a274c0cf93c2214ffff8">CBUF_Len</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;((typeof( cbuf.m_putIdx ))(( cbuf.m_putIdx ) - ( cbuf.m_getIdx )))</td></tr>
+<tr class="memitem:ga14b3d7264a17a274c0cf93c2214ffff8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga14b3d7264a17a274c0cf93c2214ffff8">CBUF_Len</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;((typeof( <a class="el" href="structcbuf.html#afdab558b8012dbcb7223a1eb3056e484">cbuf.m_putIdx</a> ))(( <a class="el" href="structcbuf.html#afdab558b8012dbcb7223a1eb3056e484">cbuf.m_putIdx</a> ) - ( <a class="el" href="structcbuf.html#a491b0fc06d3aa58b9813f61ef045105e">cbuf.m_getIdx</a> )))</td></tr>
 <tr class="separator:ga14b3d7264a17a274c0cf93c2214ffff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf8dc32e432e751175292d3bab7ed91b2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gaf8dc32e432e751175292d3bab7ed91b2">CBUF_Push</a>(<a class="el" href="structcbuf.html">cbuf</a>,  elem)</td></tr>
 <tr class="separator:gaf8dc32e432e751175292d3bab7ed91b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafe3672eecf4b83980759648f2b2f2f93"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gafe3672eecf4b83980759648f2b2f2f93">CBUF_Pop</a>(<a class="el" href="structcbuf.html">cbuf</a>)</td></tr>
 <tr class="separator:gafe3672eecf4b83980759648f2b2f2f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaac710bdf906c7095a704e5a085c9f3d2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gaac710bdf906c7095a704e5a085c9f3d2">CBUF_GetLastEntryPtr</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;&amp;(cbuf.m_entry)[ ( cbuf.m_putIdx - 1 ) &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
+<tr class="memitem:gaac710bdf906c7095a704e5a085c9f3d2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gaac710bdf906c7095a704e5a085c9f3d2">CBUF_GetLastEntryPtr</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;&amp;(<a class="el" href="structcbuf.html#ae9c51d6ec302061d66199494da5c53c6">cbuf.m_entry</a>)[ ( <a class="el" href="structcbuf.html#afdab558b8012dbcb7223a1eb3056e484">cbuf.m_putIdx</a> - 1 ) &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
 <tr class="separator:gaac710bdf906c7095a704e5a085c9f3d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1d6ce2647c420cdcc6266661f212a494"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga1d6ce2647c420cdcc6266661f212a494">CBUF_GetPushEntryPtr</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;&amp;(cbuf.m_entry)[ cbuf.m_putIdx &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
+<tr class="memitem:ga1d6ce2647c420cdcc6266661f212a494"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga1d6ce2647c420cdcc6266661f212a494">CBUF_GetPushEntryPtr</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;&amp;(<a class="el" href="structcbuf.html#ae9c51d6ec302061d66199494da5c53c6">cbuf.m_entry</a>)[ <a class="el" href="structcbuf.html#afdab558b8012dbcb7223a1eb3056e484">cbuf.m_putIdx</a> &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
 <tr class="separator:ga1d6ce2647c420cdcc6266661f212a494"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6c34ce3752a52df1c681bde87302ca3f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga6c34ce3752a52df1c681bde87302ca3f">CBUF_AdvancePushIdx</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;cbuf.m_putIdx++</td></tr>
+<tr class="memitem:ga6c34ce3752a52df1c681bde87302ca3f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga6c34ce3752a52df1c681bde87302ca3f">CBUF_AdvancePushIdx</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;<a class="el" href="structcbuf.html#afdab558b8012dbcb7223a1eb3056e484">cbuf.m_putIdx</a>++</td></tr>
 <tr class="separator:ga6c34ce3752a52df1c681bde87302ca3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf5f91145ed62dcc222294c47ebb9437d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gaf5f91145ed62dcc222294c47ebb9437d">CBUF_AdvancePopIdx</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;cbuf.m_getIdx++</td></tr>
+<tr class="memitem:gaf5f91145ed62dcc222294c47ebb9437d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gaf5f91145ed62dcc222294c47ebb9437d">CBUF_AdvancePopIdx</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;<a class="el" href="structcbuf.html#a491b0fc06d3aa58b9813f61ef045105e">cbuf.m_getIdx</a>++</td></tr>
 <tr class="separator:gaf5f91145ed62dcc222294c47ebb9437d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4496290c9c5c69f8688d6f6c120e5d47"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga4496290c9c5c69f8688d6f6c120e5d47">CBUF_Get</a>(<a class="el" href="structcbuf.html">cbuf</a>,  idx)&#160;&#160;&#160;(cbuf.m_entry)[( cbuf.m_getIdx + idx ) &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
+<tr class="memitem:ga4496290c9c5c69f8688d6f6c120e5d47"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga4496290c9c5c69f8688d6f6c120e5d47">CBUF_Get</a>(<a class="el" href="structcbuf.html">cbuf</a>,  idx)&#160;&#160;&#160;(<a class="el" href="structcbuf.html#ae9c51d6ec302061d66199494da5c53c6">cbuf.m_entry</a>)[( <a class="el" href="structcbuf.html#a491b0fc06d3aa58b9813f61ef045105e">cbuf.m_getIdx</a> + idx ) &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
 <tr class="separator:ga4496290c9c5c69f8688d6f6c120e5d47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga99f25054ac9eee1b3bcfa87914c0461d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga99f25054ac9eee1b3bcfa87914c0461d">CBUF_GetEnd</a>(<a class="el" href="structcbuf.html">cbuf</a>,  idx)&#160;&#160;&#160;(cbuf.m_entry)[( cbuf.m_putIdx - idx - 1 ) &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
+<tr class="memitem:ga99f25054ac9eee1b3bcfa87914c0461d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga99f25054ac9eee1b3bcfa87914c0461d">CBUF_GetEnd</a>(<a class="el" href="structcbuf.html">cbuf</a>,  idx)&#160;&#160;&#160;(<a class="el" href="structcbuf.html#ae9c51d6ec302061d66199494da5c53c6">cbuf.m_entry</a>)[( <a class="el" href="structcbuf.html#afdab558b8012dbcb7223a1eb3056e484">cbuf.m_putIdx</a> - idx - 1 ) &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
 <tr class="separator:ga99f25054ac9eee1b3bcfa87914c0461d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab86c71658c41e37921ace0eb1e1d48ec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gab86c71658c41e37921ace0eb1e1d48ec">CBUF_GetPopEntryPtr</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;&amp;(cbuf.m_entry)[ cbuf.m_getIdx &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
+<tr class="memitem:gab86c71658c41e37921ace0eb1e1d48ec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#gab86c71658c41e37921ace0eb1e1d48ec">CBUF_GetPopEntryPtr</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;&amp;(<a class="el" href="structcbuf.html#ae9c51d6ec302061d66199494da5c53c6">cbuf.m_entry</a>)[ <a class="el" href="structcbuf.html#a491b0fc06d3aa58b9813f61ef045105e">cbuf.m_getIdx</a> &amp; (( <a class="el" href="structcbuf.html">cbuf</a>##_SIZE ) - 1 )]</td></tr>
 <tr class="separator:gab86c71658c41e37921ace0eb1e1d48ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8d7830eaee46cb9027c56e9f94cf6e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___c_b_u_f.html#ga8d7830eaee46cb9027c56e9f94cf6e78">CBUF_IsEmpty</a>(<a class="el" href="structcbuf.html">cbuf</a>)&#160;&#160;&#160;( <a class="el" href="group___c_b_u_f.html#ga14b3d7264a17a274c0cf93c2214ffff8">CBUF_Len</a>( <a class="el" href="structcbuf.html">cbuf</a> ) == 0 )</td></tr>
 <tr class="separator:ga8d7830eaee46cb9027c56e9f94cf6e78"><td class="memSeparator" colspan="2">&#160;</td></tr>

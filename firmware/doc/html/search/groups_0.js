@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['circular_20buffer',['Circular Buffer',['../group___c_b_u_f.html',1,'']]]
+  ['adc_20module',['ADC Module',['../group___a_d_c.html',1,'']]]
 ];

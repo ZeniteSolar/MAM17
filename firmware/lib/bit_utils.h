@@ -1,3 +1,11 @@
+/**
+ * @file bit_utils.h
+ *
+ * @defgroup BIT_UTILS Bit Utils
+ *
+ * @brief The basic bitwork a little bit easier using this.
+ *
+ */
 #ifndef _BIT_UTILS_H_
 #define _BIT_UTILS_H_
 
@@ -8,9 +16,25 @@
 // #define loop_until_bit_is_set(sfr,bit)   do { } while (bit_is_clear(sfr, bit)) 
 // #define _BV(bit)                         (1 << (bit))
 
-#define set_bit(y,bit)  (y|=(1<<(bit)))     //coloca em 1 o bit x da variável Y
-#define clr_bit(y,bit)  (y&=~(1<<(bit)))    //coloca em 0 o bit x da variável Y
-#define cpl_bit(y,bit)  (y^=(1<<(bit)))     //troca o estado lógico do bit x da variável Y
-#define tst_bit(y,bit)  (y&(1<<(bit)))      //retorna 0 ou 1 conforme leitura do bit
+/**
+ * @brief Changes the nth bit 'bit' to 1 of an address/variable 'y'.
+ */
+#define set_bit(y,bit)  (y|=(1<<(bit)))
+
+/**
+ * @brief Changes the nth bit 'bit' to 0 of an address/variable 'y'.
+ */ 
+#define clr_bit(y,bit)  (y&=~(1<<(bit)))
+
+/**
+ * @brief Changes the nth bit 'bit' of an address/variable 'y' to its logical complement (from 0 to 1, from 1 to 0).
+ */ 
+#define cpl_bit(y,bit)  (y^=(1<<(bit)))
+
+/**
+ * @brief Returns '1' if the nth bit 'bit' of an address/variable 'y' is '1',
+ * 0 otherwise.
+ */ 
+#define tst_bit(y,bit)  (y&(1<<(bit)))
 
 #endif /* ifndef _BIT_UTILS_H_*/

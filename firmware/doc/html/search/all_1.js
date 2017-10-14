@@ -1,28 +1,6 @@
 var searchData=
 [
-  ['cbuf',['cbuf',['../structcbuf.html',1,'cbuf'],['../group___c_b_u_f.html',1,'(Global Namespace)']]],
-  ['cbuf_2eh',['cbuf.h',['../cbuf_8h.html',1,'']]],
-  ['cbuf_5fadvancepopidx',['CBUF_AdvancePopIdx',['../group___c_b_u_f.html#gaf5f91145ed62dcc222294c47ebb9437d',1,'cbuf.h']]],
-  ['cbuf_5fadvancepushidx',['CBUF_AdvancePushIdx',['../group___c_b_u_f.html#ga6c34ce3752a52df1c681bde87302ca3f',1,'cbuf.h']]],
-  ['cbuf_5ferror',['CBUF_Error',['../group___c_b_u_f.html#ga56598579a1c63e3071fb71208cb525c5',1,'cbuf.h']]],
-  ['cbuf_5fget',['CBUF_Get',['../group___c_b_u_f.html#ga4496290c9c5c69f8688d6f6c120e5d47',1,'cbuf.h']]],
-  ['cbuf_5fgetend',['CBUF_GetEnd',['../group___c_b_u_f.html#ga99f25054ac9eee1b3bcfa87914c0461d',1,'cbuf.h']]],
-  ['cbuf_5fgetlastentryptr',['CBUF_GetLastEntryPtr',['../group___c_b_u_f.html#gaac710bdf906c7095a704e5a085c9f3d2',1,'cbuf.h']]],
-  ['cbuf_5fgetpopentryptr',['CBUF_GetPopEntryPtr',['../group___c_b_u_f.html#gab86c71658c41e37921ace0eb1e1d48ec',1,'cbuf.h']]],
-  ['cbuf_5fgetpushentryptr',['CBUF_GetPushEntryPtr',['../group___c_b_u_f.html#ga1d6ce2647c420cdcc6266661f212a494',1,'cbuf.h']]],
-  ['cbuf_5fh',['CBUF_H',['../group___c_b_u_f.html#ga01162d0b1861b0c80097676b6f283bef',1,'cbuf.h']]],
-  ['cbuf_5finit',['CBUF_Init',['../group___c_b_u_f.html#ga417ec47b08d169767ad67e6053712b58',1,'cbuf.h']]],
-  ['cbuf_5fisempty',['CBUF_IsEmpty',['../group___c_b_u_f.html#ga8d7830eaee46cb9027c56e9f94cf6e78',1,'cbuf.h']]],
-  ['cbuf_5fisfull',['CBUF_IsFull',['../group___c_b_u_f.html#ga0e9aa8ed1d291b0c36bf2bcbc0e8bb7b',1,'cbuf.h']]],
-  ['cbuf_5flen',['CBUF_Len',['../group___c_b_u_f.html#ga14b3d7264a17a274c0cf93c2214ffff8',1,'cbuf.h']]],
-  ['cbuf_5fpop',['CBUF_Pop',['../group___c_b_u_f.html#gafe3672eecf4b83980759648f2b2f2f93',1,'cbuf.h']]],
-  ['cbuf_5fpush',['CBUF_Push',['../group___c_b_u_f.html#gaf8dc32e432e751175292d3bab7ed91b2',1,'cbuf.h']]],
-  ['check_5fidle_5fcurrent',['check_idle_current',['../machine_8h.html#a4acc6ed1a7d355bf7d169168296f2331',1,'machine.c']]],
-  ['check_5fidle_5ftemperature',['check_idle_temperature',['../machine_8h.html#a3fb8af957c5329aadd73138383a25db5',1,'machine.c']]],
-  ['check_5fidle_5fvoltage',['check_idle_voltage',['../machine_8h.html#a0052c5637c8d907f6e84e31b15955887',1,'machine.c']]],
-  ['check_5fidle_5fzero_5fpot',['check_idle_zero_pot',['../machine_8h.html#a9092b9f3fdcbef8e8ee1e6aa51879e90',1,'machine.c']]],
-  ['check_5frunning_5fcurrent',['check_running_current',['../machine_8h.html#a3b27cfb94a8aae5a5ccdec43e2df66b1',1,'machine.c']]],
-  ['check_5frunning_5ftemperature',['check_running_temperature',['../machine_8h.html#aa1479095b4b9b8f459bd5e0e7ffc591e',1,'machine.c']]],
-  ['check_5frunning_5fvoltage',['check_running_voltage',['../machine_8h.html#a6d1fe529c5b85c08a42b3d240deb9457',1,'machine.c']]],
-  ['check_5fswitches',['check_switches',['../machine_8h.html#a1953fa238f88fb50763fa8b50805a4b6',1,'machine.c']]]
+  ['base',['BASE',['../usart_8c.html#a79bcfb6bde984f42d1124b068a509af7',1,'usart.c']]],
+  ['bit_20utils',['Bit Utils',['../group___b_i_t___u_t_i_l_s.html',1,'']]],
+  ['bit_5futils_2eh',['bit_utils.h',['../bit__utils_8h.html',1,'']]]
 ];

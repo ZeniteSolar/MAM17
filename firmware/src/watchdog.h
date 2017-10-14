@@ -1,3 +1,11 @@
+/**
+ * @file watchdog.h
+ *
+ * @defgroup WATCHDOG Watchdog Module
+ *
+ * @brief A simple watchdog
+ *
+ */
 
 #ifndef _WATCHDOG_H
 #define _WATCHDOG_H 

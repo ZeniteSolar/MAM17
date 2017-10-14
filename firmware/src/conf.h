@@ -1,7 +1,9 @@
 /**
- * @file config.h
+ * @file conf.h
  *
- * @brief Configuracoes gerais do funcionamento do sistema
+ * @defgroup CONF Configurations 
+ *
+ * @brief General configuration of the system.
  *
  */
 

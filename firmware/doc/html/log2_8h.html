@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: lib/log2.h File Reference</title>
+<title>Chopper PMDC 2017: lib/log2.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -28,7 +28,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">Chopper PMDC 2017
    </div>
   </td>
  </tr>
@@ -85,10 +85,20 @@ $(document).ready(function(){initNavTree('log2_8h.html','');});
 <div class="title">log2.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>computing log2 is quite simple in microcontrollers but sometime we just miss it.  
-<a href="#details">More...</a></p>
-
+<div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="log2_8h__dep__incl.png" border="0" usemap="#lib_2log2_8hdep" alt=""/></div>
+<map name="lib_2log2_8hdep" id="lib_2log2_8hdep">
+<area shape="rect" id="node2" href="adc_8h.html" title="src/adc.h" alt="" coords="120,80,196,107"/>
+<area shape="rect" id="node3" href="adc_8c.html" title="src/adc.c" alt="" coords="5,155,81,181"/>
+<area shape="rect" id="node4" href="machine_8h.html" title="src/machine.h" alt="" coords="106,155,210,181"/>
+<area shape="rect" id="node6" href="main_8h.html" title="src/main.h" alt="" coords="206,229,289,256"/>
+<area shape="rect" id="node5" href="machine_8c.html" title="src/machine.c" alt="" coords="78,229,182,256"/>
+<area shape="rect" id="node7" href="main_8c.html" title="src/main.c" alt="" coords="206,304,289,331"/>
+</map>
+</div>
+</div>
 <p><a href="log2_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -97,11 +107,7 @@ Macros</h2></td></tr>
 <tr class="memdesc:aafff1c6ccbc74934f8ad66bb2e6f319f"><td class="mdescLeft">&#160;</td><td class="mdescRight">computes the log2 from the number n as r = <a class="el" href="log2_8h.html#aafff1c6ccbc74934f8ad66bb2e6f319f" title="computes the log2 from the number n as r = log2(n) The benefit from using a macro implementation is t...">log2(n)</a> The benefit from using a macro implementation is that it is independet from the sizeof(n). And also it is always inline.  <a href="#aafff1c6ccbc74934f8ad66bb2e6f319f">More...</a><br /></td></tr>
 <tr class="separator:aafff1c6ccbc74934f8ad66bb2e6f319f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>computing log2 is quite simple in microcontrollers but sometime we just miss it. </p>
-
-<p class="definition">Definition in file <a class="el" href="log2_8h_source.html">log2.h</a>.</p>
-</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="aafff1c6ccbc74934f8ad66bb2e6f319f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aafff1c6ccbc74934f8ad66bb2e6f319f">&#9670;&nbsp;</a></span>log2</h2>
 
@@ -131,13 +137,13 @@ Macros</h2></td></tr>
 <p>computes the log2 from the number n as r = <a class="el" href="log2_8h.html#aafff1c6ccbc74934f8ad66bb2e6f319f" title="computes the log2 from the number n as r = log2(n) The benefit from using a macro implementation is t...">log2(n)</a> The benefit from using a macro implementation is that it is independet from the sizeof(n). And also it is always inline. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">n</td><td>is the input for <a class="el" href="log2_8h.html#aafff1c6ccbc74934f8ad66bb2e6f319f" title="computes the log2 from the number n as r = log2(n) The benefit from using a macro implementation is t...">log2(n)</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>is the input for <a class="el" href="log2_8h.html#aafff1c6ccbc74934f8ad66bb2e6f319f" title="computes the log2 from the number n as r = log2(n) The benefit from using a macro implementation is t...">log2(n)</a> </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">r</td><td>is the output from <a class="el" href="log2_8h.html#aafff1c6ccbc74934f8ad66bb2e6f319f" title="computes the log2 from the number n as r = log2(n) The benefit from using a macro implementation is t...">log2(n)</a> </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>r is the output from <a class="el" href="log2_8h.html#aafff1c6ccbc74934f8ad66bb2e6f319f" title="computes the log2 from the number n as r = log2(n) The benefit from using a macro implementation is t...">log2(n)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="log2_8h_source.html#l00019">19</a> of file <a class="el" href="log2_8h_source.html">log2.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="log2_8h_source.html#l00021">21</a> of file <a class="el" href="log2_8h_source.html">log2.h</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['init_5fbuffers',['init_buffers',['../adc_8h.html#ad438327c9cf783bd9c519ce8b8ef3bfa',1,'adc.c']]]
+  ['empty_5finterrupt',['EMPTY_INTERRUPT',['../adc_8c.html#a44c80f97a36e1e8aaa78b81c8984434f',1,'adc.c']]]
 ];

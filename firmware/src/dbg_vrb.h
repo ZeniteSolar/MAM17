@@ -1,6 +1,8 @@
 /**
  * @file dbg_vrb.h
  *
+ * @defgroup DBG_VRB    Debug And Verbose
+ *
  * @brief Debug and Verbose mode definitions
  *
  */

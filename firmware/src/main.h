@@ -1,7 +1,7 @@
 /**
  * @file main.h
  *
- * @defgroup MAIN
+ * @defgroup MAIN Main Module
  *
  * @brief Headers for main.c
  *

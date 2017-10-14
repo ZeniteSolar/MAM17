@@ -1,6 +1,6 @@
 /**
  * 
- * @TODO: adicionar um filtro janelado para cada adc
+ * @todo: adicionar um filtro janelado para cada adc
  *
  */
 
