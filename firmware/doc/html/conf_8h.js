@@ -2,6 +2,7 @@ var conf_8h =
 [
     [ "ADC_ON", "conf_8h.html#aada7c87131a3f0228b01f1e9057d9d18", null ],
     [ "avg_pot", "conf_8h.html#afc4ca9fd04b4d1aebfe161280d33e10b", null ],
+    [ "CAN_ON", "conf_8h.html#a966d97c19ba26170b77dea5d043ada7c", null ],
     [ "clr_led", "conf_8h.html#aab0b5fd0daf38ac80ef11d397b83f4e1", null ],
     [ "cpl_led", "conf_8h.html#a628df6739ce246dd478441704923daf2", null ],
     [ "CTRL_ON", "conf_8h.html#ae4832b1c82a8cae29b400a4614e56d32", null ],
@@ -26,6 +27,8 @@ var conf_8h =
     [ "PWM_PORT", "conf_8h.html#adba65af49b5bab952693d914ec888b7b", null ],
     [ "set_led", "conf_8h.html#a5692bdc7c501c5f77eede2b0f5af6867", null ],
     [ "SLEEP_ON", "conf_8h.html#ac424b5ee522b0a891561d6c6f6645082", null ],
+    [ "SUPPORT_EXTENDED_CANID", "conf_8h.html#ac0f5b384b9866c391517aac0549b3978", null ],
+    [ "SUPPORT_TIMESTAMPS", "conf_8h.html#afe033c4dc0ffd1f277edb4f70aa6c519", null ],
     [ "SWITCHES_DDR", "conf_8h.html#ad79efff7180d9fea740cf719086071aa", null ],
     [ "SWITCHES_PIN", "conf_8h.html#a588e75a275fb11bb4d6326d8e5256137", null ],
     [ "SWITCHES_PORT", "conf_8h.html#a3e4b0f5b69408c7f4da74650a969bcdf", null ],

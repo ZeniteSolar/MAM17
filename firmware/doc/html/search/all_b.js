@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['pot_5fzero_5fwidth',['pot_zero_width',['../unionsystem__flags.html#a0bc1c72bb385947e0d3714b115b768ce',1,'system_flags']]],
-  ['pwm',['PWM',['../conf_8h.html#a538e3ec60828cfabae7e3011d73d2093',1,'conf.h']]],
-  ['pwm_5fddr',['PWM_DDR',['../conf_8h.html#afd2543c59ca8198d1327ca908005ba17',1,'conf.h']]],
-  ['pwm_5finit',['pwm_init',['../main_8c.html#a2847f9e5c10cc20b1699946600617d03',1,'main.c']]],
-  ['pwm_5fon',['PWM_ON',['../conf_8h.html#ac489ed9f69c6337823c29cb9f64121f9',1,'conf.h']]],
-  ['pwm_5fpin',['PWM_PIN',['../conf_8h.html#af5a48adc9d939102a42f2829b7a1b8ac',1,'conf.h']]],
-  ['pwm_5fport',['PWM_PORT',['../conf_8h.html#adba65af49b5bab952693d914ec888b7b',1,'conf.h']]]
+  ['on_5foff_5fswitch',['on_off_switch',['../unionsystem__flags.html#a640443712823b1a6728077fa0cac0b96',1,'system_flags::on_off_switch()'],['../conf_8h.html#a9dc0fab210e3cc10c5cba2f09ad2cee6',1,'ON_OFF_SWITCH():&#160;conf.h']]],
+  ['only_5fnon_5frtr',['ONLY_NON_RTR',['../can_8h.html#a2bf0df6def4127052a5ba192e7f5e226',1,'can.h']]],
+  ['only_5frtr',['ONLY_RTR',['../can_8h.html#a2ae9ebf1705c9e6df60ac6e198a8f5f2',1,'can.h']]],
+  ['overcurrent',['overcurrent',['../unionerror__flags.html#abfe2bfcab698834b20907efb4265fd68',1,'error_flags']]],
+  ['overheat',['overheat',['../unionerror__flags.html#adb2e930773b011af8412e72ddfcb4ffe',1,'error_flags']]],
+  ['overvoltage',['overvoltage',['../unionerror__flags.html#a188d9566ee078480ad28ae4fb6d72ae9',1,'error_flags']]]
 ];

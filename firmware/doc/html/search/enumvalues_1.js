@@ -1,7 +1,11 @@
 var searchData=
 [
-  ['state_5ferror',['STATE_ERROR',['../machine_8h.html#a915b2902e05c4e29541a0e9973500da8ad55c0bfe3a7d3ae983e81a98e3384d6c',1,'machine.h']]],
-  ['state_5fidle',['STATE_IDLE',['../machine_8h.html#a915b2902e05c4e29541a0e9973500da8aaade5e53e88cf231292cd1142cce2afe',1,'machine.h']]],
-  ['state_5finitializing',['STATE_INITIALIZING',['../machine_8h.html#a915b2902e05c4e29541a0e9973500da8a3ac15d2e111262c1053ed05e14226386',1,'machine.h']]],
-  ['state_5frunning',['STATE_RUNNING',['../machine_8h.html#a915b2902e05c4e29541a0e9973500da8addfe11c6d06c4e27bd6efc18cc4862a6',1,'machine.h']]]
+  ['bitrate_5f100_5fkbps',['BITRATE_100_KBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7aefcd20924de3b6faf488c564626970b5',1,'can.h']]],
+  ['bitrate_5f10_5fkbps',['BITRATE_10_KBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7ad539354f5b822bb4f6f077fd76c676aa',1,'can.h']]],
+  ['bitrate_5f125_5fkbps',['BITRATE_125_KBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7a6170921df7a5133b8b1da92db1b835d5',1,'can.h']]],
+  ['bitrate_5f1_5fmbps',['BITRATE_1_MBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7ac9cd8abb166f14f43c0d6d52572dae00',1,'can.h']]],
+  ['bitrate_5f20_5fkbps',['BITRATE_20_KBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7af32dcf4a6486959d5b99d74753c2529c',1,'can.h']]],
+  ['bitrate_5f250_5fkbps',['BITRATE_250_KBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7a1a86be0c6fbea650b1316558b9873f78',1,'can.h']]],
+  ['bitrate_5f500_5fkbps',['BITRATE_500_KBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7a2d588cbd87da7c9f8cc889f1bddc191e',1,'can.h']]],
+  ['bitrate_5f50_5fkbps',['BITRATE_50_KBPS',['../group__can__interface.html#gga1085b545b19ee92abad774ad27eec8d7a0424e06b7c7d439c696cf5a47831fb2c',1,'can.h']]]
 ];

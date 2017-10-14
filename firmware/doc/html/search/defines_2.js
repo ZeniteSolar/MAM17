@@ -1,6 +1,7 @@
 var searchData=
 [
   ['calc_5fd_5fdiv_5fcounts',['CALC_D_DIV_COUNTS',['../main_8c.html#a94cca833344662afb3437135d18fa67d',1,'main.c']]],
+  ['can_5fon',['CAN_ON',['../conf_8h.html#a966d97c19ba26170b77dea5d043ada7c',1,'conf.h']]],
   ['cbuf_5fadc0_5fsize',['cbuf_adc0_SIZE',['../adc_8h.html#a58b8117972b2e9e06f5146a0a985ba1d',1,'adc.h']]],
   ['cbuf_5fadc0_5fsize_5f2',['cbuf_adc0_SIZE_2',['../adc_8h.html#a1e61a71667c2540d89ad9655f5526118',1,'adc.h']]],
   ['clr_5fbit',['clr_bit',['../bit__utils_8h.html#aa58d5468592b9059a06ec7237a4a89e7',1,'bit_utils.h']]],

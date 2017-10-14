@@ -2,6 +2,8 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
 [
     [ "adc.c", "adc_8c.html", "adc_8c" ],
     [ "adc.h", "adc_8h.html", "adc_8h" ],
+    [ "can.h", "can_8h.html", "can_8h" ],
+    [ "can_filters.h", "can__filters_8h.html", "can__filters_8h" ],
     [ "conf.h", "conf_8h.html", "conf_8h" ],
     [ "dbg_vrb.h", "dbg__vrb_8h.html", "dbg__vrb_8h" ],
     [ "machine.c", "machine_8c.html", "machine_8c" ],

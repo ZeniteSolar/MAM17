@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['raw_5fadc',['raw_adc',['../adc_8h.html#a2a3722bba948e464e41c6c4d863e5308',1,'adc.h']]]
+  ['pot_5fzero_5fwidth',['pot_zero_width',['../unionsystem__flags.html#a0bc1c72bb385947e0d3714b115b768ce',1,'system_flags']]],
+  ['progmem',['PROGMEM',['../can__filters_8h.html#a3aee216c20806500cbc385ba33152545',1,'can_filters.h']]]
 ];
