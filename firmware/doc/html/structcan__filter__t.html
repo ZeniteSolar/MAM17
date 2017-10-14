@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('structcan__filter__t.html','');});
 <p>Datenstruktur zur Aufnahme von CAN-Filtern.  
  <a href="structcan__filter__t.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="can_8h_source.html">can.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="src_2can_8h_source.html">can.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for can_filter_t:</div>
 <div class="dyncontent">
@@ -113,13 +113,31 @@ Data Fields</h2></td></tr>
 <tr class="separator:acd53bef429b3afe798b7228806e6e294"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1007d2b22756c2fb9206167850b6b50a"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcan__filter__t.html#a1007d2b22756c2fb9206167850b6b50a">flags</a></td></tr>
 <tr class="separator:a1007d2b22756c2fb9206167850b6b50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3312c5ffd61c4dce44472d45ff61a015"><td class="memItemLeft" >struct {</td></tr>
+<tr class="memitem:a7be9c2d0472674ddfd4e8c1ce2e460c4"><td class="memItemLeft" >&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<a class="el" href="structcan__filter__t.html#a7be9c2d0472674ddfd4e8c1ce2e460c4">rtr</a>: 2</td></tr>
+<tr class="memdesc:a7be9c2d0472674ddfd4e8c1ce2e460c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remote Request Frame.  <a href="#a7be9c2d0472674ddfd4e8c1ce2e460c4">More...</a><br /></td></tr>
+<tr class="separator:a7be9c2d0472674ddfd4e8c1ce2e460c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd53bef429b3afe798b7228806e6e294"><td class="memItemLeft" >&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<a class="el" href="structcan__filter__t.html#acd53bef429b3afe798b7228806e6e294">extended</a>: 2</td></tr>
+<tr class="memdesc:acd53bef429b3afe798b7228806e6e294"><td class="mdescLeft">&#160;</td><td class="mdescRight">extended ID  <a href="#acd53bef429b3afe798b7228806e6e294">More...</a><br /></td></tr>
+<tr class="separator:acd53bef429b3afe798b7228806e6e294"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3312c5ffd61c4dce44472d45ff61a015"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcan__filter__t.html#a3312c5ffd61c4dce44472d45ff61a015">flags</a></td></tr>
+<tr class="separator:a3312c5ffd61c4dce44472d45ff61a015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b54b81fed67eb95daf8413be6836aa4"><td class="memItemLeft" >struct {</td></tr>
+<tr class="memitem:a7be9c2d0472674ddfd4e8c1ce2e460c4"><td class="memItemLeft" >&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<a class="el" href="structcan__filter__t.html#a7be9c2d0472674ddfd4e8c1ce2e460c4">rtr</a>: 2</td></tr>
+<tr class="memdesc:a7be9c2d0472674ddfd4e8c1ce2e460c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remote Request Frame.  <a href="#a7be9c2d0472674ddfd4e8c1ce2e460c4">More...</a><br /></td></tr>
+<tr class="separator:a7be9c2d0472674ddfd4e8c1ce2e460c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd53bef429b3afe798b7228806e6e294"><td class="memItemLeft" >&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<a class="el" href="structcan__filter__t.html#acd53bef429b3afe798b7228806e6e294">extended</a>: 2</td></tr>
+<tr class="memdesc:acd53bef429b3afe798b7228806e6e294"><td class="mdescLeft">&#160;</td><td class="mdescRight">extended ID  <a href="#acd53bef429b3afe798b7228806e6e294">More...</a><br /></td></tr>
+<tr class="separator:acd53bef429b3afe798b7228806e6e294"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b54b81fed67eb95daf8413be6836aa4"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcan__filter__t.html#a7b54b81fed67eb95daf8413be6836aa4">flags</a></td></tr>
+<tr class="separator:a7b54b81fed67eb95daf8413be6836aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Datenstruktur zur Aufnahme von CAN-Filtern. </p>
-<div class="fragment"><div class="line"> <a class="code" href="structcan__filter__t.html#a7be9c2d0472674ddfd4e8c1ce2e460c4">rtr</a> | Funtion</div><div class="line">-----|------</div><div class="line"> 00  | alle Nachrichten unabhaengig vom RTR-Bit</div><div class="line"> 01  | ungültig</div><div class="line"> 10  | empfange nur nicht RTR-Nachrichten</div><div class="line"> 11  | empfange nur Nachrichten mit gesetzem RTR-Bit</div></div><!-- fragment --><p><b>ACHTUNG:</b> Funktioniert nur mit dem AT90CAN, beim MCP2515 wird der Parameter ignoriert.</p>
+<div class="fragment"><div class="line"> <a class="code" href="structcan__filter__t.html#a7be9c2d0472674ddfd4e8c1ce2e460c4">rtr</a> | Funtion</div><div class="line">-----|------</div><div class="line"> 00  | alle Nachrichten unabhaengig vom <a class="code" href="mcp2515__defs_8h.html#a8f14d04b8bcaf04226f4fe5c112b60aa">RTR</a>-Bit</div><div class="line"> 01  | ungültig</div><div class="line"> 10  | empfange nur nicht <a class="code" href="mcp2515__defs_8h.html#a8f14d04b8bcaf04226f4fe5c112b60aa">RTR</a>-Nachrichten</div><div class="line"> 11  | empfange nur Nachrichten mit gesetzem <a class="code" href="mcp2515__defs_8h.html#a8f14d04b8bcaf04226f4fe5c112b60aa">RTR</a>-Bit</div></div><!-- fragment --><p><b>ACHTUNG:</b> Funktioniert nur mit dem AT90CAN, beim MCP2515 wird der Parameter ignoriert.</p>
 <div class="fragment"><div class="line"> ext | Funtion</div><div class="line">-----|------</div><div class="line"> 00  | alle Nachrichten</div><div class="line"> 01  | ungueltig</div><div class="line"> 10  | empfange nur Standard-Nachrichten</div><div class="line"> 11  | empfange nur Extended-Nachrichten</div></div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>Filter sind beim SJA1000 nur begrenzt nutzbar, man sollte ihn nur in Systemen mit entweder Standard- oder Extended-Frames einsetzten, aber nicht beidem zusammen. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="can_8h_source.html#l00225">225</a> of file <a class="el" href="can_8h_source.html">can.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2can_8h_source.html#l00225">225</a> of file <a class="el" href="src_2can_8h_source.html">can.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a id="acd53bef429b3afe798b7228806e6e294"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd53bef429b3afe798b7228806e6e294">&#9670;&nbsp;</a></span>extended</h2>
@@ -135,12 +153,40 @@ Data Fields</h2></td></tr>
 
 <p>extended ID </p>
 
-<p class="definition">Definition at line <a class="el" href="can_8h_source.html#l00232">232</a> of file <a class="el" href="can_8h_source.html">can.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2can_8h_source.html#l00232">232</a> of file <a class="el" href="src_2can_8h_source.html">can.h</a>.</p>
 
 </div>
 </div>
 <a id="a1007d2b22756c2fb9206167850b6b50a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1007d2b22756c2fb9206167850b6b50a">&#9670;&nbsp;</a></span>flags</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1007d2b22756c2fb9206167850b6b50a">&#9670;&nbsp;</a></span>flags <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct { ... }   flags</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7b54b81fed67eb95daf8413be6836aa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b54b81fed67eb95daf8413be6836aa4">&#9670;&nbsp;</a></span>flags <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct { ... }   flags</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3312c5ffd61c4dce44472d45ff61a015"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3312c5ffd61c4dce44472d45ff61a015">&#9670;&nbsp;</a></span>flags <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -167,7 +213,7 @@ Data Fields</h2></td></tr>
 
 <p>ID der Nachricht (11 oder 29 Bit) </p>
 
-<p class="definition">Definition at line <a class="el" href="can_8h_source.html#l00228">228</a> of file <a class="el" href="can_8h_source.html">can.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2can_8h_source.html#l00228">228</a> of file <a class="el" href="src_2can_8h_source.html">can.h</a>.</p>
 
 </div>
 </div>
@@ -185,7 +231,7 @@ Data Fields</h2></td></tr>
 
 <p>Maske. </p>
 
-<p class="definition">Definition at line <a class="el" href="can_8h_source.html#l00229">229</a> of file <a class="el" href="can_8h_source.html">can.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2can_8h_source.html#l00229">229</a> of file <a class="el" href="src_2can_8h_source.html">can.h</a>.</p>
 
 </div>
 </div>
@@ -203,12 +249,12 @@ Data Fields</h2></td></tr>
 
 <p>Remote Request Frame. </p>
 
-<p class="definition">Definition at line <a class="el" href="can_8h_source.html#l00231">231</a> of file <a class="el" href="can_8h_source.html">can.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2can_8h_source.html#l00231">231</a> of file <a class="el" href="src_2can_8h_source.html">can.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/<a class="el" href="can_8h_source.html">can.h</a></li>
+<li>src/<a class="el" href="src_2can_8h_source.html">can.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

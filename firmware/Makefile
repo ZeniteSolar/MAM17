@@ -94,7 +94,7 @@ CFLAGS += \
 LDFLAGS = -Wl,-Map=$(OBJDIR)/$(TARGET).map
 LDFLAGS += $(patsubst %,-L%,$(EXTRALIBDIRS))
 LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
-LDFLAGS += -Llib/ -lcan
+LDFLAGS += -Llib/avr-can-lib/src/ -lcan
 
 ## Intel Hex file production flags
 HEX_FLASH_FLAGS = \

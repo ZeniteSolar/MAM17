@@ -1,11 +1,23 @@
 var searchData=
 [
-  ['task_5ferror',['task_error',['../machine_8c.html#ac4366b47246a31f2d51fc86469424362',1,'task_error(void):&#160;machine.c'],['../machine_8h.html#ac4366b47246a31f2d51fc86469424362',1,'task_error(void):&#160;machine.c']]],
-  ['task_5fidle',['task_idle',['../machine_8c.html#ad97fd16c2e90a12f5265d1c2728102c8',1,'task_idle(void):&#160;machine.c'],['../machine_8h.html#ad97fd16c2e90a12f5265d1c2728102c8',1,'task_idle(void):&#160;machine.c']]],
-  ['task_5finitializing',['task_initializing',['../machine_8c.html#a6cb00718d655b4ce0a33ba15eff8b0fd',1,'task_initializing(void):&#160;machine.c'],['../machine_8h.html#a6cb00718d655b4ce0a33ba15eff8b0fd',1,'task_initializing(void):&#160;machine.c']]],
-  ['task_5frunning',['task_running',['../machine_8c.html#af040179e007cd9ad43b63af2df2b3f4b',1,'task_running(void):&#160;machine.c'],['../machine_8h.html#af040179e007cd9ad43b63af2df2b3f4b',1,'task_running(void):&#160;machine.c']]],
-  ['todo_20list',['Todo List',['../todo.html',1,'']]],
-  ['total_5ferrors',['total_errors',['../machine_8h.html#aa3ec4a4452ff69fb2862f5ae0cfd8e4e',1,'machine.h']]],
-  ['tst_5fbit',['tst_bit',['../bit__utils_8h.html#a3a535667d8246fffe669cf15b23e5f7d',1,'bit_utils.h']]],
-  ['tx',['tx',['../structcan__error__register__t.html#a1b12e4ee55043211cb10d21bb128b196',1,'can_error_register_t']]]
+  ['phseg0',['PHSEG0',['../mcp2515__defs_8h.html#a26935c055940aef1b2d3e535e9865252',1,'mcp2515_defs.h']]],
+  ['phseg1',['PHSEG1',['../mcp2515__defs_8h.html#a7d077cee524ed589baae3fc3d1b5747e',1,'mcp2515_defs.h']]],
+  ['phseg10',['PHSEG10',['../mcp2515__defs_8h.html#a833588352c10aad7ea3ff1ccee9fb2d4',1,'mcp2515_defs.h']]],
+  ['phseg11',['PHSEG11',['../mcp2515__defs_8h.html#a57c32a481275ba6f0af69e8879df3479',1,'mcp2515_defs.h']]],
+  ['phseg12',['PHSEG12',['../mcp2515__defs_8h.html#a39b9a26570148c0472961f23749a901c',1,'mcp2515_defs.h']]],
+  ['phseg2',['PHSEG2',['../mcp2515__defs_8h.html#a180e6ea5744255ce2b5183b25ef33d80',1,'mcp2515_defs.h']]],
+  ['phseg20',['PHSEG20',['../mcp2515__defs_8h.html#a9fec3d3364b4f10b35ee24522f1bd447',1,'mcp2515_defs.h']]],
+  ['phseg21',['PHSEG21',['../mcp2515__defs_8h.html#aea75aaf28b850c8d003fbdb60089a019',1,'mcp2515_defs.h']]],
+  ['phseg22',['PHSEG22',['../mcp2515__defs_8h.html#a091c57739bfa59c893dcd9a9c84ddcec',1,'mcp2515_defs.h']]],
+  ['pin',['PIN',['../utils_8h.html#ad7581da21e9fd6fd6f6920dd68d1c782',1,'utils.h']]],
+  ['pin_5fnum',['PIN_NUM',['../utils_8h.html#a991614131d1f747107ed0303be9970c9',1,'utils.h']]],
+  ['port',['PORT',['../utils_8h.html#a533379ddbe9e9015ac109f39c84bce48',1,'utils.h']]],
+  ['pot_5fzero_5fwidth',['pot_zero_width',['../unionsystem__flags.html#a0bc1c72bb385947e0d3714b115b768ce',1,'system_flags']]],
+  ['progmem',['PROGMEM',['../can__filters_8h.html#a3aee216c20806500cbc385ba33152545',1,'PROGMEM():&#160;can_filters.h'],['../lib_2avr-can-lib_2demo_2main_8c.html#a3aee216c20806500cbc385ba33152545',1,'PROGMEM():&#160;main.c']]],
+  ['pwm',['PWM',['../conf_8h.html#a538e3ec60828cfabae7e3011d73d2093',1,'conf.h']]],
+  ['pwm_5fddr',['PWM_DDR',['../conf_8h.html#afd2543c59ca8198d1327ca908005ba17',1,'conf.h']]],
+  ['pwm_5finit',['pwm_init',['../src_2main_8c.html#a2847f9e5c10cc20b1699946600617d03',1,'main.c']]],
+  ['pwm_5fon',['PWM_ON',['../conf_8h.html#ac489ed9f69c6337823c29cb9f64121f9',1,'conf.h']]],
+  ['pwm_5fpin',['PWM_PIN',['../conf_8h.html#af5a48adc9d939102a42f2829b7a1b8ac',1,'conf.h']]],
+  ['pwm_5fport',['PWM_PORT',['../conf_8h.html#adba65af49b5bab952693d914ec888b7b',1,'conf.h']]]
 ];

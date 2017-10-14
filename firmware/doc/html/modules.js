@@ -8,6 +8,7 @@ var modules =
     [ "Main Module", "group___m_a_i_n.html", null ],
     [ "USART Module", "group___u_s_a_r_t.html", null ],
     [ "Watchdog Module", "group___w_a_t_c_h_d_o_g.html", null ],
+    [ "Gruppe nützlicher Makros und Inline-Funktionen", "group__utils__h.html", "group__utils__h" ],
     [ "Bit Utils", "group___b_i_t___u_t_i_l_s.html", null ],
     [ "Circular Buffer", "group___c_b_u_f.html", "group___c_b_u_f" ],
     [ "Log2", "group___l_o_g2.html", null ]

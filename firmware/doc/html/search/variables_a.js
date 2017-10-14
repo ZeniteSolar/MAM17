@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['raw_5fadc',['raw_adc',['../adc_8h.html#a2a3722bba948e464e41c6c4d863e5308',1,'adc.h']]],
-  ['rtr',['rtr',['../structcan__t.html#afaa6bdb074232059cc607a8a1eedfffe',1,'can_t::rtr()'],['../structcan__filter__t.html#a7be9c2d0472674ddfd4e8c1ce2e460c4',1,'can_filter_t::rtr()']]],
-  ['rx',['rx',['../structcan__error__register__t.html#aa2146da9811399cd856abaef0c545957',1,'can_error_register_t']]]
+  ['on_5foff_5fswitch',['on_off_switch',['../unionsystem__flags.html#a640443712823b1a6728077fa0cac0b96',1,'system_flags']]],
+  ['overcurrent',['overcurrent',['../unionerror__flags.html#abfe2bfcab698834b20907efb4265fd68',1,'error_flags']]],
+  ['overheat',['overheat',['../unionerror__flags.html#adb2e930773b011af8412e72ddfcb4ffe',1,'error_flags']]],
+  ['overvoltage',['overvoltage',['../unionerror__flags.html#a188d9566ee078480ad28ae4fb6d72ae9',1,'error_flags']]]
 ];

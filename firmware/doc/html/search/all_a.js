@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['normal_5fmode',['NORMAL_MODE',['../group__can__interface.html#ggad6f5bfd4c152b830a94c2066e9c81710a83feb61d42f8db9f494019fcea2c0148',1,'can.h']]]
+  ['k2_5f',['k2_',['../src_2main_8c.html#a856f4c8d6bcef8c5ab0c0da850b09f91',1,'main.c']]],
+  ['k_5f',['k_',['../src_2main_8c.html#abbf30ed7e26706e4871117304a7d7373',1,'main.c']]]
 ];
