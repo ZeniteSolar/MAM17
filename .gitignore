@@ -74,4 +74,4 @@ dkms.conf
 #html documentation
 
 #keys
-settings/keys
+settings/keys/deploy_key
