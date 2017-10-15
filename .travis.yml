@@ -1,16 +1,26 @@
 language: c
+sudo: false
+env:
+  global:
+  - GH_REPO_NAME: Acionamento2017
+  - DOXYFILE: "$TRAVIS_BUILD_DIR/firmware/"
+  - GH_REPO_REF: github.com/ZeniteSolar/Acionamento2017.git
+  - ENCRYPTION_LABEL: "0a6446eb3ae3"
+  - COMMIT_AUTHOR_EMAIL: joao.maker@gmail.com 
 addons:
   apt:
-#        sources:
-  packages:
+    packages:
     - gcc-avr
     - binutils-avr
     - avr-libc
+branches:
+  except:
+  - gh-pages  
 before_install:
     #  - sudo apt-get update -qq
     #  - sudo apt-get install -qq gcc-avr binutils-avr avr-libc
-  - openssl aes-256-cbc -K $encrypted_384a0b2b175f_key -iv $encrypted_384a0b2b175f_iv
-  - in deploy_key.enc -out settings/keys/deploy_key -d
+#- openssl aes-256-cbc -K $encrypted_384a0b2b175f_key -iv $encrypted_384a0b2b175f_iv
+#- in deploy_key.enc -out settings/keys/deploy_key -d
 #install:
 #before_script:
 script: 
@@ -18,13 +28,5 @@ script:
 #after_sucess:
 #after_failure
 
-branches:
-  except:
-  - gh-pages 
-env:
-  global:
-  - GH_REPO_NAME: Acionamento2017
-  - DOXYFILE: "$TRAVIS_BUILD_DIR/firmware/"
-  - GH_REPO_REF: github.com/ZeniteSolar/Acionamento2017.git
-  - ENCRYPTION_LABEL: "0a6446eb3ae3"
-  - COMMIT_AUTHOR_EMAIL: joao.maker@gmail.com
+
+
