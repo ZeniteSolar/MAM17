@@ -1,8 +1,6 @@
-language: c
+---
 #sudo: false
-branches:
-  except:
-  - gh-pages
+language: c
 before_install:
   - sudo apt-get update -qq
   - openssl aes-256-cbc -K $encrypted_384a0b2b175f_key -iv $encrypted_384a0b2b175f_iv
@@ -11,6 +9,9 @@ install:
   - sudo apt-get install -qq git gcc-avr binutils-avr avr-libc
 script: 
   bash ./deploy.sh
+branches:
+  except:
+  - gh-pages 
 env:
   global:
   - GH_REPO_NAME: Acionamento2017
