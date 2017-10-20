@@ -79,7 +79,7 @@
  *
  * Select if you want to use 29 bit identifiers.
  */
-#define SUPPORT_EXTENDED_CANID  1
+#define SUPPORT_EXTENDED_CANID  0
 
 /* Select if you want to use timestamps.
  * Timestamps are sourced from a register internal to the AT90CAN.
