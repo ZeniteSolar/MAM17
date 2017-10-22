@@ -28,6 +28,7 @@ typedef enum state_machine{
 
 typedef union system_flags{
     struct{
+        uint8_t     can_enabled     :1;
         uint8_t     on_off_switch   :1;
         uint8_t     dms_switch      :1;
         uint8_t     pot_zero_width  :1;
@@ -45,7 +46,18 @@ typedef union error_flags{
     uint8_t   all;
 }error_flags_t;
 
-// checks
+typedef struct control{
+    uint8_t     D_raw;          // value from 0 to 255
+    uint8_t     D_raw_target;   // value for target pwm, from 0 to 255
+    uint16_t    D;              // value converted from 0 to TOP
+    uint8_t     I_raw;          // value from 0 to 255
+    uint8_t     I_raw_target;   // value for target pwm, from 0 to 255
+    uint8_t     I;              // value converted to amps (0 to 150)
+}control_t;
+
+control_t control;
+
+// machine checks
 void check_switches(void);
 void check_idle_zero_pot(void);
 void check_idle_current(void);
@@ -54,8 +66,10 @@ void check_idle_temperature(void);
 void check_running_current(void);
 void check_running_voltage(void);
 void check_running_temperature(void);
+void check_can(void);
+void check_pwm_fault(void);
 
-// tasks
+// machine tasks
 void task_initializing(void);
 void task_idle(void);
 void task_running(void);
@@ -74,14 +88,25 @@ system_flags_t system_flags;
 error_flags_t error_flags;
 uint8_t total_errors;   // Contagem de ERROS
 
-extern uint8_t led_div;
+// pwm macros
+#define set_pwm_duty_cycle(d)       OCR1A = d      //!< apply duty cycle 'd'
+#define set_pwm_off()               set_pwm_duty_cycle(0)      //!< d = 0
+
+// pwm functions
+void pwm_reset(void);
+void pwm_compute(void);
+void pwm_treat_fault(void);
+uint8_t pwm_zero_width(uint16_t duty_cycle);
+
+// pwm variables
+uint8_t pwm_d_clk_div;
+uint8_t pwm_fault_count;
+uint8_t check_pwm_fault_times;
+
+// other variables
+uint8_t led_clk_div;
 
 // externs
-extern uint8_t mean;
-extern uint16_t D;
-extern uint8_t fault_count;
-extern void calc_d(uint8_t out);
 //extern uint8_t total_errors;
-extern uint8_t zero_width(uint16_t duty_cycle);
 
 #endif /* ifndef _MACHINE_H_ */

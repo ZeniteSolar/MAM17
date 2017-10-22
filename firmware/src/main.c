@@ -7,98 +7,7 @@
 #include "main.h"
 #include "can_filters.h"
 
-uint8_t CTRL_CLK = 0;       // CLOCK de controle (frequencia definida pelo timer2)
-uint16_t D = 0;             // DUTY CYCLE do PWM
-uint8_t led_div = 0;        // CLOCK division for led control
-uint8_t fault_count = 0;    // fault counter;
-
-/*
- *  @brief funcao conta o tempo em que o Duty cycle fica em zero
- *  @param registrador de 16 bits; nesse caso, do timer 1 (OCR1A)
- *  @ret  retorna 1 se registrador esta em zero por mais de um segundo (para
- *  freq = 35 Hz)
- */
-uint8_t zero_width(uint16_t duty_cycle)
-{   
-    static uint8_t times = 0;
-    uint8_t one_sec = 0;
-    
-    if(!duty_cycle) times += 1; 
-    else times = one_sec = 0;
-
-    if(times >= MIN_ZERO_WIDTH_TIMES){ 
-        one_sec = 1;
-        times = 0;
-    }
-    return one_sec;
-}
-
-
-/**
- * @brief Calcula e aplica PWM a partir da entrada do ADC
- *      min: 4, max 128 elements
- *      it is taking 6us using mean of 4 elements
- *      it is taking 11.2us using mean of 8 elements
- *      it is taking 17.5us using mean of 16 elements
- *      it is taking 31.9us using mean of 32 elements
- *      it is taking 64.7us using mean of 64 elements
- *      it is taking 119.6us using mean of 128 elements
- */
-/*inline void calc_d(void)
-{   
-    //DEBUG0;
-    uint16_t D = (ma_adc0()*5) >> 1;        // duty cycle D = ADCH*5/2
-    if(D > 634) D = 640;                    // limite maximo para não ficar em 99%
-    else if(D < 6) D = 0;                   // limite minimo para não ficar em 1%
-    OCR1A = D;                              // aplica duty cycle D
-    //DEBUG0;
-}*/
-
-//uint16_t D = 0;
-#define eps             20
-#define k2_             1                   // se maior ou igual a 7, usar uint32_t
-#define k_              1                   // se maior ou igual a 7, usar uint32_t
-#define CALC_D_DIV_COUNTS 2
-volatile uint8_t calc_d_div = 0;
-volatile uint32_t D_raw_target;
-inline void calc_d(uint8_t out)
-{   
-    static uint32_t D_raw = 0;
-
-    if(!out){
-        D = D_raw = D_raw_target = 0;
-    }else if(out == 100){
-        if(D_raw_target > 10) {
-            D_raw_target = D_raw_target -6;
-        }
-    }else{ 
-        D_raw_target = ma_adc0();
-    }
-
-    // y = (1 -e^-x), x>=0:
-    //D_raw = ((D_raw << k_ ) +(D_raw_target -D_raw) ) >> k_;
-    //D_raw = ((D_raw << k_ ) +((D_raw_target -D_raw) << k2_ ) ) >> k_;
-    //D_raw = D_raw_target;
-    
-    if(D_raw < D_raw_target){
-        if(calc_d_div++ >= CALC_D_DIV_COUNTS){
-            D_raw += 1;
-            calc_d_div = 0;
-        }
-    }else if((D_raw >= D_raw_target)){
-        //D_raw = ((D_raw << k_ ) +(D_raw_target -D_raw )) >> k_;
-        D_raw = D_raw_target;
-    }
-
-    D = (D_raw*5) >> 1;                         // converte valores
-
-    if(D > 636) D = 640;                        // limite maximo para não ficar em 99%
-    else if(D < 6) D = 0;                       // limite minimo para não ficar em 1% 
-
-    
-
-    OCR1A = D;                                  // aplica duty_cycle
-}
+volatile uint8_t CTRL_CLK = 0;       // CLOCK de controle (frequencia definida pelo timer2)
 
 /**
  * @brief configura o PWM usando o timer TC1
@@ -202,9 +111,6 @@ int main(void)
 {
     system_flags.all = error_flags.all = 0;
     state_machine = STATE_INITIALIZING;
-
-    //rb_in = ring_buffer_create(INPUT_BUFFER_SIZE);
-    //rb_out = ring_buffer_create(OUTPUT_BUFFER_SIZE);
 
     setup();
 

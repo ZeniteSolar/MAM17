@@ -1,6 +1,11 @@
 #include "machine.h"
 
-#define set_pwm_off()     OCR1A = 0      //!< D of PWM TURNED TO 0
+/*
+ * to-do:
+ *      - modularize state sinalization
+ *      - 
+ *
+ */
 
 /**
  * @brief checks if the switches updating system flags
@@ -27,12 +32,47 @@ inline void check_switches(void)
 }
 
 /**
+ * @brief prints all known information about a given can_t msg
+ * @param *msg is a pointer to the can_t message 
+ */
+void can_print_msg(can_t *msg)
+{
+    usart_send_string("ID: ");
+    usart_send_uint16(msg->id);
+    usart_send_string("F: ");
+    usart_send_uint16(msg->flags.rtr);
+    usart_send_string("L: ");
+    usart_send_uint16(msg->length);
+    usart_send_string("D: ");
+    for(uint8_t i = 0; i< msg->length; i++){
+        usart_send_uint16(msg->data[i]);
+        usart_send_char(' ');
+    }
+    usart_send_char('\n');
+}
+
+/**
+ * @brief
+ */
+inline void check_can(void)
+{
+    if(can_check_message()){
+        can_t msg;
+        if(can_get_message(&msg)){
+            can_print_msg(&msg);
+            
+
+        }
+    }
+}
+
+/**
  * @brief checks if the pot is zeroed when idle.
  */
 inline void check_idle_zero_pot(void)
 {
     VERBOSE_MSG(usart_send_string("Potentiometer: "));
-    if(zero_width(ma_adc0())){  // computa a media
+    if(pwm_zero_width(ma_adc0())){  // computa a media
         VERBOSE_MSG(usart_send_string("ok.  "));
         system_flags.pot_zero_width = 1;   
     }else{
@@ -42,13 +82,16 @@ inline void check_idle_zero_pot(void)
 }
 
 /**
- * @brief
+ * @brief checks the quantity of the faults.
  */
-inline void check_fault(void)
+inline void check_pwm_fault(void)
 {
-    if(fault_count >= FAULT_COUNT_LIMIT){
+    if(pwm_fault_count >= FAULT_COUNT_LIMIT){
         error_flags.fault = 1;
+        check_pwm_fault_times = 0;
         set_state_error();
+    }else if(check_pwm_fault_times++ > CHECKS_BEFORE_RESET_FAULT_COUNTER){
+        pwm_fault_count = 0;    
     }
 }
 
@@ -149,10 +192,73 @@ inline void set_state_idle(void)
 */ 
 inline void set_state_running(void)
 {
-    calc_d(0);
+    pwm_reset();
     state_machine = STATE_RUNNING;
 }
- 
+
+/**
+ * @brief reset pwm and its control buffers.
+ */
+inline void pwm_reset(void)
+{
+    set_pwm_off();
+    control.D_raw = control.D_raw_target = control.D = 0;
+    control.I_raw = control.I_raw_target = control.I = 0;
+}
+
+
+/**
+ * @brief computs duty-cycle for PWM
+ */
+inline void pwm_compute(void)
+{
+    if(control.D_raw < control.D_raw_target){           //!< law for D increasing
+        if(pwm_d_clk_div++ >= PWM_D_MAX_DELTA){
+            control.D_raw += PWM_D_DELTA;
+            pwm_d_clk_div = 0;
+        }
+    }else if(control.D_raw >= control.D_raw_target){    //!< law for D decreasing
+        control.D_raw = control.D_raw_target;
+    }
+
+    // converts to OCR1A range.
+    control.D = (control.D_raw*PWM_D_LIN_MULT) >> PWM_D_LIN_DIV;
+
+    // apply some threshhold saturation limits
+    if(control.D > PWM_D_MAX_THRESHHOLD)        control.D = PWM_D_MAX;
+    else if(control.D < PWM_D_MIN_THRESHHOLD)   control.D = PWM_D_MIN;
+}
+
+/**
+ * @brief decreases pwm by 10% in case of mosfet fault detected by IR2127.
+ */
+inline void pwm_treat_fault(void)
+{
+    if(control.D_raw_target > 10)
+        control.D_raw_target -= 6;      // -10%
+}
+
+/*
+ *  @brief funcao conta o tempo em que o Duty cycle fica em zero
+ *  @param registrador de 16 bits; nesse caso, do timer 1 (OCR1A)
+ *  @ret  retorna 1 se registrador esta em zero por mais de um segundo (para
+ *  freq = 35 Hz)
+ */
+uint8_t pwm_zero_width(uint16_t duty_cycle)
+{
+	static uint8_t times = 0;
+	uint8_t one_sec = 0;
+
+	if(!duty_cycle) times += 1;
+	else times = one_sec = 0;
+
+	if(times >= MIN_ZERO_WIDTH_TIMES){
+		one_sec = 1;
+		times = 0;
+	}
+	return one_sec;
+}
+
 
 /**
  * @brief Checks if the system is OK to run:
@@ -166,12 +272,15 @@ inline void task_initializing(void)
 {
     set_led();
     set_pwm_off();
-    fault_count = 0;
+    pwm_fault_count = 0;
 
-    //check_buffers();
-    //check_idle_current();
-    //check_idle_voltage();
-    //check_idle_temperature();
+    check_can();
+    if(system_flags.can_enabled){
+        //check_buffers();
+        //check_idle_current();
+        //check_idle_voltage();
+        //check_idle_temperature();
+    }
    
     if(!error_flags.all){
         VERBOSE_MSG(usart_send_string("System initialized without errors.\n"));
@@ -193,14 +302,19 @@ inline void task_initializing(void)
  */
 inline void task_idle(void)
 {
-    if(led_div++ >= 50){
+    if(led_clk_div++ >= 50){
         cpl_led();
-        led_div = 0;
+        led_clk_div = 0;
     }
  
     set_pwm_off();
-    check_idle_zero_pot();
-    check_switches();
+    
+    if(system_flags.can_enabled){
+        check_can();
+    }else{
+        check_idle_zero_pot();
+        check_switches();
+    }
 
     VERBOSE_MSG(usart_send_char('\n'));
 
@@ -216,19 +330,23 @@ inline void task_idle(void)
  */
 inline void task_running(void)
 {
-    if(led_div++ >= 10){
+    if(led_clk_div++ >= 10){
         cpl_led();
-        led_div = 0;
+        led_clk_div = 0;
     }
-    check_switches();
-    //check_running_current();
-    //check_running_voltage();
-    //check_running_temperature();
+
+    if(!system_flags.can_enabled){
+        check_switches();
+        //check_running_current();
+        //check_running_voltage();
+        //check_running_temperature();
+    }
 
     VERBOSE_MSG(usart_send_char('\n'));
 
     if(system_flags.on_off_switch && system_flags.dms_switch){
-        calc_d(1);
+        //calc_d(1);
+        pwm_compute();
     }else{
         set_pwm_off();
         set_state_idle();
@@ -241,9 +359,9 @@ inline void task_running(void)
  */
 inline void task_error(void)
 {
-    if(led_div++ >= 5){
+    if(led_clk_div++ >= 5){
         cpl_led();
-        led_div = 0;
+        led_clk_div = 0;
     }
 
     OCR1A = INITIAL_D;      // assegura pwm com duty-cycle inicial
@@ -284,6 +402,10 @@ inline void task_error(void)
  */
 inline void machine_run(void)
 {
+
+//    DEBUG ONLY!!!!!!!!!
+    check_can();
+
     switch(state_machine){
         case STATE_INITIALIZING:
             task_initializing();
@@ -311,9 +433,10 @@ inline void machine_run(void)
 ISR(PCINT2_vect)
 {    
     if(bit_is_clear(FAULT_PIN, FAULT)){
-        calc_d(100);                // diminui 10% do duty-cycle imediatamente
+        //calc_d(100);                // diminui 10% do duty-cycle imediatamente
+        pwm_treat_fault();
         set_led();
-        fault_count++;
+        pwm_fault_count++;
     }
 
     if(bit_is_set(SWITCHES_PIN, ON_OFF_SWITCH)
