@@ -52,21 +52,6 @@ void can_print_msg(can_t *msg)
 }
 
 /**
- * @brief
- */
-inline void check_can(void)
-{
-    if(can_check_message()){
-        can_t msg;
-        if(can_get_message(&msg)){
-            can_print_msg(&msg);
-            
-
-        }
-    }
-}
-
-/**
  * @brief checks if the pot is zeroed when idle.
  */
 inline void check_idle_zero_pot(void)

@@ -18,6 +18,7 @@
 #include "usart.h"
 #include "dbg_vrb.h"
 #include "can.h"
+#include "can_app.h"
 
 typedef enum state_machine{
     STATE_INITIALIZING,
@@ -52,7 +53,10 @@ typedef struct control{
     uint16_t    D;              // value converted from 0 to TOP
     uint8_t     I_raw;          // value from 0 to 255
     uint8_t     I_raw_target;   // value for target pwm, from 0 to 255
-    uint8_t     I;              // value converted to amps (0 to 150)
+    uint8_t     I;              // value of current in AMPS
+    uint8_t     V;              // value of voltage in VOLTS
+    uint8_t     R;              // value of angular velocity in RPMS
+    uint8_t     T;              // value of temperature in CELCIUS DEGREES
 }control_t;
 
 control_t control;
@@ -66,7 +70,7 @@ void check_idle_temperature(void);
 void check_running_current(void);
 void check_running_voltage(void);
 void check_running_temperature(void);
-void check_can(void);
+//void check_can(void);         // transfered to can_app.h
 void check_pwm_fault(void);
 
 // machine tasks
