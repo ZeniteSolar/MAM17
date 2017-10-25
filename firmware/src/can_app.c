@@ -26,7 +26,7 @@ inline void can_app_print_msg(can_t *msg)
 inline void can_app_task(void)
 {
     check_can();
-    can_app_send_state();
+//    can_app_send_state();
 }
 
 inline void can_app_send_state(void)
@@ -84,7 +84,6 @@ inline void can_app_extractor_mic17_motor(can_t *msg)
 {
     system_flags.on_off_switch  = bit_is_set(msg->data[2], 0);
     system_flags.dms_switch     = bit_is_set(msg->data[2], 1);
-    system_flags.pot_zero_width = bit_is_set(msg->data[2], 2);
 
     control.D_raw_target        = msg->data[1];
     control.I_raw_target        = msg->data[2];
@@ -118,7 +117,8 @@ inline void check_can(void)
     if(can_check_message()){
         can_t msg;
         if(can_get_message(&msg)){
-            can_app_msg_extractors_switch(&msg);
+            can_app_print_msg(&msg);
+//            can_app_msg_extractors_switch(&msg);
         }
     }
 }

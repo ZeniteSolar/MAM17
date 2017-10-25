@@ -32,26 +32,6 @@ inline void check_switches(void)
 }
 
 /**
- * @brief prints all known information about a given can_t msg
- * @param *msg is a pointer to the can_t message 
- */
-void can_print_msg(can_t *msg)
-{
-    usart_send_string("ID: ");
-    usart_send_uint16(msg->id);
-    usart_send_string("F: ");
-    usart_send_uint16(msg->flags.rtr);
-    usart_send_string("L: ");
-    usart_send_uint16(msg->length);
-    usart_send_string("D: ");
-    for(uint8_t i = 0; i< msg->length; i++){
-        usart_send_uint16(msg->data[i]);
-        usart_send_char(' ');
-    }
-    usart_send_char('\n');
-}
-
-/**
  * @brief checks if the pot is zeroed when idle.
  */
 inline void check_idle_zero_pot(void)
@@ -388,8 +368,7 @@ inline void task_error(void)
 inline void machine_run(void)
 {
 
-//    DEBUG ONLY!!!!!!!!!
-    check_can();
+    can_app_task();
 
     switch(state_machine){
         case STATE_INITIALIZING:
