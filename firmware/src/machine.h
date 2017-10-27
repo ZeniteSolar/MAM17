@@ -80,6 +80,7 @@ void task_running(void);
 void task_error(void);
 
 // the machine itself
+void machine_init(void);
 void machine_run(void);
 void set_state_error(void);
 void set_state_initializing(void);
@@ -90,6 +91,7 @@ void set_state_running(void);
 state_machine_t state_machine;
 system_flags_t system_flags;
 error_flags_t error_flags;
+volatile uint8_t machine_clk;
 uint8_t total_errors;   // Contagem de ERROS
 
 // pwm macros
@@ -110,7 +112,7 @@ uint8_t check_pwm_fault_times;
 // other variables
 uint8_t led_clk_div;
 
-// externs
-//extern uint8_t total_errors;
+// ISRs
+ISR(TIMER2_COMPA_vect);
 
 #endif /* ifndef MACHINE_H */
