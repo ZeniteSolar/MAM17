@@ -6,8 +6,8 @@
  * @brief Headers for main.c
  *
  */
-#ifndef MAIN_H_
-#define MAIN_H_ 
+#ifndef MAIN_H
+#define MAIN_H 
 
 #ifndef F_CPU
 #define F_CPU 16000000UL    ///< Frequency of CPU
@@ -87,4 +87,4 @@ const uint8_t can_filter[] PROGMEM =
 
 void can_app_print_msg(can_t *msg);
 
-#endif /* ifndef MAIN_H_ */
+#endif /* ifndef MAIN_H */

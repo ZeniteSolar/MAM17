@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef PWM_H_
-#define PWM_H_
+#ifndef PWM_H
+#define PWM_H
 
 #include "avr/io.h"
 #include "avr/interrupt.h"
@@ -33,4 +33,4 @@ void pwm_init(void);
 // extern system_flags_t system_flags;
 // extern error_flags_t error_flags;
 
-#endif /* ifndef PWM_H_ */
+#endif /* ifndef PWM_H */

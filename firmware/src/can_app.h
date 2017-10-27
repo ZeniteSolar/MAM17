@@ -1,5 +1,5 @@
-#ifndef CAN_APP_H_
-#define CAN_APP_H_ 
+#ifndef CAN_APP_H
+#define CAN_APP_H 
 
 #include "conf.h"
 #include "machine.h"
@@ -21,4 +21,4 @@ void check_can(void);
 //extern flags_errors_t flags_errors;
 //extern system_flags_t system_flags;
 
-#endif /* ifndef CAN_APP_H_ */
+#endif /* ifndef CAN_APP_H */

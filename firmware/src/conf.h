@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef CONF_H_
-#define CONF_H_
+#ifndef CONF_H
+#define CONF_H
 
 // CONFIGURACOES DE COMPILACAO
 //#define DEBUG_ON
@@ -37,7 +37,7 @@
 #define PWM_D_LIN_DIV               1   //!< this is B for D = (D*A) >> B
 
 // tempo em que o potenciometro deve ficar zerado para que seja permitido ligar 
-#define MIN_ZERO_WIDTH_TIMES        10     
+#define MIN_ZERO_WIDTHTIMES        10     
 // number of checks before reset the pwm fault counter.
 #define CHECKS_BEFORE_RESET_FAULT_COUNTER 100
 // maximum of consecutive faults before state an error
@@ -71,4 +71,30 @@
 #define     clr_led()               clr_bit(LED_PORT, LED)
 
 
-#endif /* ifndef CONF_H_ */
+// CANBUS DEFINITONS
+// ----------------------------------------------------------------------------
+/* Global settings for building the can-lib and application program.
+ *
+ * The following two #defines must be set identically for the can-lib and
+ * your application program. They control the underlying CAN struct. If the
+ * settings disagree, the underlying CAN struct will be broken, with
+ * unpredictable results.
+ * If can.h detects that any of the #defines is not defined, it will set them
+ * to the default values shown here, so it is in your own interest to have a
+ * consistent setting. Ommiting the #defines in both can-lib and application
+ * program will apply the defaults in a consistent way too.
+ *
+ * Select if you want to use 29 bit identifiers.
+ */
+#define	SUPPORT_EXTENDED_CANID	0
+
+/* Select if you want to use timestamps.
+ * Timestamps are sourced from a register internal to the AT90CAN.
+ * Selecting them on any other controller will have no effect, they will
+ * be 0 all the time.
+ */
+#define	SUPPORT_TIMESTAMPS		0
+
+
+
+#endif /* ifndef CONF_H */

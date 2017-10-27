@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef MACHINE_H_
-#define MACHINE_H_ 
+#ifndef MACHINE_H
+#define MACHINE_H 
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -113,4 +113,4 @@ uint8_t led_clk_div;
 // externs
 //extern uint8_t total_errors;
 
-#endif /* ifndef MACHINE_H_ */
+#endif /* ifndef MACHINE_H */

@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _DBG_VRB_H_
-#define _DBG_VRB_H_
+#ifndef DBG_VRB_H
+#define DBG_VRB_H
     
 #ifdef VERBOSE_ON
 #define VERBOSE_MSG(x) x
@@ -26,4 +26,4 @@
 #define DEBUG1
 #endif
 
-#endif /* ifndef _DBG_VRB_H_ */
+#endif /* ifndef DBG_VRB_H */

@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef ADC_H_
-#define ADC_H_
+#ifndef ADC_H
+#define ADC_H
 
 #include "avr/io.h"
 #include "avr/interrupt.h"
@@ -44,4 +44,4 @@ volatile struct cbuf{
 uint8_t ma_adc0(void);
 uint8_t avg_adc0;
 
-#endif /* ifndef ADC_H_ */
+#endif /* ifndef ADC_H */
