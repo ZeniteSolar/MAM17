@@ -26,8 +26,10 @@ void can_app_extractor_mic17_motor(can_t *msg);
 void can_app_msg_extractors_switch(can_t *msg);
 void check_can(void);
 
-//extern control_t control;
-//extern flags_errors_t flags_errors;
-//extern system_flags_t system_flags;
+#define CAN_APP_SEND_STATE_CLK_DIV 10
+#define CAN_APP_SEND_MOTOR_CLK_DIV 1
+
+uint8_t can_app_send_state_clk_div;
+uint8_t can_app_send_motor_clk_div;
 
 #endif /* ifndef CAN_APP_H */

@@ -28,6 +28,12 @@
 #define CAN_FILTER_MSG_MIC17_MOTOR      0b00000100001   //<! Informs about motor controls.
 #define CAN_FILTER_MSG_MIC17_PUMPS      0b00000100010   //<! Informs about pumps controls.
 #define CAN_FILTER_MSG_MIC17_MPPTS      0b00000100011   //<! Informs about mppts controls.
+#define CAN_MSG_MIC17_MOTOR_DMS_BYTE    	2
+#define CAN_MSG_MIC17_MOTOR_DMS_BIT      	1
+#define CAN_MSG_MIC17_MOTOR_MOTOR_ON_BYTE   2
+#define CAN_MSG_MIC17_MOTOR_MOTOR_ON_BIT    0
+#define CAN_MSG_MIC17_MOTOR_D_RAW_BYTE		1
+#define CAN_MSG_MIC17_MOTOR_I_RAW_BYTE		0
 
 // MESSAGES FROM AC17:
 #define CAN_MASK_AC17                   0b11111111111   //<! Mask for AC17

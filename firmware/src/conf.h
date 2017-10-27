@@ -19,10 +19,10 @@
 #define USART_ON
 #define CAN_ON
 #define ADC_ON
-#define PWM_ON
-#define SLEEP_ON
-#define WATCHDOG_ON
 #define MACHINE_ON
+#define PWM_ON
+#define WATCHDOG_ON
+#define SLEEP_ON
 
 
 // PWM DEFINITIONS

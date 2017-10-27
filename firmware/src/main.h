@@ -15,6 +15,7 @@
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>
+#include <avr/interrupt.h>
 
 // MODULOS DO SISTEMA
 #include "conf.h"
@@ -32,6 +33,7 @@
 
 #ifdef CAN_ON
 #include "can.h"
+#include "can_filters.h"
 #else
 #pragma message("CAN: OFF!")
 #endif /*ifdef CAN_ON*/
@@ -44,7 +46,6 @@
 
 #ifdef MACHINE_ON
 #include "machine.h"
-#include "can_filters.h"
 #else
 #pragma message("MACHINE: OFF!")
 #endif /*ifdef MACHINE_ON*/
@@ -66,7 +67,5 @@
 #else
 #pragma message("SLEEP: OFF!")
 #endif /*ifdef SLEEP_ON*/
-
-void can_app_print_msg(can_t *msg);
 
 #endif /* ifndef MAIN_H */

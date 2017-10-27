@@ -28,7 +28,17 @@ inline void can_app_print_msg(can_t *msg)
 inline void can_app_task(void)
 {
     check_can();
-//    can_app_send_state();
+
+    if(can_app_send_state_clk_div++ >= CAN_APP_SEND_STATE_CLK_DIV){
+        can_app_send_state();
+        can_app_send_state_clk_div = 0;
+    }
+
+    if(can_app_send_motor_clk_div >= CAN_APP_SEND_MOTOR_CLK_DIV){
+        can_app_send_motor();
+        can_app_send_motor_clk_div = 0;
+    }
+
 }
 
 inline void can_app_send_state(void)
@@ -66,17 +76,29 @@ inline void can_app_send_motor(void)
  */
 inline void can_app_extractor_mic17_state(can_t *msg)
 {
-    //
+    // TODO:
+    //  - se tiver em erro, desligar acionamento
+    //  - se nao tiver mensagem em X repeticoes, desligar acionamento
+    if(msg->data[CAN_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC17){
+        // zerar contador
+        if(msg->data[CAN_STATE_MSG_ERROR_BYTE]){
+            //ERROR!!!
+        }
+        /*if(contador == maximo)*/{
+            //ERROR!!!
+        }
+
+         
+    }
 }
  
 /**
  * @brief extracts the specific MIC17 MOTOR  message
  *
- * The msg is AAAAAAAA000000DCBEEEEEEEEFFFFFFFF
+ * The msg is AAAAAAAA0000000CBEEEEEEEEFFFFFFFF
  * A is the Signature of module
- * B is the on/off switch
+ * B is the motor on/off switch
  * C is the deadman's switch
- * D is the pot_zero_width
  * E is the voltage potentiometer
  * F is the current potentiometer
  *
@@ -84,11 +106,23 @@ inline void can_app_extractor_mic17_state(can_t *msg)
 */ 
 inline void can_app_extractor_mic17_motor(can_t *msg)
 {
-    system_flags.on_off_switch  = bit_is_set(msg->data[2], 0);
-    system_flags.dms_switch     = bit_is_set(msg->data[2], 1);
+    if(msg->data[CAN_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC17){
 
-    control.D_raw_target        = msg->data[1];
-    control.I_raw_target        = msg->data[2];
+        system_flags.dms_switch         = bit_is_set(msg->data[
+            CAN_MSG_MIC17_MOTOR_DMS_BYTE], 
+            CAN_MSG_MIC17_MOTOR_DMS_BIT);
+
+        system_flags.on_off_switch      = bit_is_set(msg->data[
+            CAN_MSG_MIC17_MOTOR_MOTOR_ON_BYTE], 
+            CAN_MSG_MIC17_MOTOR_MOTOR_ON_BIT);
+
+        control.D_raw_target        = msg->data[
+            CAN_MSG_MIC17_MOTOR_D_RAW_BYTE];
+
+        control.I_raw_target        = msg->data[
+            CAN_MSG_MIC17_MOTOR_I_RAW_BYTE];
+
+    }
 }
 
 /**
@@ -120,7 +154,7 @@ inline void check_can(void)
         can_t msg;
         if(can_get_message(&msg)){
             can_app_print_msg(&msg);
-//            can_app_msg_extractors_switch(&msg);
+            can_app_msg_extractors_switch(&msg);
         }
     }
 }

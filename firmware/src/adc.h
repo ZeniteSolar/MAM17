@@ -11,12 +11,14 @@
 #ifndef ADC_H
 #define ADC_H
 
-#include "avr/io.h"
-#include "avr/interrupt.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
 #include "../lib/bit_utils.h"
-#include "dbg_vrb.h"
 #include "../lib/cbuf.h"
 #include "../lib/log2.h"
+
+#include "dbg_vrb.h"
 
 #define ADC_LAST_CHANNEL 4                  //*< quantity of channels used
 
