@@ -6,40 +6,23 @@
  * @brief Headers for main.c
  *
  */
-
-#ifndef _MAIN_H_
-#define _MAIN_H_ 
+#ifndef MAIN_H_
+#define MAIN_H_ 
 
 #ifndef F_CPU
 #define F_CPU 16000000UL    ///< Frequency of CPU
 #endif /* ifndef F_CPU */
 
-// BIBLIOTECAS AVR
-#include <avr/io.h> 	    //definições do componente especificado
-#include <util/delay.h>		//biblioteca para o uso das rotinas de _delay_ms e _delay_us()
-#include <avr/interrupt.h>
-#include <avr/eeprom.h>
-#include <avr/pgmspace.h>   //para o uso do PROGMEM, gravação de dados na memória flash
-#include <avr/sleep.h>      //para o uso do modo sleep
-#include <avr/wdt.h>        //para o uso do Watchdog
-#include <avr/power.h>
-
-// BIBLIOTECAS
-//#include "../lib/cbuf.h"
-//#include "../lib/log2.h"
-#include "../lib/bit_utils.h"
-
-// CONFIGURACOES DO SISTEMA
-#include "conf.h"
-
-#include "dbg_vrb.h"        //para o uso das predefinicoes de debug e verbose
+#include <avr/io.h>
+#include <avr/pgmspace.h>
 
 // MODULOS DO SISTEMA
-#ifdef ADC_ON 
-#include "adc.h"
-#else
-#pragma message("ADC: OFF!")
-#endif  /*ifdef ADC_ON*/
+#include "conf.h"
+
+//#if defined(DEBUG_ON) || defined(VERBOSE_ON)
+#include "dbg_vrb.h"
+//#pragma message("VERBOSE OR DEBUG: ON!")
+//#endif  /*ifdef ADC_ON*/
 
 #ifdef USART_ON
 #include "usart.h"
@@ -47,11 +30,48 @@
 #pragma message("USART: OFF!")
 #endif /*ifdef USART_ON*/
 
+#ifdef CAN_ON
+#include "can.h"
+
+const uint8_t can_filter[] PROGMEM = 
+{
+	// Group 0
+	MCP2515_FILTER(0),				// Filter 0
+	MCP2515_FILTER(0),				// Filter 1
+	
+	// Group 1
+	MCP2515_FILTER(0),		// Filter 2
+	MCP2515_FILTER(0),		// Filter 3
+	MCP2515_FILTER(0),		// Filter 4
+	MCP2515_FILTER(0),		// Filter 5
+	
+	MCP2515_FILTER(0),				// Mask 0 (for group 0)
+	MCP2515_FILTER(0),		// Mask 1 (for group 1)
+};
+
+#include "can_app.h"
+
+#else
+#pragma message("CAN: OFF!")
+#endif /*ifdef CAN_ON*/
+
+#ifdef ADC_ON 
+#include "adc.h"
+#else
+#pragma message("ADC: OFF!")
+#endif  /*ifdef ADC_ON*/
+
 #ifdef MACHINE_ON
 #include "machine.h"
 #else
 #pragma message("MACHINE: OFF!")
 #endif /*ifdef MACHINE_ON*/
+
+#ifdef PWM_ON
+#include "pwm.h"
+#else
+#pragma message("PWM: OFF!")
+#endif /*ifdef PWM*/
 
 #ifdef WATCHDOG_ON
 #include "watchdog.h"
@@ -59,10 +79,12 @@
 #pragma message("WATCHDOG: OFF!")
 #endif /*ifdef WATCHDOG_ON*/
 
-#ifdef CAN_ON
-#include "can.h"
+#ifdef SLEEP_ON
+#include "sleep.h"
 #else
-#pragma message("CAN: OFF!")
-#endif /*ifdef CAN_ON*/
+#pragma message("SLEEP: OFF!")
+#endif /*ifdef SLEEP_ON*/
 
-#endif /* ifndef _MAIN_H_ */
+void can_app_print_msg(can_t *msg);
+
+#endif /* ifndef MAIN_H_ */

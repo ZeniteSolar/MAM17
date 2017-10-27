@@ -1,5 +1,5 @@
-#ifndef _CAN_IDS_H_
-#define _CAN_IDS_H_ 
+#ifndef CAN_IDS_H_
+#define CAN_IDS_H_ 
 
 // GENERIC FIELDS FROM ANY MODULE's STATE MESSAGE
 #define CAN_LENGTH_MSG_STATE            3
@@ -30,12 +30,10 @@
 #define CAN_MSG_AC17_MOTOR_I_BYTE       3
 #define CAN_MSG_AC17_MOTOR_R_BYTE       4
 #define CAN_MSG_AC17_MOTOR_T_BYTE       5
- 
-
 
 // MESSAGES FROM MAB17
 #define CAN_MASK_MAB17                  0b11111111111   //<! Mask for MAB17
 #define CAN_FILTER_MSG_MAB17_STATE      0b00000000000   //<! Informs about state and errors
 #define CAN_FILTER_MSG_MAB17_PUMP       0b00000000000   //<! Informs about motor
 
-#endif /* ifndef _CAN_IDS_H_ */
+#endif /* ifndef CAN_IDS_H_ */

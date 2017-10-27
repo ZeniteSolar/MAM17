@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef _ADC_H_
-#define _ADC_H_
+#ifndef ADC_H_
+#define ADC_H_
 
 #include "avr/io.h"
 #include "avr/interrupt.h"
@@ -26,7 +26,7 @@ typedef volatile enum adc_channels{
 static adc_channels_t ADC_CHANNEL = ADC0;   //*< current chosen adc channel
 uint8_t raw_adc[ADC_LAST_CHANNEL];          //*< an array for raw measurements
 
-void adc_select_channel(adc_channels_t __ch);
+void adc_select_channel(adc_channels_t _ch);
 void adc_init(void);
 
 // MOVING AVERAGE BELOW //
@@ -44,4 +44,4 @@ volatile struct cbuf{
 uint8_t ma_adc0(void);
 uint8_t avg_adc0;
 
-#endif /* ifndef _ADC_H_ */
+#endif /* ifndef ADC_H_ */

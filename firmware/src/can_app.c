@@ -5,19 +5,21 @@
  */
 inline void can_app_print_msg(can_t *msg)
 {
-	usart_send_string("ID: ");
-	usart_send_uint16(msg->id);
-	usart_send_string(". Data: ");
+    usart_send_string("ID: ");
+    usart_send_uint16(msg->id);
+    usart_send_string(". D: ");
 
-	for(uint8_t i = 0; i < msg->length; i++){
-	  usart_send_uint16(msg->data[i]);
-	  usart_send_char(' ');
-	}
+    for(uint8_t i = 0; i < msg->length; i++){
+      usart_send_uint16(msg->data[i]);
+      usart_send_char(' ');
+    }
 
-	usart_send_string(". ERR: ");
-	
-//	usart_send_uint16(can_msg_err);
-	usart_send_char('\n');
+    usart_send_string(". ERR: ");
+    can_error_register_t err = can_read_error_register();
+    usart_send_uint16(err.rx);
+    usart_send_char(' ');
+    usart_send_uint16(err.tx);
+    usart_send_char('\n');
 }
 
 /**

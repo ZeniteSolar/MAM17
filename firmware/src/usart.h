@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef _USART_H_
-#define _USART_H_
+#ifndef USART_H_
+#define USART_H_
 
 #ifndef F_CPU
 #define F_CPU 16000000UL    //define a frequencia do microcontrolador - 16MHz
