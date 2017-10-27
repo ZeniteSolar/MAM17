@@ -32,25 +32,6 @@
 
 #ifdef CAN_ON
 #include "can.h"
-
-const uint8_t can_filter[] PROGMEM = 
-{
-	// Group 0
-	MCP2515_FILTER(0),				// Filter 0
-	MCP2515_FILTER(0),				// Filter 1
-	
-	// Group 1
-	MCP2515_FILTER(0),		// Filter 2
-	MCP2515_FILTER(0),		// Filter 3
-	MCP2515_FILTER(0),		// Filter 4
-	MCP2515_FILTER(0),		// Filter 5
-	
-	MCP2515_FILTER(0),				// Mask 0 (for group 0)
-	MCP2515_FILTER(0),		// Mask 1 (for group 1)
-};
-
-#include "can_app.h"
-
 #else
 #pragma message("CAN: OFF!")
 #endif /*ifdef CAN_ON*/
@@ -63,6 +44,7 @@ const uint8_t can_filter[] PROGMEM =
 
 #ifdef MACHINE_ON
 #include "machine.h"
+#include "can_filters.h"
 #else
 #pragma message("MACHINE: OFF!")
 #endif /*ifdef MACHINE_ON*/
