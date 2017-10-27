@@ -58,7 +58,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "config.h"
+#include "conf.h"
 
 // ----------------------------------------------------------------------------
 /** \ingroup	can_interface

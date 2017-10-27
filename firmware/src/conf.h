@@ -37,7 +37,7 @@
 #define PWM_D_LIN_DIV               1   //!< this is B for D = (D*A) >> B
 
 // tempo em que o potenciometro deve ficar zerado para que seja permitido ligar 
-#define MIN_ZERO_WIDTHTIMES        10     
+#define MIN_ZERO_WIDTH_TIMES        10     
 // number of checks before reset the pwm fault counter.
 #define CHECKS_BEFORE_RESET_FAULT_COUNTER 100
 // maximum of consecutive faults before state an error
