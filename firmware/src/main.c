@@ -65,3 +65,22 @@ int main(void)
 	}
 }
 
+
+/**
+ * @brief se em debug, fica chaveando os pinos de debugs até o reset do watchdog
+ */
+ISR(BADISR_vect)
+{
+    for(;;){
+        VERBOSE0_MSG(usart_send_string("\nFATAL ERROR: BAD ISR."));
+        #ifdef WATCHDOG_ON
+            VERBOSE0_MSG(usart_send_string("WAITING FOR WATCHDOG TO RESET...\n"));
+        #endif
+        #ifdef DEBUG_ON
+            DEBUG0;
+            DEBUG1;
+            _delay_ms(100);
+        #endif
+    }
+}
+
