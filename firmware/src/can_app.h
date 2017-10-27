@@ -1,3 +1,12 @@
+/**
+ * @file can_app.h
+ *
+ * @defgroup CANAPP    Application Module for canbus
+ *
+ * @brief The application layer module for canbus
+ *
+ */
+
 #ifndef CAN_APP_H
 #define CAN_APP_H 
 
