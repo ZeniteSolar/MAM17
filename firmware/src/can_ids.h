@@ -1,3 +1,12 @@
+/**
+ * @file can_ids.h
+ *
+ * @defgroup CANAPP    Ids for can application
+ *
+ * @brief Ids for canbus application
+ *
+ */
+
 #ifndef CAN_IDS_H
 #define CAN_IDS_H 
 

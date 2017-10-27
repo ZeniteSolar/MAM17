@@ -1,3 +1,12 @@
+/**
+ * @file can_filters.h
+ *
+ * @defgroup CANAPP    Filters for can application
+ *
+ * @brief Filters for canbus application
+ *
+ */
+
 #ifndef CAN_FILTERS_H
 #define CAN_FILTERS_H
 
