@@ -16,12 +16,36 @@
 #define VERBOSE_MSG(x)
 #endif
 
-#ifdef VERBOSE0_ON
-#define VERBOSE0_MSG(x) x
+#ifdef VERBOSE_ON_ERROR
+#define VERBOSE_MSG_ERROR(x) x
 #else
-#define VERBOSE0_MSG(x)
+#define VERBOSE0_MSG_ERROR(x)
+#endif 
+
+#ifdef VERBOSE_ON_CAN_APP
+#define VERBOSE_MSG_CAN_APP(x) x
+#else
+#define VERBOSE0_MSG_CAN_APP(x)
 #endif
 
+#ifdef VERBOSE_ON_ADC
+#define VERBOSE_MSG_ADC(x) x
+#else
+#define VERBOSE0_MSG_ADC(x)
+#endif 
+ 
+#ifdef VERBOSE_ON_PWM
+#define VERBOSE_MSG_PWM(x) x
+#else
+#define VERBOSE0_MSG_PWM(x)
+#endif 
+ 
+#ifdef VERBOSE_ON_INIT
+#define VERBOSE_MSG_INIT(x) x
+#else
+#define VERBOSE0_MSG_INIT(x)
+#endif 
+ 
 #ifdef DEBUG_ON
 #define DEBUG_MSG(x) x
 #define DEBUG0 cpl_bit(PORTB, PB5);
