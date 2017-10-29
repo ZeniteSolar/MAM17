@@ -26,30 +26,26 @@ void machine_init(void)
 	
 }
 
-
-
-
-
 /**
  * @brief checks if the switches updating system flags
  */
 inline void check_switches(void)
 {
-    VERBOSE_MSG(usart_send_string("Motor Switch: "));
+    VERBOSE_MSG_MACHINE(usart_send_string("Motor Switch: "));
     if(bit_is_clear(SWITCHES_PIN, ON_OFF_SWITCH)){
-        VERBOSE_MSG(usart_send_string("On.  "));
+        VERBOSE_MSG_MACHINE(usart_send_string("On.  "));
         system_flags.on_off_switch = 1;
     }else{
-        VERBOSE_MSG(usart_send_string("Off. "));
+        VERBOSE_MSG_MACHINE(usart_send_string("Off. "));
         system_flags.on_off_switch = 0;
     }
     
-    VERBOSE_MSG(usart_send_string("Deadman' Switch: "));
+    VERBOSE_MSG_MACHINE(usart_send_string("Deadman' Switch: "));
     if(bit_is_set(SWITCHES_PIN, DEAD_MAN_SWITCH)){
-        VERBOSE_MSG(usart_send_string("On.  "));
+        VERBOSE_MSG_MACHINE(usart_send_string("On.  "));
         system_flags.dms_switch = 1;   
     }else{
-        VERBOSE_MSG(usart_send_string("Off. "));
+        VERBOSE_MSG_MACHINE(usart_send_string("Off. "));
         system_flags.dms_switch = 0;   
     }
 }
@@ -59,12 +55,12 @@ inline void check_switches(void)
  */
 inline void check_idle_zero_pot(void)
 {
-    VERBOSE_MSG(usart_send_string("Potentiometer: "));
+    VERBOSE_MSG_MACHINE(usart_send_string("Potentiometer: "));
     if(pwm_zero_width(ma_adc0())){  // computa a media
-        VERBOSE_MSG(usart_send_string("ok.  "));
+        VERBOSE_MSG_MACHINE(usart_send_string("ok.  "));
         system_flags.pot_zero_width = 1;   
     }else{
-        VERBOSE_MSG(usart_send_string("Nok. "));
+        VERBOSE_MSG_MACHINE(usart_send_string("Nok. "));
         system_flags.pot_zero_width = 0;
     } 
 }
@@ -88,9 +84,9 @@ inline void check_pwm_fault(void)
  */
 inline void check_buffers(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking buffers..."));
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking buffers..."));
     while(!CBUF_IsFull(cbuf_adc0));
-    VERBOSE_MSG(usart_send_string(" \t\tdone.\n")); 
+    VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n")); 
 }
 
 /**
@@ -98,9 +94,9 @@ inline void check_buffers(void)
  */
 inline void check_idle_current(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking motor current levels..."));
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking motor current levels..."));
     //if(motor_current <= MAXIMUM_OFF_CURRENT);
-        VERBOSE_MSG(usart_send_string(" \t\tdone.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n"));
     //else error_flag: motor_current at off_state bigger than it should be. 
 }
 
@@ -109,9 +105,9 @@ inline void check_idle_current(void)
  */
 inline void check_idle_voltage(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking motor voltage levels..."));
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking motor voltage levels..."));
     //if(output_voltage <= MAXIMUM_OFF_VOLTAGE);
-        VERBOSE_MSG(usart_send_string(" \t\tdone.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n"));
     //else error_flag: motor_voltage at off_state bigger than it should be.
 }
 
@@ -120,9 +116,9 @@ inline void check_idle_voltage(void)
  */
 inline void check_idle_temperature(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking motor temperature levels..."));
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking motor temperature levels..."));
     //if(temperature <= MAXIMUM_OFF_TEMPERATURE);
-        VERBOSE_MSG(usart_send_string(" \t\tdone.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n"));
     //else error_flag: motor_temperature at off_state bigger than it should be.
 }
  
@@ -198,6 +194,7 @@ inline void task_initializing(void)
     set_pwm_off();
     pwm_fault_count = 0;
 
+#ifdef CAN_ON
     check_can();
     if(system_flags.can_enabled){
         //check_buffers();
@@ -205,13 +202,14 @@ inline void task_initializing(void)
         //check_idle_voltage();
         //check_idle_temperature();
     }
+#endif
    
     if(!error_flags.all){
-        VERBOSE_MSG(usart_send_string("System initialized without errors.\n"));
+        VERBOSE_MSG_INIT(usart_send_string("System initialized without errors.\n"));
         set_state_idle();
     }
     else{
-        VERBOSE_MSG(usart_send_string("Sorry. I have have found errors in the initialilation process. \n\nI will begin to process it...\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("Sorry. I have have found errors in the initialilation process. \n\nI will begin to process it...\n"));
         set_state_error();
     }
 }
@@ -240,10 +238,10 @@ inline void task_idle(void)
         check_switches();
     }
 
-    VERBOSE_MSG(usart_send_char('\n'));
+    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
 
     if(system_flags.on_off_switch && system_flags.dms_switch && system_flags.pot_zero_width){
-        VERBOSE_MSG(usart_send_string("Enjoy, the system is at its RUNNING STATE!!\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string("Enjoy, the system is at its RUNNING STATE!!\n"));
         set_state_running();
     }
 }
@@ -266,7 +264,7 @@ inline void task_running(void)
         //check_running_temperature();
     }
 
-    VERBOSE_MSG(usart_send_char('\n'));
+    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
 
     if(system_flags.on_off_switch && system_flags.dms_switch){
         //calc_d(1);
@@ -291,28 +289,28 @@ inline void task_error(void)
     OCR1A = INITIAL_D;      // assegura pwm com duty-cycle inicial
 
     total_errors++;         // incrementa a contagem de erros
-    VERBOSE_MSG(usart_send_string("The error code is: "));
-    VERBOSE_MSG(usart_send_char(error_flags.all));
-    VERBOSE_MSG(usart_send_char('\n'));
+    VERBOSE_MSG_MACHINE(usart_send_string("The error code is: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(error_flags.all));
+    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
 
     if(error_flags.overcurrent)
-        VERBOSE_MSG(usart_send_string("\t - Motor over-current!\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string("\t - Motor over-current!\n"));
     if(error_flags.overvoltage)
-        VERBOSE_MSG(usart_send_string("\t - Motor over-voltage!\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string("\t - Motor over-voltage!\n"));
     if(error_flags.overheat)
-        VERBOSE_MSG(usart_send_string("\t - Motor over-heat!\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string("\t - Motor over-heat!\n"));
     if(!error_flags.all)
-        VERBOSE_MSG(usart_send_string("\t - Oh no, it was some unknown error.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string("\t - Oh no, it was some unknown error.\n"));
  
-    VERBOSE_MSG(usart_send_string("The error level is: "));
-    VERBOSE_MSG(usart_send_uint16(total_errors));
-    VERBOSE_MSG(usart_send_char('\n'));
+    VERBOSE_MSG_MACHINE(usart_send_string("The error level is: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(total_errors));
+    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
     
     if(total_errors < 2){
-        VERBOSE_MSG(usart_send_string("I will reset the machine state.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string("I will reset the machine state.\n"));
     }
     if(total_errors >= 20){
-        VERBOSE_MSG(usart_send_string("The watchdog will reset the whole system.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string("The watchdog will reset the whole system.\n"));
         for(;;);    // waits the watchdog to reset.
     }
     
@@ -378,7 +376,7 @@ ISR(PCINT2_vect)
 */
 ISR(TIMER2_COMPA_vect)
 {
-    VERBOSE0_MSG(if(machine_clk) usart_send_string("\nERROR: CLOCK CONFLICT!!!\n"));
+    VERBOSE_MSG_ERROR(if(machine_clk) usart_send_string("\nERROR: CLOCK CONFLICT!!!\n"));
 	machine_clk = 1;
 }
 

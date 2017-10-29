@@ -45,7 +45,14 @@
 #else
 #define VERBOSE0_MSG_INIT(x)
 #endif 
+
+#ifdef VERBOSE_ON_MACHINE
+#define VERBOSE_MSG_MACHINE(x) x
+#else
+#define VERBOSE0_MSG_MACHINE(x)
+#endif 
  
+
 #ifdef DEBUG_ON
 #define DEBUG_MSG(x) x
 #define DEBUG0 cpl_bit(PORTB, PB5);
