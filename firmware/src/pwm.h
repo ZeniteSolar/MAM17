@@ -21,7 +21,7 @@
 
 // pwm functions
 void pwm_init(void);
-// void pwm_reset(void);
+void pwm_reset(void);
 // void pwm_compute(void);
 // void pwm_treat_fault(void);
 // uint8_t pwm_zero_width(uint16_t duty_cycle);
