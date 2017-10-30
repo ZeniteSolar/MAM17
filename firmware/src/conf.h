@@ -12,10 +12,10 @@
 
 // CONFIGURACOES DE COMPILACAO
 //#define DEBUG_ON
-#define VERBOSE_ON
-#define VERBOSE_ON_CAN_APP
+//#define VERBOSE_ON
+//#define VERBOSE_ON_CAN_APP
 #define VERBOSE_ON_MACHINE
-#define VERBOSE_ON_ADC
+//#define VERBOSE_ON_ADC
 #define VERBOSE_ON_PWM
 #define VERBOSE_ON_INIT
 #define VERBOSE_ON_ERROR
@@ -28,7 +28,7 @@
 #define MACHINE_ON
 #define PWM_ON
 #define WATCHDOG_ON
-//#define SLEEP_ON
+#define SLEEP_ON
 
 
 // PWM DEFINITIONS
@@ -51,11 +51,11 @@
 
 
 // INPUT PINS DEFINITIONS
-#define     DEAD_MAN_SWITCH         PD4
-#define     ON_OFF_SWITCH           PD5
-#define     SWITCHES_PORT           PORTD
-#define     SWITCHES_PIN            PIND
-#define     SWITCHES_DDR            DDRD
+//#define     DEAD_MAN_SWITCH         PD4
+//#define     ON_OFF_SWITCH           PD5
+//#define     SWITCHES_PORT           PORTD
+//#define     SWITCHES_PIN            PIND
+//#define     SWITCHES_DDR            DDRD
 #define     FAULT_PORT              PORTD
 #define     FAULT_PIN               PIND
 #define     FAULT_DDR               DDRD
