@@ -16,21 +16,17 @@
 #include "machine.h"
 
 // // pwm macros
-// #define set_pwm_duty_cycle(d)       OCR1A = d      //!< apply duty cycle 'd'
-// #define set_pwm_off()               set_pwm_duty_cycle(0)      //!< d = 0
+#define set_pwm_duty_cycle(d)       OCR1A = d      //!< apply duty cycle 'd'
+#define set_pwm_off()               set_pwm_duty_cycle(0)      //!< d = 0
 
 // pwm functions
 void pwm_init(void);
 void pwm_reset(void);
-// void pwm_compute(void);
-// void pwm_treat_fault(void);
-// uint8_t pwm_zero_width(uint16_t duty_cycle);
+void pwm_compute(void);
+void pwm_treat_fault(void);
+uint8_t pwm_zero_width(uint16_t duty_cycle);
 
 // // pwm variables
-// uint8_t pwm_d_clk_div;
-
-// extern state_machine_t state_machine;
-// extern system_flags_t system_flags;
-// extern error_flags_t error_flags;
+uint8_t pwm_d_clk_div;
 
 #endif /* ifndef PWM_H */

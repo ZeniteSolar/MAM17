@@ -63,10 +63,12 @@
 
 
 // OUTPUT PINS DEFINITIONS
+#ifdef PWM_ON
 #define     PWM_PORT                PORTB
 #define     PWM_PIN                 PINB
 #define     PWM_DDR                 DDRB
 #define     PWM                     PB1
+#endif 
 #define     LED_PORT                PORTC
 #define     LED_PIN                 PINC
 #define     LED_DDR                 DDRC

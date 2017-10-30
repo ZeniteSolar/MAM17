@@ -61,7 +61,7 @@ inline void pwm_treat_fault(void)
         control.D_raw_target -= 6;      // -10%
 }
 
-/*
+/**
  *  @brief funcao conta o tempo em que o Duty cycle fica em zero
  *  @param registrador de 16 bits; nesse caso, do timer 1 (OCR1A)
  *  @ret  retorna 1 se registrador esta em zero por mais de um segundo (para
