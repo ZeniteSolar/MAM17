@@ -17,6 +17,7 @@
 #include "adc.h"
 #include "usart.h"
 #include "dbg_vrb.h"
+#include "pwm.h"
 #ifdef CAN_ON
 #include "can.h"
 #include "can_app.h"
@@ -31,12 +32,11 @@ typedef enum state_machine{
 
 typedef union system_flags{
     struct{
-        uint8_t     can_enabled     :1;
-        uint8_t     on_off_switch   :1;
-        uint8_t     dms_switch      :1;
+        uint8_t     motor_on        :1;
+        uint8_t     dms             :1;
         uint8_t     pot_zero_width  :1;
     };
-    uint8_t   all;
+    uint8_t   all__;
 } system_flags_t;
 
 typedef union error_flags{
@@ -64,7 +64,6 @@ typedef struct control{
 control_t control;
 
 // machine checks
-void check_switches(void);
 void check_idle_zero_pot(void);
 void check_idle_current(void);
 void check_idle_voltage(void);
@@ -74,6 +73,11 @@ void check_running_voltage(void);
 void check_running_temperature(void);
 //void check_can(void);         // transfered to can_app.h
 void check_pwm_fault(void);
+
+// debug functions
+void print_system_flags(void);
+void print_error_flags(void);
+void print_control(void);
 
 // machine tasks
 void task_initializing(void);
@@ -96,18 +100,7 @@ error_flags_t error_flags;
 volatile uint8_t machine_clk;
 uint8_t total_errors;   // Contagem de ERROS
 
-// pwm macros
-#define set_pwm_duty_cycle(d)       OCR1A = d      //!< apply duty cycle 'd'
-#define set_pwm_off()               set_pwm_duty_cycle(0)      //!< d = 0
-
-// pwm functions
-void pwm_reset(void);
-void pwm_compute(void);
-void pwm_treat_fault(void);
-uint8_t pwm_zero_width(uint16_t duty_cycle);
-
 // pwm variables
-uint8_t pwm_d_clk_div;
 uint8_t pwm_fault_count;
 uint8_t check_pwm_fault_times;
 
@@ -116,5 +109,6 @@ uint8_t led_clk_div;
 
 // ISRs
 ISR(TIMER2_COMPA_vect);
+ISR(PCINT2_vect);
 
 #endif /* ifndef MACHINE_H */

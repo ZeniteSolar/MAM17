@@ -27,43 +27,13 @@ void machine_init(void)
 }
 
 /**
- * @brief checks if the switches updating system flags
- */
-inline void check_switches(void)
-{
-    VERBOSE_MSG_MACHINE(usart_send_string("Motor Switch: "));
-    if(bit_is_clear(SWITCHES_PIN, ON_OFF_SWITCH)){
-        VERBOSE_MSG_MACHINE(usart_send_string("On.  "));
-        system_flags.on_off_switch = 1;
-    }else{
-        VERBOSE_MSG_MACHINE(usart_send_string("Off. "));
-        system_flags.on_off_switch = 0;
-    }
-    
-    VERBOSE_MSG_MACHINE(usart_send_string("Deadman' Switch: "));
-    if(bit_is_set(SWITCHES_PIN, DEAD_MAN_SWITCH)){
-        VERBOSE_MSG_MACHINE(usart_send_string("On.  "));
-        system_flags.dms_switch = 1;   
-    }else{
-        VERBOSE_MSG_MACHINE(usart_send_string("Off. "));
-        system_flags.dms_switch = 0;   
-    }
-}
-
-/**
- * @brief checks if the pot is zeroed when idle.
- */
+* @brief checks if the pot is zero and updates the system flags
+*/
 inline void check_idle_zero_pot(void)
 {
-    VERBOSE_MSG_MACHINE(usart_send_string("Potentiometer: "));
-    if(pwm_zero_width(ma_adc0())){  // computa a media
-        VERBOSE_MSG_MACHINE(usart_send_string("ok.  "));
-        system_flags.pot_zero_width = 1;   
-    }else{
-        VERBOSE_MSG_MACHINE(usart_send_string("Nok. "));
-        system_flags.pot_zero_width = 0;
-    } 
+    system_flags.pot_zero_width = pwm_zero_width(control.D_raw_target);
 }
+ 
 
 /**
  * @brief checks the quantity of the faults.
@@ -85,8 +55,9 @@ inline void check_pwm_fault(void)
 inline void check_buffers(void)
 {
     VERBOSE_MSG_MACHINE(usart_send_string("Checking buffers..."));
-    while(!CBUF_IsFull(cbuf_adc0));
-    VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n")); 
+    //while(!CBUF_IsFull(cbuf_adc0));
+    VERBOSE_MSG_ERROR(usart_send_string("<No buffers to check>"));
+    //VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n")); 
 }
 
 /**
@@ -181,6 +152,65 @@ inline void set_state_running(void)
 }
 
 /**
+* @brief prints the system flags
+*/
+inline void print_system_flags(void)
+{
+    VERBOSE_MSG_MACHINE(usart_send_string("Motor Sw: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.motor_on));
+    
+    VERBOSE_MSG_MACHINE(usart_send_string(" DMS Sw: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.dms));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" Pot_zero: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.pot_zero_width)); 
+}
+
+/**
+* @brief prints the error flags
+*/
+inline void print_error_flags(void)
+{
+    VERBOSE_MSG_MACHINE(usart_send_string("\novercurrent: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overcurrent));
+    
+    VERBOSE_MSG_MACHINE(usart_send_string(" overvoltage: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overvoltage));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" overheat: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overheat));
+}
+ 
+/**
+* @brief prints the error flags
+*/
+inline void print_control(void)
+{
+    VERBOSE_MSG_MACHINE(usart_send_string("\nD: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.D_raw));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.D_raw_target));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.D));
+    
+    VERBOSE_MSG_MACHINE(usart_send_string(" I: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.I_raw));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.I_raw_target));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.I));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" V: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.V));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" R: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.R));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" T: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.T));
+} 
+
+/**
  * @brief Checks if the system is OK to run:
  *  - all ring_buffers needed to be full
  *  - checks the current
@@ -194,16 +224,11 @@ inline void task_initializing(void)
     set_pwm_off();
     pwm_fault_count = 0;
 
-#ifdef CAN_ON
-    check_can();
-    if(system_flags.can_enabled){
-        //check_buffers();
-        //check_idle_current();
-        //check_idle_voltage();
-        //check_idle_temperature();
-    }
-#endif
-   
+    //check_buffers();
+    //check_idle_current();
+    //check_idle_voltage();
+    //check_idle_temperature();
+       
     if(!error_flags.all){
         VERBOSE_MSG_INIT(usart_send_string("System initialized without errors.\n"));
         set_state_idle();
@@ -213,7 +238,6 @@ inline void task_initializing(void)
         set_state_error();
     }
 }
-
 
 /**
  * @brief waits for commands while checking the system:
@@ -229,18 +253,12 @@ inline void task_idle(void)
         led_clk_div = 0;
     }
  
-    set_pwm_off();
-    
-    if(system_flags.can_enabled){
-        check_can();
-    }else{
-        check_idle_zero_pot();
-        check_switches();
-    }
+    check_idle_zero_pot();
+    //check_idle_current();
+    //check_idle_voltage();
+    //check_idle_temperature();
 
-    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
-
-    if(system_flags.on_off_switch && system_flags.dms_switch && system_flags.pot_zero_width){
+    if(system_flags.motor_on && system_flags.dms && system_flags.pot_zero_width){
         VERBOSE_MSG_MACHINE(usart_send_string("Enjoy, the system is at its RUNNING STATE!!\n"));
         set_state_running();
     }
@@ -257,17 +275,11 @@ inline void task_running(void)
         led_clk_div = 0;
     }
 
-    if(!system_flags.can_enabled){
-        check_switches();
-        //check_running_current();
-        //check_running_voltage();
-        //check_running_temperature();
-    }
+    //check_running_current();
+    //check_running_voltage();
+    //check_running_temperature();
 
-    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
-
-    if(system_flags.on_off_switch && system_flags.dms_switch){
-        //calc_d(1);
+    if(system_flags.motor_on && system_flags.dms){
         pwm_compute();
     }else{
         set_pwm_off();
@@ -289,28 +301,28 @@ inline void task_error(void)
     OCR1A = INITIAL_D;      // assegura pwm com duty-cycle inicial
 
     total_errors++;         // incrementa a contagem de erros
-    VERBOSE_MSG_MACHINE(usart_send_string("The error code is: "));
-    VERBOSE_MSG_MACHINE(usart_send_char(error_flags.all));
-    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
+    VERBOSE_MSG_ERROR(usart_send_string("The error code is: "));
+    VERBOSE_MSG_ERROR(usart_send_char(error_flags.all));
+    VERBOSE_MSG_ERROR(usart_send_char('\n'));
 
     if(error_flags.overcurrent)
-        VERBOSE_MSG_MACHINE(usart_send_string("\t - Motor over-current!\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-current!\n"));
     if(error_flags.overvoltage)
-        VERBOSE_MSG_MACHINE(usart_send_string("\t - Motor over-voltage!\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-voltage!\n"));
     if(error_flags.overheat)
-        VERBOSE_MSG_MACHINE(usart_send_string("\t - Motor over-heat!\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-heat!\n"));
     if(!error_flags.all)
-        VERBOSE_MSG_MACHINE(usart_send_string("\t - Oh no, it was some unknown error.\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Oh no, it was some unknown error.\n"));
  
-    VERBOSE_MSG_MACHINE(usart_send_string("The error level is: "));
-    VERBOSE_MSG_MACHINE(usart_send_uint16(total_errors));
-    VERBOSE_MSG_MACHINE(usart_send_char('\n'));
+    VERBOSE_MSG_ERROR(usart_send_string("The error level is: "));
+    VERBOSE_MSG_ERROR(usart_send_uint16(total_errors));
+    VERBOSE_MSG_ERROR(usart_send_char('\n'));
     
     if(total_errors < 2){
-        VERBOSE_MSG_MACHINE(usart_send_string("I will reset the machine state.\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("I will reset the machine state.\n"));
     }
     if(total_errors >= 20){
-        VERBOSE_MSG_MACHINE(usart_send_string("The watchdog will reset the whole system.\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("The watchdog will reset the whole system.\n"));
         for(;;);    // waits the watchdog to reset.
     }
     
@@ -325,6 +337,9 @@ inline void task_error(void)
 inline void machine_run(void)
 {
     can_app_task();
+    print_system_flags();
+    //print_error_flags();
+    print_control();
 
     if(machine_clk){
         machine_clk = 0;
@@ -356,16 +371,9 @@ inline void machine_run(void)
 ISR(PCINT2_vect)
 {    
     if(bit_is_clear(FAULT_PIN, FAULT)){
-        //calc_d(100);                // diminui 10% do duty-cycle imediatamente
         pwm_treat_fault();
         set_led();
         pwm_fault_count++;
-    }
-
-    if(bit_is_set(SWITCHES_PIN, ON_OFF_SWITCH)
-            || bit_is_clear(SWITCHES_PIN, DEAD_MAN_SWITCH)){
-        set_pwm_off();
-        set_state_idle();
     }
 
     DEBUG1;
@@ -376,7 +384,7 @@ ISR(PCINT2_vect)
 */
 ISR(TIMER2_COMPA_vect)
 {
-    VERBOSE_MSG_ERROR(if(machine_clk) usart_send_string("\nERROR: CLOCK CONFLICT!!!\n"));
+    //VERBOSE_MSG_ERROR(if(machine_clk) usart_send_string("\nERROR: CLOCK CONFLICT!!!\n"));
 	machine_clk = 1;
 }
 
