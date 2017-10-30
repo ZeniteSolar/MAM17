@@ -19,11 +19,7 @@
 
 // MODULOS DO SISTEMA
 #include "conf.h"
-
-//#if defined(DEBUG_ON) || defined(VERBOSE_ON)
 #include "dbg_vrb.h"
-//#pragma message("VERBOSE OR DEBUG: ON!")
-//#endif  /*ifdef ADC_ON*/
 
 #ifdef USART_ON
 #include "usart.h"
