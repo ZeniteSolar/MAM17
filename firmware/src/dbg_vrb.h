@@ -19,37 +19,37 @@
 #ifdef VERBOSE_ON_ERROR
 #define VERBOSE_MSG_ERROR(x) x
 #else
-#define VERBOSE0_MSG_ERROR(x)
+#define VERBOSE_MSG_ERROR(x)
 #endif 
 
 #ifdef VERBOSE_ON_CAN_APP
 #define VERBOSE_MSG_CAN_APP(x) x
 #else
-#define VERBOSE0_MSG_CAN_APP(x)
+#define VERBOSE_MSG_CAN_APP(x)
 #endif
 
 #ifdef VERBOSE_ON_ADC
 #define VERBOSE_MSG_ADC(x) x
 #else
-#define VERBOSE0_MSG_ADC(x)
+#define VERBOSE_MSG_ADC(x)
 #endif 
  
 #ifdef VERBOSE_ON_PWM
 #define VERBOSE_MSG_PWM(x) x
 #else
-#define VERBOSE0_MSG_PWM(x)
+#define VERBOSE_MSG_PWM(x)
 #endif 
  
 #ifdef VERBOSE_ON_INIT
 #define VERBOSE_MSG_INIT(x) x
 #else
-#define VERBOSE0_MSG_INIT(x)
+#define VERBOSE_MSG_INIT(x)
 #endif 
 
 #ifdef VERBOSE_ON_MACHINE
 #define VERBOSE_MSG_MACHINE(x) x
 #else
-#define VERBOSE0_MSG_MACHINE(x)
+#define VERBOSE_MSG_MACHINE(x)
 #endif 
  
 
