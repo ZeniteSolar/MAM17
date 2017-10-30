@@ -30,13 +30,13 @@ inline void can_app_task(void)
     check_can();
 
     if(can_app_send_state_clk_div++ >= CAN_APP_SEND_STATE_CLK_DIV){
-        //VERBOSE_MSG_CAN_APP(usart_send_string("state msg was sent.\n"));
+        VERBOSE_MSG_CAN_APP(usart_send_string("state msg was sent.\n"));
         can_app_send_state();
         can_app_send_state_clk_div = 0;
     }
 
     if(can_app_send_motor_clk_div++ >= CAN_APP_SEND_MOTOR_CLK_DIV){
-        //VERBOSE_MSG_CAN_APP(usart_send_string("motor msg was sent.\n"));
+        VERBOSE_MSG_CAN_APP(usart_send_string("motor msg was sent.\n"));
         can_app_send_motor();
         can_app_send_motor_clk_div = 0;
     }
@@ -80,7 +80,6 @@ inline void can_app_extractor_mic17_state(can_t *msg)
 {
     // TODO:
     //  - se tiver em erro, desligar acionamento
-    //  - se nao tiver mensagem em X repeticoes, desligar acionamento
     if(msg->data[CAN_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC17){
         // zerar contador
         if(msg->data[CAN_STATE_MSG_ERROR_BYTE]){
@@ -112,14 +111,14 @@ inline void can_app_extractor_mic17_motor(can_t *msg)
         
         can_app_checks_without_mic17_msg = 0;
 
-        system_flags.dms_switch         = bit_is_set(msg->data[
-            CAN_MSG_MIC17_MOTOR_DMS_BYTE], 
-            CAN_MSG_MIC17_MOTOR_DMS_BIT);
-
-        system_flags.on_off_switch      = bit_is_set(msg->data[
+        system_flags.motor_on       = bit_is_set(msg->data[
             CAN_MSG_MIC17_MOTOR_MOTOR_ON_BYTE], 
             CAN_MSG_MIC17_MOTOR_MOTOR_ON_BIT);
-
+        
+        system_flags.dms            = bit_is_set(msg->data[
+            CAN_MSG_MIC17_MOTOR_DMS_BYTE], 
+            CAN_MSG_MIC17_MOTOR_DMS_BIT);
+         
         control.D_raw_target        = msg->data[
             CAN_MSG_MIC17_MOTOR_D_RAW_BYTE];
 
