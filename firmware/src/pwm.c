@@ -27,6 +27,7 @@ inline void pwm_reset(void)
     set_pwm_off();
     control.D_raw = control.D_raw_target = control.D = 0;
     control.I_raw = control.I_raw_target = control.I = 0;
+    VERBOSE_MSG_PWM(usart_send_string("PWM turned off!\n"));
 }
 
 
@@ -50,6 +51,10 @@ inline void pwm_compute(void)
     // apply some threshhold saturation limits
     if(control.D > PWM_D_MAX_THRESHHOLD)        control.D = PWM_D_MAX;
     else if(control.D < PWM_D_MIN_THRESHHOLD)   control.D = PWM_D_MIN;
+
+    VERBOSE_MSG_PWM(usart_send_string("PWM computed as: "));
+    VERBOSE_MSG_PWM(usart_send_uint16(control.D));
+    VERBOSE_MSG_PWM(usart_send_char('\n'));
 }
 
 /**
@@ -59,6 +64,7 @@ inline void pwm_treat_fault(void)
 {
     if(control.D_raw_target > 10)
         control.D_raw_target -= 6;      // -10%
+    VERBOSE_MSG_PWM(usart_send_string("PWM fault treated\n"));
 }
 
 /**
@@ -69,15 +75,20 @@ inline void pwm_treat_fault(void)
  */
 uint8_t pwm_zero_width(uint16_t duty_cycle)
 {
-	static uint8_t times = 0;
-	uint8_t one_sec = 0;
+    //VERBOSE_MSG_PWM(usart_send_string("PWM zero witdh..."));
 
-	if(!duty_cycle) times += 1;
-	else times = one_sec = 0;
+	static uint8_t times = 0;
+	static uint8_t one_sec = 0;
+
+	if(duty_cycle <= PWM_D_MIN_THRESHHOLD) times++;
+	else times = 0;
 
 	if(times >= MIN_ZERO_WIDTH_TIMES){
 		one_sec = 1;
-		times = 0;
-	}
+        //VERBOSE_MSG_PWM(usart_send_string("OK!\n"));
+	}else{
+        one_sec = 0;
+        //VERBOSE_MSG_PWM(usart_send_string("NOK!\n"));
+    }
 	return one_sec;
 }
