@@ -10,6 +10,7 @@
 #ifndef CAN_FILTERS_H
 #define CAN_FILTERS_H
 
+#include "conf.h"
 #include "can_ids.h"
 
 // -----------------------------------------------------------------------------

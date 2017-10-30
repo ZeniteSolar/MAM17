@@ -17,6 +17,7 @@
 #include "../lib/bit_utils.h"
 #include "../lib/cbuf.h"
 #include "../lib/log2.h"
+#include "conf.h"
 
 #include "dbg_vrb.h"
 

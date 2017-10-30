@@ -17,6 +17,7 @@
 
 #include <avr/io.h>
 #include "../lib/bit_utils.h"
+#include "conf.h"
 
 #ifndef USART_BAUD
 #define USART_BAUD 57600

@@ -16,6 +16,7 @@
 #include "can_ids.h"
 #include "usart.h"
 #include "dbg_vrb.h"
+#include "../lib/bit_utils.h"
 
 void can_app_print_msg(can_t *msg);
 void can_app_task(void);
