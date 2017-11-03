@@ -97,4 +97,7 @@ Project\ Outputs*/
 # Access lock file for dbLib sources
 **/*.ldb
 
+# Preview files
+*.*DocPreview
+
 # End of https://www.gitignore.io/api/altium
