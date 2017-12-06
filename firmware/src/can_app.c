@@ -161,10 +161,13 @@ inline void check_can(void)
 {
     // If no messages is received from mic17 for
     // CAN_APP_CHECKS_WITHOUT_MIC17_MSG cycles, than it go to a specific error state. 
+    //VERBOSE_MSG_CAN_APP(usart_send_string("checks: "));
+    //VERBOSE_MSG_CAN_APP(usart_send_uint16(can_app_checks_without_mic17_msg));
     if(can_app_checks_without_mic17_msg++ >= CAN_APP_CHECKS_WITHOUT_MIC17_MSG){
-        can_app_checks_without_mic17_msg = 0;
         VERBOSE_MSG_CAN_APP(usart_send_string("Error: too many cycles withtou message.\n"));
-        pwm_reset();
+        can_app_checks_without_mic17_msg = 0;
+        error_flags.no_canbus = 1;
+        set_state_error();
     }
     
     if(can_check_message()){

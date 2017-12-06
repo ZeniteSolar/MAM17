@@ -21,6 +21,7 @@
 #ifdef CAN_ON
 #include "can.h"
 #include "can_app.h"
+extern const uint8_t can_filter[];
 #endif
 
 typedef enum state_machine{
@@ -45,6 +46,7 @@ typedef union error_flags{
         uint8_t     overvoltage :1;
         uint8_t     overheat    :1;
         uint8_t     fault       :1;
+        uint8_t     no_canbus   :1;
     };
     uint8_t   all;
 }error_flags_t;
@@ -59,6 +61,8 @@ typedef struct control{
     uint8_t     V;              // value of voltage in VOLTS
     uint8_t     R;              // value of angular velocity in RPMS
     uint8_t     T;              // value of temperature in CELCIUS DEGREES
+    uint8_t     fault;          // counts the faults from ir2127
+
 }control_t;
 
 control_t control;

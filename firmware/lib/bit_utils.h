@@ -23,7 +23,7 @@
  * (1<<0) from _BV(bit) from bit_is_set:
  */
 #undef bit_is_set
-#define bit_is_set(sfr, bit)        ((_SFR_BYTE(sfr) >> (bit)) & 1);
+#define bit_is_set(sfr, bit)        ((_SFR_BYTE(sfr) >> (bit)) & 1)
 
 /**
  * @brief Changes the nth bit 'bit' to 1 of an address/variable 'y'.

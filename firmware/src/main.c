@@ -9,9 +9,18 @@ int main(void)
         VERBOSE_MSG_INIT(usart_send_string("\n\n\nUSART... OK!\n"));
     #endif
 
+    _delay_ms(1000);
+
+    #ifdef PWM_ON
+        VERBOSE_MSG_INIT(usart_send_string("PWM..."));
+        pwm_init();
+        VERBOSE_MSG_INIT(usart_send_string(" OK!\n"));
+    #endif 
+ 
+
     #ifdef CAN_ON
         VERBOSE_MSG_INIT(usart_send_string("CAN (125kbps)..."));
-        can_init(BITRATE_125_KBPS);
+        can_init(BITRATE_500_KBPS);
         VERBOSE_MSG_INIT(usart_send_string(" OK!\n"));
         VERBOSE_MSG_INIT(usart_send_string("CAN filters..."));
         can_static_filter(can_filter);
@@ -24,11 +33,6 @@ int main(void)
         VERBOSE_MSG_INIT(usart_send_string(" OK!\n"));
     #endif
 
-    #ifdef PWM_ON
-        VERBOSE_MSG_INIT(usart_send_string("PWM..."));
-        pwm_init();
-        VERBOSE_MSG_INIT(usart_send_string(" OK!\n"));
-    #endif 
 
     #ifdef SLEEP_ON 
         VERBOSE_MSG_INIT(usart_send_string("SLEEP..."));
@@ -47,6 +51,16 @@ int main(void)
 		machine_init();
         VERBOSE_MSG_INIT(usart_send_string(" OK!\n"));
 	#endif
+
+    set_bit(LED_DDR, LED);                      // LED como saída
+    set_bit(PWM_DDR, PWM);                      // PWM como saida
+    
+	// Configuracoes a interrupcao externa por FAULT (IR2127)
+    clr_bit(FAULT_DDR, FAULT);                  // FAULT como entrada
+    set_bit(FAULT_PORT, FAULT);                 // FAULT com pull-up
+    set_bit(EICRA, ISC11);                      // falling edge for int1
+    set_bit(EIMSK, INT1);                       // enables int1 interrupt
+    set_bit(EIFR, INTF1);                       // clears int1 interrupt
 
     sei();
 	

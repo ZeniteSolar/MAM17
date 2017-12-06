@@ -21,13 +21,13 @@ void pwm_init()
   	TCCR1A |= 0b10000010;
   	TCCR1B |= 0b00010001;
 
-    set_bit(PWM_DDR, PWM);                          // PWM como saida
 
     ICR1   = 640;                                   // valor TOP para f_pwm = 12 KHz
-    OCR1A  = 320;//INITIAL_D;                             // D = %*ICR1
+    OCR1A  = INITIAL_D;                             // D = %*ICR1
+
+    set_bit(PWM_DDR, PWM);                          // PWM como saida
       
     // Equacao para Frequencia do PWM:       ICR1 = (f_osc)/(2*f_pwm);
-
 
 }
 
@@ -48,13 +48,28 @@ inline void pwm_reset(void)
  */
 inline void pwm_compute(void)
 {
+
+    // it defines the arctan of D curve
+    if(control.I_raw < control.I_raw_target){
+        control.I_raw++;
+    }else if(control.I_raw >= control.I_raw_target){
+        control.I_raw = control.I_raw_target;
+    }
+
     if(control.D_raw < control.D_raw_target){           //!< law for D increasing
-        if(pwm_d_clk_div++ >= PWM_D_MAX_DELTA){
+        if((pwm_d_clk_div++ +8) >= ((control.I_raw >> 3))){
             control.D_raw += PWM_D_DELTA;
             pwm_d_clk_div = 0;
         }
     }else if(control.D_raw >= control.D_raw_target){    //!< law for D decreasing
         control.D_raw = control.D_raw_target;
+    }
+
+    // treats fault from ir2127
+    if(control.fault){
+        control.fault = 0;
+        if(control.D_raw >= 2)     control.D_raw -= 2;
+        else                        control.D_raw = 0;
     }
 
     // converts to OCR1A range.
@@ -78,8 +93,11 @@ inline void pwm_compute(void)
  */
 inline void pwm_treat_fault(void)
 {
-    if(control.D_raw_target > 10)
+    /*if(control.D_raw_target > 10)
         control.D_raw_target -= 6;      // -10%
+        */
+    if(OCR1A > 10)
+        OCR1A -= 6;
     VERBOSE_MSG_PWM(usart_send_string("PWM fault treated\n"));
 }
 
@@ -101,10 +119,10 @@ uint8_t pwm_zero_width(uint16_t duty_cycle)
 
 	if(times >= MIN_ZERO_WIDTH_TIMES){
 		one_sec = 1;
-        //VERBOSE_MSG_PWM(usart_send_string("OK!\n"));
+        VERBOSE_MSG_PWM(usart_send_string("OK!\n"));
 	}else{
         one_sec = 0;
-        //VERBOSE_MSG_PWM(usart_send_string("NOK!\n"));
+        VERBOSE_MSG_PWM(usart_send_string("NOK!\n"));
     }
 	return one_sec;
 }

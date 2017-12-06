@@ -14,9 +14,9 @@
 //#define DEBUG_ON
 //#define VERBOSE_ON
 //#define VERBOSE_ON_CAN_APP
-#define VERBOSE_ON_MACHINE
+//#define VERBOSE_ON_MACHINE
 //#define VERBOSE_ON_ADC
-#define VERBOSE_ON_PWM
+//#define VERBOSE_ON_PWM
 #define VERBOSE_ON_INIT
 #define VERBOSE_ON_ERROR
 
@@ -33,12 +33,12 @@
 
 // PWM DEFINITIONS
 #define INITIAL_D                   0   //!< float value from 0 to 1
-#define PWM_D_DELTA                 1   //!< amount to increase
-#define PWM_D_MAX_DELTA             2   //!< clock divisor
+#define PWM_D_DELTA                 1   //!< amount to increase (may interfer on threshholds)
+#define PWM_D_MAX_DELTA             1   //!< clock divisor
 #define PWM_D_MIN                   0   //!< minimum D
 #define PWM_D_MAX                   640 //!< maximum D
 #define PWM_D_MIN_THRESHHOLD        6   //!< minimum D threshhold
-#define PWM_D_MAX_THRESHHOLD        636 //!< maximum D threshhold
+#define PWM_D_MAX_THRESHHOLD        634 //!< maximum D threshhold
 #define PWM_D_LIN_MULT              5   //!< this is A for D = (D*A) >> B
 #define PWM_D_LIN_DIV               1   //!< this is B for D = (D*A) >> B
 
@@ -51,8 +51,8 @@
 
 
 // INPUT PINS DEFINITIONS
-//#define     DEAD_MAN_SWITCH         PD4
-//#define     ON_OFF_SWITCH           PD5
+//#define     DEAD_MAN_SWITCH         PD5
+//#define     ON_OFF_SWITCH           PD4
 //#define     SWITCHES_PORT           PORTD
 //#define     SWITCHES_PIN            PIND
 //#define     SWITCHES_DDR            DDRD
@@ -69,11 +69,11 @@
 #define     PWM_DDR                 DDRB
 #define     PWM                     PB1
 #endif 
-#define     LED_PORT                PORTC
-#define     LED_PIN                 PINC
-#define     LED_DDR                 DDRC
-#define     LED                     PC5
 
+#define     LED_PORT                PORTD
+#define     LED_PIN                 PIND
+#define     LED_DDR                 DDRD
+#define     LED                     PD6
 #define     cpl_led()               cpl_bit(LED_PORT, LED)
 #define     set_led()               set_bit(LED_PORT, LED)
 #define     clr_led()               clr_bit(LED_PORT, LED)

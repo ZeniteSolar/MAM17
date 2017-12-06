@@ -17,10 +17,10 @@ void machine_init(void)
             | (0 << COM2B1) | (0 << COM2B0);        // do nothing with OC2B
     TCCR2B  =   (0 << WGM22)                        // Timer 0 in Mode 2 = CTC (clear on compar  e)
             | (0 << FOC0A) | (0 << FOC0B)           // dont force outputs
-            | (1 << CS02)                           // clock enabled, prescaller = 1024
-            | (1 << CS01)
-            | (1 << CS00);
-    OCR2A   =   222;                                // Valor para igualdade de comparacao A par  a frequencia de 35 Hz
+            | (1 << CS22)                           // clock enabled, prescaller = 1024
+            | (1 << CS21)
+            | (1 << CS20);
+    OCR2A   =   80;                                // Valor para igualdade de comparacao A par  a frequencia de 150 Hz
     TIMSK2 |=   (1 << OCIE2A);                      // Ativa a interrupcao na igualdade de comp  aração do TC2 com OCR2A
 
 	
@@ -171,14 +171,17 @@ inline void print_system_flags(void)
 */
 inline void print_error_flags(void)
 {
-    VERBOSE_MSG_MACHINE(usart_send_string("\novercurrent: "));
+    VERBOSE_MSG_MACHINE(usart_send_string("\nOvrI: "));
     VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overcurrent));
     
-    VERBOSE_MSG_MACHINE(usart_send_string(" overvoltage: "));
+    VERBOSE_MSG_MACHINE(usart_send_string(" OvrV: "));
     VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overvoltage));
 
-    VERBOSE_MSG_MACHINE(usart_send_string(" overheat: "));
+    VERBOSE_MSG_MACHINE(usart_send_string(" OvrT: "));
     VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overheat));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" NOCAN: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.no_canbus));
 }
  
 /**
@@ -186,7 +189,7 @@ inline void print_error_flags(void)
 */
 inline void print_control(void)
 {
-    VERBOSE_MSG_MACHINE(usart_send_string("\nD: "));
+    VERBOSE_MSG_MACHINE(usart_send_string("D: "));
     VERBOSE_MSG_MACHINE(usart_send_uint16(control.D_raw));
     VERBOSE_MSG_MACHINE(usart_send_char(' '));
     VERBOSE_MSG_MACHINE(usart_send_uint16(control.D_raw_target));
@@ -275,6 +278,7 @@ inline void task_running(void)
         led_clk_div = 0;
     }
 
+    //check_pwm_fault();
     //check_running_current();
     //check_running_voltage();
     //check_running_temperature();
@@ -282,7 +286,7 @@ inline void task_running(void)
     if(system_flags.motor_on && system_flags.dms){
         pwm_compute();
     }else{
-        set_pwm_off();
+        pwm_reset();
         set_state_idle();
     }
 
@@ -298,11 +302,11 @@ inline void task_error(void)
         led_clk_div = 0;
     }
 
-    OCR1A = INITIAL_D;      // assegura pwm com duty-cycle inicial
+    pwm_reset();
 
     total_errors++;         // incrementa a contagem de erros
     VERBOSE_MSG_ERROR(usart_send_string("The error code is: "));
-    VERBOSE_MSG_ERROR(usart_send_char(error_flags.all));
+    VERBOSE_MSG_ERROR(usart_send_uint16(error_flags.all));
     VERBOSE_MSG_ERROR(usart_send_char('\n'));
 
     if(error_flags.overcurrent)
@@ -311,6 +315,10 @@ inline void task_error(void)
         VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-voltage!\n"));
     if(error_flags.overheat)
         VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-heat!\n"));
+    if(error_flags.fault)
+        VERBOSE_MSG_ERROR(usart_send_string("\t - IR2127 FAULT!\n"));
+    if(error_flags.no_canbus)
+        VERBOSE_MSG_ERROR(usart_send_string("\t - No canbus communication with MIC17!\n"));
     if(!error_flags.all)
         VERBOSE_MSG_ERROR(usart_send_string("\t - Oh no, it was some unknown error.\n"));
  
@@ -338,7 +346,7 @@ inline void machine_run(void)
 {
     can_app_task();
     print_system_flags();
-    //print_error_flags();
+    print_error_flags();
     print_control();
 
     if(machine_clk){
@@ -368,14 +376,15 @@ inline void machine_run(void)
 /**
  * @brief Interrupcao das chaves: se alguma chave desligar, o motor desliga.
  */
-ISR(PCINT2_vect)
+ISR(INT1_vect)
 {    
-    if(bit_is_clear(FAULT_PIN, FAULT)){
+    /*if(bit_is_clear(FAULT_PIN, FAULT)){
         pwm_treat_fault();
-        set_led();
+        cpl_led();
         pwm_fault_count++;
     }
-
+    */
+    control.fault = 1;
     DEBUG1;
 }
 

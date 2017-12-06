@@ -33,6 +33,6 @@ void check_can(void);
 uint8_t can_app_send_state_clk_div;
 uint8_t can_app_send_motor_clk_div;
 uint16_t can_app_checks_without_mic17_msg;
-#define CAN_APP_CHECKS_WITHOUT_MIC17_MSG 20000
+#define CAN_APP_CHECKS_WITHOUT_MIC17_MSG 100
 
 #endif /* ifndef CAN_APP_H */

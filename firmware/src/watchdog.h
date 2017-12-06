@@ -33,7 +33,7 @@ void wdt_first(void)
  */
 void wdt_init(void)
 {
-    wdt_enable(WDTO_8S);
+    wdt_enable(WDTO_2S);
 }
 
 #endif /* ifndef WATCHDOG_H */
