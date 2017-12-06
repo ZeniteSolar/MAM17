@@ -63,11 +63,8 @@ inline void can_app_send_motor(void)
     msg.length                              = CAN_LENGTH_MSG_MAM17_MOTOR;
 
     msg.data[CAN_SIGNATURE_BYTE]            = CAN_SIGNATURE_SELF;
-    msg.data[CAN_MSG_MAM17_MOTOR_D_BYTE]     = control.D;
-    msg.data[CAN_MSG_MAM17_MOTOR_V_BYTE]     = control.V;    
-    msg.data[CAN_MSG_MAM17_MOTOR_I_BYTE]     = control.I;
-    msg.data[CAN_MSG_MAM17_MOTOR_R_BYTE]     = control.R;
-    msg.data[CAN_MSG_MAM17_MOTOR_T_BYTE]     = control.T;
+    msg.data[CAN_MSG_MAM17_MOTOR_D_BYTE]    = control.D;
+    msg.data[CAN_MSG_MAM17_MOTOR_LIM_BYTE]  = control.I;    
 
     can_send_message(&msg); 
 }
