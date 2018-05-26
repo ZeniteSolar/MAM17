@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _WATCHDOG_H
-#define _WATCHDOG_H 
+#ifndef WATCHDOG_H
+#define WATCHDOG_H 
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -33,7 +33,7 @@ void wdt_first(void)
  */
 void wdt_init(void)
 {
-    wdt_enable(WDTO_8S);
+    wdt_enable(WDTO_2S);
 }
 
-#endif /* ifndef _WATCHDOG_H */
+#endif /* ifndef WATCHDOG_H */

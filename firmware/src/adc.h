@@ -8,15 +8,18 @@
  *
  */
 
-#ifndef _ADC_H_
-#define _ADC_H_
+#ifndef ADC_H
+#define ADC_H
 
-#include "avr/io.h"
-#include "avr/interrupt.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
 #include "../lib/bit_utils.h"
-#include "dbg_vrb.h"
 #include "../lib/cbuf.h"
 #include "../lib/log2.h"
+#include "conf.h"
+
+#include "dbg_vrb.h"
 
 #define ADC_LAST_CHANNEL 4                  //*< quantity of channels used
 
@@ -26,7 +29,7 @@ typedef volatile enum adc_channels{
 static adc_channels_t ADC_CHANNEL = ADC0;   //*< current chosen adc channel
 uint8_t raw_adc[ADC_LAST_CHANNEL];          //*< an array for raw measurements
 
-void adc_select_channel(adc_channels_t __ch);
+void adc_select_channel(adc_channels_t _ch);
 void adc_init(void);
 
 // MOVING AVERAGE BELOW //
@@ -44,4 +47,4 @@ volatile struct cbuf{
 uint8_t ma_adc0(void);
 uint8_t avg_adc0;
 
-#endif /* ifndef _ADC_H_ */
+#endif /* ifndef ADC_H */

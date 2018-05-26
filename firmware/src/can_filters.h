@@ -1,6 +1,16 @@
-#ifndef _CAN_FILTERS_H_
-#define _CAN_FILTERS_H_
+/**
+ * @file can_filters.h
+ *
+ * @defgroup CANAPP    Filters for can application
+ *
+ * @brief Filters for canbus application
+ *
+ */
 
+#ifndef CAN_FILTERS_H
+#define CAN_FILTERS_H
+
+#include "conf.h"
 #include "can_ids.h"
 
 // -----------------------------------------------------------------------------
@@ -58,19 +68,19 @@
 const uint8_t can_filter[] PROGMEM =
 {
     // Group 0
-    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_STATE),              // Filter 0
-    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_MOTOR),              // Filter 1
+    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_STATE), // Filter 0
+    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_MOTOR), // Filter 1
 
     // Group 1
-    MCP2515_FILTER(CAN_FILTER_IGNOREALL),     // Filter 2
-    MCP2515_FILTER(CAN_FILTER_IGNOREALL),     // Filter 3
-    MCP2515_FILTER(CAN_FILTER_IGNOREALL),     // Filter 4
-    MCP2515_FILTER(CAN_FILTER_IGNOREALL),     // Filter 5
+    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_STATE), // Filter 2
+    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_MOTOR), // Filter 3
+    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_STATE), // Filter 4
+    MCP2515_FILTER(CAN_FILTER_MSG_MIC17_MOTOR), // Filter 5
 
-    MCP2515_FILTER(CAN_FILTER_IGNOREALL),              // Mask 0 (for group 0)
-    MCP2515_FILTER(CAN_FILTER_IGNOREALL),     // Mask 1 (for group 1)
+    MCP2515_FILTER(CAN_MASK_MIC17),             // Mask 0 (for group 0)
+    MCP2515_FILTER(CAN_MASK_MIC17),             // Mask 1 (for group 1)
 };
 // You can receive 11 bit identifiers with either group 0 or 1.
 
 
-#endif /* ifndef _CAN_FILTERS_H_ */
+#endif /* ifndef CAN_FILTERS_H */

@@ -1,54 +1,51 @@
 #include "machine.h"
 
-#define set_pwm_off()     OCR1A = 0      //!< D of PWM TURNED TO 0
+/*
+ * to-do:
+ *      - modularize state sinalization
+ *      - 
+ *
+ */
 
 /**
- * @brief checks if the switches updating system flags
+ * @brief 
  */
-inline void check_switches(void)
+void machine_init(void)
 {
-    VERBOSE_MSG(usart_send_string("Motor Switch: "));
-    if(bit_is_clear(SWITCHES_PIN, ON_OFF_SWITCH)){
-        VERBOSE_MSG(usart_send_string("On.  "));
-        system_flags.on_off_switch = 1;
-    }else{
-        VERBOSE_MSG(usart_send_string("Off. "));
-        system_flags.on_off_switch = 0;
-    }
-    
-    VERBOSE_MSG(usart_send_string("Deadman' Switch: "));
-    if(bit_is_set(SWITCHES_PIN, DEAD_MAN_SWITCH)){
-        VERBOSE_MSG(usart_send_string("On.  "));
-        system_flags.dms_switch = 1;   
-    }else{
-        VERBOSE_MSG(usart_send_string("Off. "));
-        system_flags.dms_switch = 0;   
-    }
+    TCCR2A  =   (1 << WGM21) | (0 << WGM20)         // Timer 2 in Mode 2 = CTC (clear on compar  e)
+            | (0 << COM2A1) | (0 << COM2A0)         // do nothing with OC2A
+            | (0 << COM2B1) | (0 << COM2B0);        // do nothing with OC2B
+    TCCR2B  =   (0 << WGM22)                        // Timer 0 in Mode 2 = CTC (clear on compar  e)
+            | (0 << FOC0A) | (0 << FOC0B)           // dont force outputs
+            | (1 << CS22)                           // clock enabled, prescaller = 1024
+            | (1 << CS21)
+            | (1 << CS20);
+    OCR2A   =   80;                                // Valor para igualdade de comparacao A par  a frequencia de 150 Hz
+    TIMSK2 |=   (1 << OCIE2A);                      // Ativa a interrupcao na igualdade de comp  aração do TC2 com OCR2A
+
+	
 }
 
 /**
- * @brief checks if the pot is zeroed when idle.
- */
+* @brief checks if the pot is zero and updates the system flags
+*/
 inline void check_idle_zero_pot(void)
 {
-    VERBOSE_MSG(usart_send_string("Potentiometer: "));
-    if(zero_width(ma_adc0())){  // computa a media
-        VERBOSE_MSG(usart_send_string("ok.  "));
-        system_flags.pot_zero_width = 1;   
-    }else{
-        VERBOSE_MSG(usart_send_string("Nok. "));
-        system_flags.pot_zero_width = 0;
-    } 
+    system_flags.pot_zero_width = pwm_zero_width(control.D_raw_target);
 }
+ 
 
 /**
- * @brief
+ * @brief checks the quantity of the faults.
  */
-inline void check_fault(void)
+inline void check_pwm_fault(void)
 {
-    if(fault_count >= FAULT_COUNT_LIMIT){
+    if(pwm_fault_count >= FAULT_COUNT_LIMIT){
         error_flags.fault = 1;
+        check_pwm_fault_times = 0;
         set_state_error();
+    }else if(check_pwm_fault_times++ > CHECKS_BEFORE_RESET_FAULT_COUNTER){
+        pwm_fault_count = 0;    
     }
 }
 
@@ -57,9 +54,10 @@ inline void check_fault(void)
  */
 inline void check_buffers(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking buffers..."));
-    while(!CBUF_IsFull(cbuf_adc0));
-    VERBOSE_MSG(usart_send_string(" \t\tdone.\n")); 
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking buffers..."));
+    //while(!CBUF_IsFull(cbuf_adc0));
+    VERBOSE_MSG_ERROR(usart_send_string("<No buffers to check>"));
+    //VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n")); 
 }
 
 /**
@@ -67,9 +65,9 @@ inline void check_buffers(void)
  */
 inline void check_idle_current(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking motor current levels..."));
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking motor current levels..."));
     //if(motor_current <= MAXIMUM_OFF_CURRENT);
-        VERBOSE_MSG(usart_send_string(" \t\tdone.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n"));
     //else error_flag: motor_current at off_state bigger than it should be. 
 }
 
@@ -78,9 +76,9 @@ inline void check_idle_current(void)
  */
 inline void check_idle_voltage(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking motor voltage levels..."));
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking motor voltage levels..."));
     //if(output_voltage <= MAXIMUM_OFF_VOLTAGE);
-        VERBOSE_MSG(usart_send_string(" \t\tdone.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n"));
     //else error_flag: motor_voltage at off_state bigger than it should be.
 }
 
@@ -89,9 +87,9 @@ inline void check_idle_voltage(void)
  */
 inline void check_idle_temperature(void)
 {
-    VERBOSE_MSG(usart_send_string("Checking motor temperature levels..."));
+    VERBOSE_MSG_MACHINE(usart_send_string("Checking motor temperature levels..."));
     //if(temperature <= MAXIMUM_OFF_TEMPERATURE);
-        VERBOSE_MSG(usart_send_string(" \t\tdone.\n"));
+        VERBOSE_MSG_MACHINE(usart_send_string(" \t\tdone.\n"));
     //else error_flag: motor_temperature at off_state bigger than it should be.
 }
  
@@ -149,10 +147,71 @@ inline void set_state_idle(void)
 */ 
 inline void set_state_running(void)
 {
-    calc_d(0);
+    pwm_reset();
     state_machine = STATE_RUNNING;
 }
+
+/**
+* @brief prints the system flags
+*/
+inline void print_system_flags(void)
+{
+    VERBOSE_MSG_MACHINE(usart_send_string("Motor Sw: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.motor_on));
+    
+    VERBOSE_MSG_MACHINE(usart_send_string(" DMS Sw: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.dms));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" Pot_zero: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.pot_zero_width)); 
+}
+
+/**
+* @brief prints the error flags
+*/
+inline void print_error_flags(void)
+{
+    VERBOSE_MSG_MACHINE(usart_send_string("\nOvrI: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overcurrent));
+    
+    VERBOSE_MSG_MACHINE(usart_send_string(" OvrV: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overvoltage));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" OvrT: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overheat));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" NOCAN: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.no_canbus));
+}
  
+/**
+* @brief prints the error flags
+*/
+inline void print_control(void)
+{
+    VERBOSE_MSG_MACHINE(usart_send_string("D: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.D_raw));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.D_raw_target));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.D));
+    
+    VERBOSE_MSG_MACHINE(usart_send_string(" I: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.I_raw));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.I_raw_target));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.I));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" V: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.V));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" R: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.R));
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" T: "));
+    VERBOSE_MSG_MACHINE(usart_send_uint16(control.T));
+} 
 
 /**
  * @brief Checks if the system is OK to run:
@@ -166,23 +225,22 @@ inline void task_initializing(void)
 {
     set_led();
     set_pwm_off();
-    fault_count = 0;
+    pwm_fault_count = 0;
 
     //check_buffers();
     //check_idle_current();
     //check_idle_voltage();
     //check_idle_temperature();
-   
+       
     if(!error_flags.all){
-        VERBOSE_MSG(usart_send_string("System initialized without errors.\n"));
+        VERBOSE_MSG_INIT(usart_send_string("System initialized without errors.\n"));
         set_state_idle();
     }
     else{
-        VERBOSE_MSG(usart_send_string("Sorry. I have have found errors in the initialilation process. \n\nI will begin to process it...\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("Sorry. I have have found errors in the initialilation process. \n\nI will begin to process it...\n"));
         set_state_error();
     }
 }
-
 
 /**
  * @brief waits for commands while checking the system:
@@ -193,19 +251,18 @@ inline void task_initializing(void)
  */
 inline void task_idle(void)
 {
-    if(led_div++ >= 50){
+    if(led_clk_div++ >= 50){
         cpl_led();
-        led_div = 0;
+        led_clk_div = 0;
     }
  
-    set_pwm_off();
     check_idle_zero_pot();
-    check_switches();
+    //check_idle_current();
+    //check_idle_voltage();
+    //check_idle_temperature();
 
-    VERBOSE_MSG(usart_send_char('\n'));
-
-    if(system_flags.on_off_switch && system_flags.dms_switch && system_flags.pot_zero_width){
-        VERBOSE_MSG(usart_send_string("Enjoy, the system is at its RUNNING STATE!!\n"));
+    if(system_flags.motor_on && system_flags.dms && system_flags.pot_zero_width){
+        VERBOSE_MSG_MACHINE(usart_send_string("Enjoy, the system is at its RUNNING STATE!!\n"));
         set_state_running();
     }
 }
@@ -216,21 +273,20 @@ inline void task_idle(void)
  */
 inline void task_running(void)
 {
-    if(led_div++ >= 10){
+    if(led_clk_div++ >= 10){
         cpl_led();
-        led_div = 0;
+        led_clk_div = 0;
     }
-    check_switches();
+
+    //check_pwm_fault();
     //check_running_current();
     //check_running_voltage();
     //check_running_temperature();
 
-    VERBOSE_MSG(usart_send_char('\n'));
-
-    if(system_flags.on_off_switch && system_flags.dms_switch){
-        calc_d(1);
+    if(system_flags.motor_on && system_flags.dms){
+        pwm_compute();
     }else{
-        set_pwm_off();
+        pwm_reset();
         set_state_idle();
     }
 
@@ -241,36 +297,40 @@ inline void task_running(void)
  */
 inline void task_error(void)
 {
-    if(led_div++ >= 5){
+    if(led_clk_div++ >= 5){
         cpl_led();
-        led_div = 0;
+        led_clk_div = 0;
     }
 
-    OCR1A = INITIAL_D;      // assegura pwm com duty-cycle inicial
+    pwm_reset();
 
     total_errors++;         // incrementa a contagem de erros
-    VERBOSE_MSG(usart_send_string("The error code is: "));
-    VERBOSE_MSG(usart_send_char(error_flags.all));
-    VERBOSE_MSG(usart_send_char('\n'));
+    VERBOSE_MSG_ERROR(usart_send_string("The error code is: "));
+    VERBOSE_MSG_ERROR(usart_send_uint16(error_flags.all));
+    VERBOSE_MSG_ERROR(usart_send_char('\n'));
 
     if(error_flags.overcurrent)
-        VERBOSE_MSG(usart_send_string("\t - Motor over-current!\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-current!\n"));
     if(error_flags.overvoltage)
-        VERBOSE_MSG(usart_send_string("\t - Motor over-voltage!\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-voltage!\n"));
     if(error_flags.overheat)
-        VERBOSE_MSG(usart_send_string("\t - Motor over-heat!\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Motor over-heat!\n"));
+    if(error_flags.fault)
+        VERBOSE_MSG_ERROR(usart_send_string("\t - IR2127 FAULT!\n"));
+    if(error_flags.no_canbus)
+        VERBOSE_MSG_ERROR(usart_send_string("\t - No canbus communication with MIC17!\n"));
     if(!error_flags.all)
-        VERBOSE_MSG(usart_send_string("\t - Oh no, it was some unknown error.\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("\t - Oh no, it was some unknown error.\n"));
  
-    VERBOSE_MSG(usart_send_string("The error level is: "));
-    VERBOSE_MSG(usart_send_uint16(total_errors));
-    VERBOSE_MSG(usart_send_char('\n'));
+    VERBOSE_MSG_ERROR(usart_send_string("The error level is: "));
+    VERBOSE_MSG_ERROR(usart_send_uint16(total_errors));
+    VERBOSE_MSG_ERROR(usart_send_char('\n'));
     
     if(total_errors < 2){
-        VERBOSE_MSG(usart_send_string("I will reset the machine state.\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("I will reset the machine state.\n"));
     }
     if(total_errors >= 20){
-        VERBOSE_MSG(usart_send_string("The watchdog will reset the whole system.\n"));
+        VERBOSE_MSG_ERROR(usart_send_string("The watchdog will reset the whole system.\n"));
         for(;;);    // waits the watchdog to reset.
     }
     
@@ -284,44 +344,56 @@ inline void task_error(void)
  */
 inline void machine_run(void)
 {
-    switch(state_machine){
-        case STATE_INITIALIZING:
-            task_initializing();
+    can_app_task();
+    print_system_flags();
+    print_error_flags();
+    print_control();
 
-            break;
-        case STATE_IDLE:
-            task_idle();
+    if(machine_clk){
+        machine_clk = 0;
+        switch(state_machine){
+            case STATE_INITIALIZING:
+                task_initializing();
 
-            break;
-        case STATE_RUNNING:
-            task_running();
+                break;
+            case STATE_IDLE:
+                task_idle();
 
-            break;
-        case STATE_ERROR:
-            task_error();
+                break;
+            case STATE_RUNNING:
+                task_running();
 
-        default:
-            break;
+                break;
+            case STATE_ERROR:
+                task_error();
+
+            default:
+                break;
+        }
     }
 }
 
 /**
  * @brief Interrupcao das chaves: se alguma chave desligar, o motor desliga.
  */
-ISR(PCINT2_vect)
+ISR(INT1_vect)
 {    
-    if(bit_is_clear(FAULT_PIN, FAULT)){
-        calc_d(100);                // diminui 10% do duty-cycle imediatamente
-        set_led();
-        fault_count++;
+    /*if(bit_is_clear(FAULT_PIN, FAULT)){
+        pwm_treat_fault();
+        cpl_led();
+        pwm_fault_count++;
     }
-
-    if(bit_is_set(SWITCHES_PIN, ON_OFF_SWITCH)
-            || bit_is_clear(SWITCHES_PIN, DEAD_MAN_SWITCH)){
-        set_pwm_off();
-        set_state_idle();
-    }
-
+    */
+    control.fault = 1;
     DEBUG1;
+}
+
+/**
+* @brief ISR para ações de controle
+*/
+ISR(TIMER2_COMPA_vect)
+{
+    //VERBOSE_MSG_ERROR(if(machine_clk) usart_send_string("\nERROR: CLOCK CONFLICT!!!\n"));
+	machine_clk = 1;
 }
 
