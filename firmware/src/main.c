@@ -16,10 +16,13 @@ int main(void)
         pwm_init();
         VERBOSE_MSG_INIT(usart_send_string(" OK!\n"));
     #endif 
- 
+    /*
+    for(;;){
+        OCR1A = 300;
+    } */
 
     #ifdef CAN_ON
-        VERBOSE_MSG_INIT(usart_send_string("CAN (125kbps)..."));
+        VERBOSE_MSG_INIT(usart_send_string("CAN (500kbps)..."));
         can_init(BITRATE_500_KBPS);
         VERBOSE_MSG_INIT(usart_send_string(" OK!\n"));
         VERBOSE_MSG_INIT(usart_send_string("CAN filters..."));
@@ -61,6 +64,8 @@ int main(void)
     set_bit(EICRA, ISC11);                      // falling edge for int1
     set_bit(EIMSK, INT1);                       // enables int1 interrupt
     set_bit(EIFR, INTF1);                       // clears int1 interrupt
+
+    
 
     sei();
 	
