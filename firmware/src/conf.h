@@ -14,7 +14,7 @@
 //#define DEBUG_ON
 //#define VERBOSE_ON
 //#define VERBOSE_ON_CAN_APP
-//#define VERBOSE_ON_MACHINE
+#define VERBOSE_ON_MACHINE
 //#define VERBOSE_ON_ADC
 //#define VERBOSE_ON_PWM
 #define VERBOSE_ON_INIT

@@ -48,7 +48,7 @@ typedef union error_flags{
         uint8_t     fault       :1;
         uint8_t     no_canbus   :1;
     };
-    uint8_t   all;
+        uint8_t   all;
 }error_flags_t;
 
 typedef struct control{
@@ -96,6 +96,7 @@ void set_state_error(void);
 void set_state_initializing(void);
 void set_state_idle(void);
 void set_state_running(void);
+void set_initial_state(void);
 
 // machine variables
 state_machine_t state_machine;

@@ -235,6 +235,7 @@ inline void task_initializing(void)
     if(!error_flags.all){
         VERBOSE_MSG_INIT(usart_send_string("System initialized without errors.\n"));
         set_state_idle();
+        set_initial_state();
     }
     else{
         VERBOSE_MSG_ERROR(usart_send_string("Sorry. I have have found errors in the initialilation process. \n\nI will begin to process it...\n"));
@@ -290,6 +291,17 @@ inline void task_running(void)
         set_state_idle();
     }
 
+}
+
+void set_initial_state(void)
+{
+    system_flags.all__ = 0;
+    error_flags.all = 0;
+
+    control.D_raw = control.D_raw_target = control. D = 0;
+
+    control.I_raw = control.I_raw_target = control.I = 0;
+    control.V = control.R = control.T = control.fault = 0;
 }
 
 /**
