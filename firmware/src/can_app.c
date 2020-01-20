@@ -109,18 +109,18 @@ inline void can_app_extractor_mic17_motor(can_t *msg)
         can_app_checks_without_mic17_msg = 0;
 
         system_flags.motor_on       = bit_is_set(msg->data[
-            CAN_MSG_MIC19_MOTOR_MOTOR_ON_BYTE], 
-            CAN_MSG_MIC19_MOTOR_MOTOR_ON_BIT);
+            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE], 
+            CAN_MSG_MIC19_MOTOR_MOTOR_MOTOR_ON_BIT);
         
         system_flags.dms            = bit_is_set(msg->data[
-            CAN_MSG_MIC19_MOTOR_DMS_BYTE], 
-            CAN_MSG_MIC19_MOTOR_DMS_BIT);
+            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE], 
+            CAN_MSG_MIC19_MOTOR_MOTOR_DMS_ON_BIT);
          
         control.D_raw_target        = msg->data[
-            CAN_MSG_MIC19_MOTOR_D_RAW_BYTE];
+            CAN_MSG_MIC19_MOTOR_D_BYTE];
 
         control.I_raw_target        = msg->data[
-            CAN_MSG_MIC19_MOTOR_I_RAW_BYTE];
+            CAN_MSG_MIC19_MOTOR_I_BYTE];
 
     }
 }
