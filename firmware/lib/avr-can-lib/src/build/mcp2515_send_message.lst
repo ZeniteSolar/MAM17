@@ -1,0 +1,393 @@
+   1               		.file	"mcp2515_send_message.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_send_message,"ax",@progbits
+  11               	.global	can_send_message
+  13               	can_send_message:
+  14               	.LFB19:
+  15               		.file 1 "mcp2515_send_message.c"
+   1:mcp2515_send_message.c **** // ----------------------------------------------------------------------------
+   2:mcp2515_send_message.c **** /*
+   3:mcp2515_send_message.c ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_send_message.c ****  *  All rights reserved.
+   5:mcp2515_send_message.c ****  *
+   6:mcp2515_send_message.c ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_send_message.c ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_send_message.c ****  * are met:
+   9:mcp2515_send_message.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_send_message.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_send_message.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_send_message.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_send_message.c ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_send_message.c ****  *
+  15:mcp2515_send_message.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_send_message.c ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_send_message.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_send_message.c ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_send_message.c ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_send_message.c ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_send_message.c ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_send_message.c ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_send_message.c ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_send_message.c ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_send_message.c ****  * SUCH DAMAGE.
+  26:mcp2515_send_message.c ****  *
+  27:mcp2515_send_message.c ****  * $Id: mcp2515_send_message.c 7224 2009-01-25 20:19:32Z fabian $
+  28:mcp2515_send_message.c ****  */
+  29:mcp2515_send_message.c **** // ----------------------------------------------------------------------------
+  30:mcp2515_send_message.c **** 
+  31:mcp2515_send_message.c **** #include "mcp2515_private.h"
+  32:mcp2515_send_message.c **** #ifdef	SUPPORT_FOR_MCP2515__
+  33:mcp2515_send_message.c **** 
+  34:mcp2515_send_message.c **** #include <util/delay.h>
+  35:mcp2515_send_message.c **** 
+  36:mcp2515_send_message.c **** // ----------------------------------------------------------------------------
+  37:mcp2515_send_message.c **** uint8_t mcp2515_send_message(const can_t *msg)
+  38:mcp2515_send_message.c **** {
+  16               		.loc 1 38 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19 0000 FF92      		push r15
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 3
+  22               		.cfi_offset 15, -2
+  23 0002 0F93      		push r16
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 4
+  26               		.cfi_offset 16, -3
+  27 0004 1F93      		push r17
+  28               	.LCFI2:
+  29               		.cfi_def_cfa_offset 5
+  30               		.cfi_offset 17, -4
+  31 0006 CF93      		push r28
+  32               	.LCFI3:
+  33               		.cfi_def_cfa_offset 6
+  34               		.cfi_offset 28, -5
+  35 0008 DF93      		push r29
+  36               	.LCFI4:
+  37               		.cfi_def_cfa_offset 7
+  38               		.cfi_offset 29, -6
+  39               	/* prologue: function */
+  40               	/* frame size = 0 */
+  41               	/* stack size = 5 */
+  42               	.L__stack_usage = 5
+  43 000a 8C01      		movw r16,r24
+  39:mcp2515_send_message.c **** 	// Status des MCP2515 auslesen
+  40:mcp2515_send_message.c **** 	uint8_t status = mcp2515_read_status(SPI_READ_STATUS);
+  44               		.loc 1 40 0
+  45 000c 80EA      		ldi r24,lo8(-96)
+  46               	.LVL1:
+  47 000e 0E94 0000 		call mcp2515_read_status
+  48               	.LVL2:
+  41:mcp2515_send_message.c **** 	
+  42:mcp2515_send_message.c **** 	/* Statusbyte:
+  43:mcp2515_send_message.c **** 	 *
+  44:mcp2515_send_message.c **** 	 * Bit	Funktion
+  45:mcp2515_send_message.c **** 	 *  2	TXB0CNTRL.TXREQ
+  46:mcp2515_send_message.c **** 	 *  4	TXB1CNTRL.TXREQ
+  47:mcp2515_send_message.c **** 	 *  6	TXB2CNTRL.TXREQ
+  48:mcp2515_send_message.c **** 	 */
+  49:mcp2515_send_message.c **** 	uint8_t address;
+  50:mcp2515_send_message.c **** 	if (_bit_is_clear(status, 2)) {
+  49               		.loc 1 50 0
+  50 0012 82FF      		sbrs r24,2
+  51 0014 00C0      		rjmp .L9
+  51:mcp2515_send_message.c **** 		address = 0x00;
+  52:mcp2515_send_message.c **** 	}
+  53:mcp2515_send_message.c **** 	else if (_bit_is_clear(status, 4)) {
+  52               		.loc 1 53 0
+  53 0016 84FF      		sbrs r24,4
+  54 0018 00C0      		rjmp .L10
+  54:mcp2515_send_message.c **** 		address = 0x02;
+  55:mcp2515_send_message.c **** 	} 
+  56:mcp2515_send_message.c **** 	else if (_bit_is_clear(status, 6)) {
+  57:mcp2515_send_message.c **** 		address = 0x04;
+  55               		.loc 1 57 0
+  56 001a C4E0      		ldi r28,lo8(4)
+  56:mcp2515_send_message.c **** 		address = 0x04;
+  57               		.loc 1 56 0
+  58 001c 86FF      		sbrs r24,6
+  59 001e 00C0      		rjmp .L2
+  58:mcp2515_send_message.c **** 	}
+  59:mcp2515_send_message.c **** 	else {
+  60:mcp2515_send_message.c **** 		// Alle Puffer sind belegt,
+  61:mcp2515_send_message.c **** 		// Nachricht kann nicht verschickt werden
+  62:mcp2515_send_message.c **** 		return 0;
+  60               		.loc 1 62 0
+  61 0020 C0E0      		ldi r28,0
+  62 0022 00C0      		rjmp .L1
+  63               	.L9:
+  51:mcp2515_send_message.c **** 	}
+  64               		.loc 1 51 0
+  65 0024 C0E0      		ldi r28,0
+  66               	.L2:
+  67               	.LVL3:
+  63:mcp2515_send_message.c **** 	}
+  64:mcp2515_send_message.c **** 	
+  65:mcp2515_send_message.c **** 	RESET(MCP2515_CS);
+  68               		.loc 1 65 0
+  69 0026 2898      		cbi 0x5,0
+  66:mcp2515_send_message.c **** 	spi_putc(SPI_WRITE_TX | address);
+  70               		.loc 1 66 0
+  71 0028 8C2F      		mov r24,r28
+  72               	.LVL4:
+  73 002a 8064      		ori r24,lo8(64)
+  74 002c 0E94 0000 		call spi_putc
+  75               	.LVL5:
+  67:mcp2515_send_message.c **** 	#if SUPPORT_EXTENDED_CANID
+  68:mcp2515_send_message.c **** 		mcp2515_write_id(&msg->id, msg->flags.extended);
+  69:mcp2515_send_message.c **** 	#else
+  70:mcp2515_send_message.c **** 		mcp2515_write_id(&msg->id);
+  76               		.loc 1 70 0
+  77 0030 C801      		movw r24,r16
+  78 0032 0E94 0000 		call mcp2515_write_id
+  79               	.LVL6:
+  71:mcp2515_send_message.c **** 	#endif
+  72:mcp2515_send_message.c **** 	uint8_t length = msg->length & 0x0f;
+  80               		.loc 1 72 0
+  81 0036 F801      		movw r30,r16
+  82 0038 D381      		ldd r29,Z+3
+  83 003a DF70      		andi r29,lo8(15)
+  84               	.LVL7:
+  73:mcp2515_send_message.c **** 	
+  74:mcp2515_send_message.c **** 	// Ist die Nachricht ein "Remote Transmit Request" ?
+  75:mcp2515_send_message.c **** 	if (msg->flags.rtr)
+  85               		.loc 1 75 0
+  86 003c 8281      		ldd r24,Z+2
+  87 003e 80FF      		sbrs r24,0
+  88 0040 00C0      		rjmp .L4
+  76:mcp2515_send_message.c **** 	{
+  77:mcp2515_send_message.c **** 		// Ein RTR hat zwar eine Laenge,
+  78:mcp2515_send_message.c **** 		// enthaelt aber keine Daten
+  79:mcp2515_send_message.c **** 		
+  80:mcp2515_send_message.c **** 		// Nachrichten Laenge + RTR einstellen
+  81:mcp2515_send_message.c **** 		spi_putc((1<<RTR) | length);
+  89               		.loc 1 81 0
+  90 0042 8D2F      		mov r24,r29
+  91 0044 8064      		ori r24,lo8(64)
+  92 0046 0E94 0000 		call spi_putc
+  93               	.LVL8:
+  94               	.L5:
+  82:mcp2515_send_message.c **** 	}
+  83:mcp2515_send_message.c **** 	else
+  84:mcp2515_send_message.c **** 	{
+  85:mcp2515_send_message.c **** 		// Nachrichten Laenge einstellen
+  86:mcp2515_send_message.c **** 		spi_putc(length);
+  87:mcp2515_send_message.c **** 		
+  88:mcp2515_send_message.c **** 		// Daten
+  89:mcp2515_send_message.c **** 		for (uint8_t i=0;i<length;i++) {
+  90:mcp2515_send_message.c **** 			spi_putc(msg->data[i]);
+  91:mcp2515_send_message.c **** 		}
+  92:mcp2515_send_message.c **** 	}
+  93:mcp2515_send_message.c **** 	SET(MCP2515_CS);
+  95               		.loc 1 93 0
+  96 004a 289A      		sbi 0x5,0
+  97               	.LVL9:
+  98               	.LBB31:
+  99               	.LBB32:
+ 100               	.LBB33:
+ 101               	.LBB34:
+ 102               		.file 2 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+   1:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    Copyright (c) 2007 Joerg Wunsch
+   3:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    All rights reserved.
+   4:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+   5:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    Redistribution and use in source and binary forms, with or without
+   6:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    modification, are permitted provided that the following conditions are met:
+   7:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+   8:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    * Redistributions of source code must retain the above copyright
+   9:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer.
+  10:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  11:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    * Redistributions in binary form must reproduce the above copyright
+  12:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer in
+  13:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      the documentation and/or other materials provided with the
+  14:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      distribution.
+  15:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  16:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    * Neither the name of the copyright holders nor the names of
+  17:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      contributors may be used to endorse or promote products derived
+  18:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      from this software without specific prior written permission.
+  19:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  20:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  31:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  32:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /* $Id$ */
+  33:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  34:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #ifndef _UTIL_DELAY_BASIC_H_
+  35:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #define _UTIL_DELAY_BASIC_H_ 1
+  36:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  37:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #include <inttypes.h>
+  38:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  39:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #if !defined(__DOXYGEN__)
+  40:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** static __inline__ void _delay_loop_1(uint8_t __count) __attribute__((__always_inline__));
+  41:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** static __inline__ void _delay_loop_2(uint16_t __count) __attribute__((__always_inline__));
+  42:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #endif
+  43:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  44:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /** \file */
+  45:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /** \defgroup util_delay_basic <util/delay_basic.h>: Basic busy-wait delay loops
+  46:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     \code
+  47:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     #include <util/delay_basic.h>
+  48:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     \endcode
+  49:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  50:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     The functions in this header file implement simple delay loops
+  51:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     that perform a busy-waiting.  They are typically used to
+  52:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     facilitate short delays in the program execution.  They are
+  53:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     implemented as count-down loops with a well-known CPU cycle
+  54:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     count per loop iteration.  As such, no other processing can
+  55:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     occur simultaneously.  It should be kept in mind that the
+  56:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     functions described here do not disable interrupts.
+  57:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  58:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     In general, for long delays, the use of hardware timers is
+  59:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     much preferrable, as they free the CPU, and allow for
+  60:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     concurrent processing of other events while the timer is
+  61:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     running.  However, in particular for very short delays, the
+  62:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     overhead of setting up a hardware timer is too much compared
+  63:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     to the overall delay time.
+  64:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  65:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     Two inline functions are provided for the actual delay algorithms.
+  66:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  67:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** */
+  68:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  69:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  70:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  71:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     Delay loop using an 8-bit counter \c __count, so up to 256
+  72:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     iterations are possible.  (The value 256 would have to be passed
+  73:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     as 0.)  The loop executes three CPU cycles per iteration, not
+  74:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     including the overhead the compiler needs to setup the counter
+  75:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     register.
+  76:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  77:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to 768 microseconds
+  78:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     can be achieved.
+  79:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** */
+  80:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** void
+  81:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** _delay_loop_1(uint8_t __count)
+  82:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** {
+  83:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 	__asm__ volatile (
+ 103               		.loc 2 83 0
+ 104 004c 85E0      		ldi r24,lo8(5)
+ 105               	/* #APP */
+ 106               	 ;  83 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+ 107 004e 8A95      		1: dec r24
+ 108 0050 01F4      		brne 1b
+ 109               	 ;  0 "" 2
+ 110               	.LVL10:
+ 111               	/* #NOAPP */
+ 112               	.LBE34:
+ 113               	.LBE33:
+ 114               	.LBE32:
+ 115               	.LBE31:
+  94:mcp2515_send_message.c **** 	
+  95:mcp2515_send_message.c **** 	_delay_us(1);
+  96:mcp2515_send_message.c **** 	
+  97:mcp2515_send_message.c **** 	// CAN Nachricht verschicken
+  98:mcp2515_send_message.c **** 	// die letzten drei Bit im RTS Kommando geben an welcher
+  99:mcp2515_send_message.c **** 	// Puffer gesendet werden soll.
+ 100:mcp2515_send_message.c **** 	RESET(MCP2515_CS);
+ 116               		.loc 1 100 0
+ 117 0052 2898      		cbi 0x5,0
+ 101:mcp2515_send_message.c **** 	address = (address == 0) ? 1 : address;
+ 118               		.loc 1 101 0
+ 119 0054 C111      		cpse r28,__zero_reg__
+ 120 0056 00C0      		rjmp .L8
+ 121 0058 C1E0      		ldi r28,lo8(1)
+ 122               	.LVL11:
+ 123               	.L8:
+ 102:mcp2515_send_message.c **** 	spi_putc(SPI_RTS | address);
+ 124               		.loc 1 102 0 discriminator 4
+ 125 005a 8C2F      		mov r24,r28
+ 126 005c 8068      		ori r24,lo8(-128)
+ 127 005e 0E94 0000 		call spi_putc
+ 128               	.LVL12:
+ 103:mcp2515_send_message.c **** 	SET(MCP2515_CS);
+ 129               		.loc 1 103 0 discriminator 4
+ 130 0062 289A      		sbi 0x5,0
+ 131               	.LVL13:
+ 132               	.L1:
+ 104:mcp2515_send_message.c **** 	
+ 105:mcp2515_send_message.c **** 	CAN_INDICATE_TX_TRAFFIC_FUNCTION;
+ 106:mcp2515_send_message.c **** 	
+ 107:mcp2515_send_message.c **** 	return address;
+ 108:mcp2515_send_message.c **** }
+ 133               		.loc 1 108 0
+ 134 0064 8C2F      		mov r24,r28
+ 135               	/* epilogue start */
+ 136 0066 CDB7      		in r28,__SP_L__
+ 137 0068 DEB7      		in r29,__SP_H__
+ 138 006a E5E0      		ldi r30, lo8(5)
+ 139 006c 0C94 0000 		jmp __epilogue_restores__ + ((18 - 5) * 2)
+ 140               	.LVL14:
+ 141               	.L10:
+  54:mcp2515_send_message.c **** 	} 
+ 142               		.loc 1 54 0
+ 143 0070 C2E0      		ldi r28,lo8(2)
+ 144 0072 00C0      		rjmp .L2
+ 145               	.LVL15:
+ 146               	.L4:
+  86:mcp2515_send_message.c **** 		
+ 147               		.loc 1 86 0
+ 148 0074 8D2F      		mov r24,r29
+ 149 0076 0E94 0000 		call spi_putc
+ 150               	.LVL16:
+ 151 007a 0C5F      		subi r16,-4
+ 152 007c 1F4F      		sbci r17,-1
+ 153               	.LVL17:
+ 154               	.LBB35:
+  89:mcp2515_send_message.c **** 			spi_putc(msg->data[i]);
+ 155               		.loc 1 89 0
+ 156 007e F12C      		mov r15,__zero_reg__
+ 157               	.LVL18:
+ 158               	.L6:
+  89:mcp2515_send_message.c **** 			spi_putc(msg->data[i]);
+ 159               		.loc 1 89 0 is_stmt 0 discriminator 1
+ 160 0080 FD16      		cp r15,r29
+ 161 0082 01F0      		breq .L5
+  90:mcp2515_send_message.c **** 		}
+ 162               		.loc 1 90 0 is_stmt 1 discriminator 3
+ 163 0084 F801      		movw r30,r16
+ 164 0086 8191      		ld r24,Z+
+ 165 0088 8F01      		movw r16,r30
+ 166 008a 0E94 0000 		call spi_putc
+ 167               	.LVL19:
+  89:mcp2515_send_message.c **** 			spi_putc(msg->data[i]);
+ 168               		.loc 1 89 0 discriminator 3
+ 169 008e F394      		inc r15
+ 170               	.LVL20:
+ 171 0090 00C0      		rjmp .L6
+ 172               	.LBE35:
+ 173               		.cfi_endproc
+ 174               	.LFE19:
+ 176               		.text
+ 177               	.Letext0:
+ 178               		.file 3 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 179               		.file 4 "../can.h"
+ 180               		.file 5 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 181               		.file 6 "spi.h"
+ 182               		.file 7 "mcp2515_private.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mcp2515_send_message.c
+     /tmp/ccGPVDiW.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccGPVDiW.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccGPVDiW.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccGPVDiW.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccGPVDiW.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccGPVDiW.s:13     .text.can_send_message:0000000000000000 can_send_message
+
+UNDEFINED SYMBOLS
+mcp2515_read_status
+spi_putc
+mcp2515_write_id
+__epilogue_restores__

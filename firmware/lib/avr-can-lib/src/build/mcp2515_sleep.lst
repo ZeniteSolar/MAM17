@@ -1,0 +1,157 @@
+   1               		.file	"mcp2515_sleep.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_sleep,"ax",@progbits
+  11               	.global	can_sleep
+  13               	can_sleep:
+  14               	.LFB19:
+  15               		.file 1 "mcp2515_sleep.c"
+   1:mcp2515_sleep.c **** // ----------------------------------------------------------------------------
+   2:mcp2515_sleep.c **** /*
+   3:mcp2515_sleep.c ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V., Frédéric Lamorce
+   4:mcp2515_sleep.c ****  *  All rights reserved.
+   5:mcp2515_sleep.c ****  *
+   6:mcp2515_sleep.c ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_sleep.c ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_sleep.c ****  * are met:
+   9:mcp2515_sleep.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_sleep.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_sleep.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_sleep.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_sleep.c ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_sleep.c ****  *
+  15:mcp2515_sleep.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_sleep.c ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_sleep.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_sleep.c ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_sleep.c ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_sleep.c ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_sleep.c ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_sleep.c ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_sleep.c ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_sleep.c ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_sleep.c ****  * SUCH DAMAGE.
+  26:mcp2515_sleep.c ****  *
+  27:mcp2515_sleep.c ****  * $Id: mcp2515_sleep.c 8086 2009-07-14 14:08:25Z fabian $
+  28:mcp2515_sleep.c ****  */
+  29:mcp2515_sleep.c **** // ----------------------------------------------------------------------------
+  30:mcp2515_sleep.c **** 
+  31:mcp2515_sleep.c **** #include "mcp2515_private.h"
+  32:mcp2515_sleep.c **** #ifdef	SUPPORT_FOR_MCP2515__
+  33:mcp2515_sleep.c **** 
+  34:mcp2515_sleep.c **** // ----------------------------------------------------------------------------
+  35:mcp2515_sleep.c **** void
+  36:mcp2515_sleep.c **** mcp2515_sleep(void)
+  37:mcp2515_sleep.c **** {
+  16               		.loc 1 37 0
+  17               		.cfi_startproc
+  18               	/* prologue: function */
+  19               	/* frame size = 0 */
+  20               	/* stack size = 0 */
+  21               	.L__stack_usage = 0
+  38:mcp2515_sleep.c **** 	// put also the 2551 in standby mode
+  39:mcp2515_sleep.c **** 	// for this, connect RX1BF to the RS pin of the 2551
+  40:mcp2515_sleep.c **** 	mcp2515_bit_modify(BFPCTRL, (1<<B1BFS), (1<<B1BFS));
+  22               		.loc 1 40 0
+  23 0000 40E2      		ldi r20,lo8(32)
+  24 0002 60E2      		ldi r22,lo8(32)
+  25 0004 8CE0      		ldi r24,lo8(12)
+  26 0006 0E94 0000 		call mcp2515_bit_modify
+  27               	.LVL0:
+  41:mcp2515_sleep.c **** 
+  42:mcp2515_sleep.c **** 	// put the 2515 in sleep more
+  43:mcp2515_sleep.c **** 	mcp2515_set_mode(SLEEP_MODE);
+  28               		.loc 1 43 0
+  29 000a 83E0      		ldi r24,lo8(3)
+  30 000c 0E94 0000 		call can_set_mode
+  31               	.LVL1:
+  44:mcp2515_sleep.c **** 
+  45:mcp2515_sleep.c **** 	// enable generating an interrupt for wakeup when activity on bus
+  46:mcp2515_sleep.c **** 	mcp2515_bit_modify(CANINTE, (1<<WAKIE), (1<<WAKIE));
+  32               		.loc 1 46 0
+  33 0010 40E4      		ldi r20,lo8(64)
+  34 0012 60E4      		ldi r22,lo8(64)
+  35 0014 8BE2      		ldi r24,lo8(43)
+  36 0016 0E94 0000 		call mcp2515_bit_modify
+  37               	.LVL2:
+  38               	/* epilogue start */
+  47:mcp2515_sleep.c **** }
+  39               		.loc 1 47 0
+  40 001a 0895      		ret
+  41               		.cfi_endproc
+  42               	.LFE19:
+  44               		.section	.text.can_wakeup,"ax",@progbits
+  45               	.global	can_wakeup
+  47               	can_wakeup:
+  48               	.LFB20:
+  48:mcp2515_sleep.c **** 
+  49:mcp2515_sleep.c **** // ----------------------------------------------------------------------------
+  50:mcp2515_sleep.c **** void
+  51:mcp2515_sleep.c **** mcp2515_wakeup(void)
+  52:mcp2515_sleep.c **** {
+  49               		.loc 1 52 0
+  50               		.cfi_startproc
+  51               	/* prologue: function */
+  52               	/* frame size = 0 */
+  53               	/* stack size = 0 */
+  54               	.L__stack_usage = 0
+  53:mcp2515_sleep.c **** 	// reset int enable and cancel the interrupt flag
+  54:mcp2515_sleep.c **** 	mcp2515_bit_modify(CANINTE, (1<<WAKIE), 0);
+  55               		.loc 1 54 0
+  56 0000 40E0      		ldi r20,0
+  57 0002 60E4      		ldi r22,lo8(64)
+  58 0004 8BE2      		ldi r24,lo8(43)
+  59 0006 0E94 0000 		call mcp2515_bit_modify
+  60               	.LVL3:
+  55:mcp2515_sleep.c **** 	mcp2515_bit_modify(CANINTF, (1<<WAKIF), 0);
+  61               		.loc 1 55 0
+  62 000a 40E0      		ldi r20,0
+  63 000c 60E4      		ldi r22,lo8(64)
+  64 000e 8CE2      		ldi r24,lo8(44)
+  65 0010 0E94 0000 		call mcp2515_bit_modify
+  66               	.LVL4:
+  56:mcp2515_sleep.c **** 
+  57:mcp2515_sleep.c **** 	// re-enable the 2551
+  58:mcp2515_sleep.c **** 	mcp2515_bit_modify(BFPCTRL, (1<<B1BFS), 0);
+  67               		.loc 1 58 0
+  68 0014 40E0      		ldi r20,0
+  69 0016 60E2      		ldi r22,lo8(32)
+  70 0018 8CE0      		ldi r24,lo8(12)
+  71 001a 0E94 0000 		call mcp2515_bit_modify
+  72               	.LVL5:
+  59:mcp2515_sleep.c **** 
+  60:mcp2515_sleep.c **** 	// when we get up of sleep, we are in listen mode, return into normal mode
+  61:mcp2515_sleep.c **** 	mcp2515_set_mode(NORMAL_MODE);
+  73               		.loc 1 61 0
+  74 001e 82E0      		ldi r24,lo8(2)
+  75 0020 0E94 0000 		call can_set_mode
+  76               	.LVL6:
+  77               	/* epilogue start */
+  62:mcp2515_sleep.c **** }
+  78               		.loc 1 62 0
+  79 0024 0895      		ret
+  80               		.cfi_endproc
+  81               	.LFE20:
+  83               		.text
+  84               	.Letext0:
+  85               		.file 2 "mcp2515_private.h"
+  86               		.file 3 "../can.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mcp2515_sleep.c
+     /tmp/ccmp9knB.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccmp9knB.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccmp9knB.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccmp9knB.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccmp9knB.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccmp9knB.s:13     .text.can_sleep:0000000000000000 can_sleep
+     /tmp/ccmp9knB.s:47     .text.can_wakeup:0000000000000000 can_wakeup
+
+UNDEFINED SYMBOLS
+mcp2515_bit_modify
+can_set_mode

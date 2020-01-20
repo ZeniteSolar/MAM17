@@ -1,0 +1,330 @@
+   1               		.file	"mcp2515_get_message.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_get_message,"ax",@progbits
+  11               	.global	can_get_message
+  13               	can_get_message:
+  14               	.LFB19:
+  15               		.file 1 "mcp2515_get_message.c"
+   1:mcp2515_get_message.c **** // ----------------------------------------------------------------------------
+   2:mcp2515_get_message.c **** /*
+   3:mcp2515_get_message.c ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_get_message.c ****  *  All rights reserved.
+   5:mcp2515_get_message.c ****  *
+   6:mcp2515_get_message.c ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_get_message.c ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_get_message.c ****  * are met:
+   9:mcp2515_get_message.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_get_message.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_get_message.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_get_message.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_get_message.c ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_get_message.c ****  *
+  15:mcp2515_get_message.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_get_message.c ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_get_message.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_get_message.c ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_get_message.c ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_get_message.c ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_get_message.c ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_get_message.c ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_get_message.c ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_get_message.c ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_get_message.c ****  * SUCH DAMAGE.
+  26:mcp2515_get_message.c ****  *
+  27:mcp2515_get_message.c ****  * $Id: mcp2515_get_message.c 7224 2009-01-25 20:19:32Z fabian $
+  28:mcp2515_get_message.c ****  */
+  29:mcp2515_get_message.c **** // ----------------------------------------------------------------------------
+  30:mcp2515_get_message.c **** 
+  31:mcp2515_get_message.c **** #include "mcp2515_private.h"
+  32:mcp2515_get_message.c **** #ifdef	SUPPORT_FOR_MCP2515__
+  33:mcp2515_get_message.c **** 
+  34:mcp2515_get_message.c **** // ----------------------------------------------------------------------------
+  35:mcp2515_get_message.c **** 
+  36:mcp2515_get_message.c **** uint8_t mcp2515_get_message(can_t *msg)
+  37:mcp2515_get_message.c **** {
+  16               		.loc 1 37 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19 0000 EF92      		push r14
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 3
+  22               		.cfi_offset 14, -2
+  23 0002 FF92      		push r15
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 4
+  26               		.cfi_offset 15, -3
+  27 0004 0F93      		push r16
+  28               	.LCFI2:
+  29               		.cfi_def_cfa_offset 5
+  30               		.cfi_offset 16, -4
+  31 0006 1F93      		push r17
+  32               	.LCFI3:
+  33               		.cfi_def_cfa_offset 6
+  34               		.cfi_offset 17, -5
+  35 0008 CF93      		push r28
+  36               	.LCFI4:
+  37               		.cfi_def_cfa_offset 7
+  38               		.cfi_offset 28, -6
+  39 000a DF93      		push r29
+  40               	.LCFI5:
+  41               		.cfi_def_cfa_offset 8
+  42               		.cfi_offset 29, -7
+  43               	/* prologue: function */
+  44               	/* frame size = 0 */
+  45               	/* stack size = 6 */
+  46               	.L__stack_usage = 6
+  47 000c 8C01      		movw r16,r24
+  38:mcp2515_get_message.c **** 	uint8_t addr;
+  39:mcp2515_get_message.c **** 	
+  40:mcp2515_get_message.c **** 	#ifdef	RXnBF_FUNKTION
+  41:mcp2515_get_message.c **** 		if (!IS_SET(MCP2515_RX0BF))
+  42:mcp2515_get_message.c **** 			addr = SPI_READ_RX;
+  43:mcp2515_get_message.c **** 		else if (!IS_SET(MCP2515_RX1BF))
+  44:mcp2515_get_message.c **** 			addr = SPI_READ_RX | 0x04;
+  45:mcp2515_get_message.c **** 		else
+  46:mcp2515_get_message.c **** 			return 0;
+  47:mcp2515_get_message.c **** 	#else
+  48:mcp2515_get_message.c **** 		// read status
+  49:mcp2515_get_message.c **** 		uint8_t status = mcp2515_read_status(SPI_RX_STATUS);
+  48               		.loc 1 49 0
+  49 000e 80EB      		ldi r24,lo8(-80)
+  50               	.LVL1:
+  51 0010 0E94 0000 		call mcp2515_read_status
+  52               	.LVL2:
+  53 0014 C82F      		mov r28,r24
+  54               	.LVL3:
+  50:mcp2515_get_message.c **** 		
+  51:mcp2515_get_message.c **** 		if (_bit_is_set(status,6)) {
+  55               		.loc 1 51 0
+  56 0016 8074      		andi r24,lo8(64)
+  57               	.LVL4:
+  58 0018 F82E      		mov r15,r24
+  59 001a C6FD      		sbrc r28,6
+  60 001c 00C0      		rjmp .L10
+  52:mcp2515_get_message.c **** 			// message in buffer 0
+  53:mcp2515_get_message.c **** 			addr = SPI_READ_RX;
+  54:mcp2515_get_message.c **** 		}
+  55:mcp2515_get_message.c **** 		else if (_bit_is_set(status,7)) {
+  56:mcp2515_get_message.c **** 			// message in buffer 1
+  57:mcp2515_get_message.c **** 			addr = SPI_READ_RX | 0x04;
+  61               		.loc 1 57 0
+  62 001e 84E9      		ldi r24,lo8(-108)
+  55:mcp2515_get_message.c **** 			// message in buffer 1
+  63               		.loc 1 55 0
+  64 0020 C7FD      		sbrc r28,7
+  65 0022 00C0      		rjmp .L2
+  66               	.L11:
+  58:mcp2515_get_message.c **** 		}
+  59:mcp2515_get_message.c **** 		else {
+  60:mcp2515_get_message.c **** 			// Error: no message available
+  61:mcp2515_get_message.c **** 			return 0;
+  67               		.loc 1 61 0
+  68 0024 80E0      		ldi r24,0
+  69 0026 00C0      		rjmp .L1
+  70               	.L10:
+  53:mcp2515_get_message.c **** 		}
+  71               		.loc 1 53 0
+  72 0028 80E9      		ldi r24,lo8(-112)
+  73               	.L2:
+  74               	.LVL5:
+  62:mcp2515_get_message.c **** 		}
+  63:mcp2515_get_message.c **** 	#endif
+  64:mcp2515_get_message.c **** 	
+  65:mcp2515_get_message.c **** 	RESET(MCP2515_CS);
+  75               		.loc 1 65 0
+  76 002a 2898      		cbi 0x5,0
+  66:mcp2515_get_message.c **** 	spi_putc(addr);
+  77               		.loc 1 66 0
+  78 002c 0E94 0000 		call spi_putc
+  79               	.LVL6:
+  67:mcp2515_get_message.c **** 	
+  68:mcp2515_get_message.c **** 	// CAN ID auslesen und ueberpruefen
+  69:mcp2515_get_message.c **** 	uint8_t tmp = mcp2515_read_id(&msg->id);
+  80               		.loc 1 69 0
+  81 0030 C801      		movw r24,r16
+  82 0032 0E94 0000 		call mcp2515_read_id
+  83               	.LVL7:
+  70:mcp2515_get_message.c **** 	#if SUPPORT_EXTENDED_CANID
+  71:mcp2515_get_message.c **** 		msg->flags.extended = tmp & 0x01;
+  72:mcp2515_get_message.c **** 	#else
+  73:mcp2515_get_message.c **** 		if (tmp & 0x01) {
+  84               		.loc 1 73 0
+  85 0036 80FF      		sbrs r24,0
+  86 0038 00C0      		rjmp .L4
+  74:mcp2515_get_message.c **** 			// Nachrichten mit extended ID verwerfen
+  75:mcp2515_get_message.c **** 			SET(MCP2515_CS);
+  87               		.loc 1 75 0
+  88 003a 289A      		sbi 0x5,0
+  76:mcp2515_get_message.c **** 			#ifdef	RXnBF_FUNKTION
+  77:mcp2515_get_message.c **** 			if (!IS_SET(MCP2515_RX0BF))
+  78:mcp2515_get_message.c **** 			#else
+  79:mcp2515_get_message.c **** 			if (_bit_is_set(status, 6))
+  80:mcp2515_get_message.c **** 			#endif
+  81:mcp2515_get_message.c **** 				mcp2515_bit_modify(CANINTF, (1<<RX0IF), 0);
+  89               		.loc 1 81 0
+  90 003c 40E0      		ldi r20,0
+  91 003e 61E0      		ldi r22,lo8(1)
+  79:mcp2515_get_message.c **** 			#endif
+  92               		.loc 1 79 0
+  93 0040 F110      		cpse r15,__zero_reg__
+  94 0042 00C0      		rjmp .L13
+  82:mcp2515_get_message.c **** 			else
+  83:mcp2515_get_message.c **** 				mcp2515_bit_modify(CANINTF, (1<<RX1IF), 0);
+  95               		.loc 1 83 0
+  96 0044 62E0      		ldi r22,lo8(2)
+  97               	.L13:
+  98 0046 8CE2      		ldi r24,lo8(44)
+  99               	.LVL8:
+ 100 0048 0E94 0000 		call mcp2515_bit_modify
+ 101               	.LVL9:
+ 102 004c 00C0      		rjmp .L11
+ 103               	.LVL10:
+ 104               	.L4:
+  84:mcp2515_get_message.c **** 			
+  85:mcp2515_get_message.c **** 			return 0;
+  86:mcp2515_get_message.c **** 		}
+  87:mcp2515_get_message.c **** 	#endif
+  88:mcp2515_get_message.c **** 	
+  89:mcp2515_get_message.c **** 	// read DLC
+  90:mcp2515_get_message.c **** 	uint8_t length = spi_putc(0xff);
+ 105               		.loc 1 90 0
+ 106 004e 8FEF      		ldi r24,lo8(-1)
+ 107               	.LVL11:
+ 108 0050 0E94 0000 		call spi_putc
+ 109               	.LVL12:
+  91:mcp2515_get_message.c **** 	#ifdef RXnBF_FUNKTION
+  92:mcp2515_get_message.c **** 		if (!(tmp & 0x01))
+  93:mcp2515_get_message.c **** 			msg->flags.rtr = (tmp & 0x02) ? 1 : 0;
+  94:mcp2515_get_message.c **** 		else
+  95:mcp2515_get_message.c **** 			msg->flags.rtr = (length & (1<<RTR)) ? 1 : 0;
+  96:mcp2515_get_message.c **** 	#else
+  97:mcp2515_get_message.c **** 		msg->flags.rtr = (_bit_is_set(status, 3)) ? 1 : 0;
+ 110               		.loc 1 97 0
+ 111 0054 F801      		movw r30,r16
+ 112 0056 9281      		ldd r25,Z+2
+ 113 0058 C3FB      		bst r28,3
+ 114 005a 90F9      		bld r25,0
+ 115 005c 9283      		std Z+2,r25
+  98:mcp2515_get_message.c **** 	#endif
+  99:mcp2515_get_message.c **** 	
+ 100:mcp2515_get_message.c **** 	length &= 0x0f;
+ 116               		.loc 1 100 0
+ 117 005e 8F70      		andi r24,lo8(15)
+ 118               	.LVL13:
+ 119 0060 E82E      		mov r14,r24
+ 120               	.LVL14:
+ 101:mcp2515_get_message.c **** 	msg->length = length;
+ 121               		.loc 1 101 0
+ 122 0062 8383      		std Z+3,r24
+ 123               	.LVL15:
+ 124 0064 0C5F      		subi r16,-4
+ 125 0066 1F4F      		sbci r17,-1
+ 126               	.LVL16:
+ 127               	.LBB2:
+ 102:mcp2515_get_message.c **** 	// read data
+ 103:mcp2515_get_message.c **** 	for (uint8_t i=0;i<length;i++) {
+ 128               		.loc 1 103 0
+ 129 0068 D0E0      		ldi r29,0
+ 130               	.LVL17:
+ 131               	.L6:
+ 132               		.loc 1 103 0 is_stmt 0 discriminator 1
+ 133 006a DE11      		cpse r29,r14
+ 134 006c 00C0      		rjmp .L7
+ 135               	.LBE2:
+ 104:mcp2515_get_message.c **** 		msg->data[i] = spi_putc(0xff);
+ 105:mcp2515_get_message.c **** 	}
+ 106:mcp2515_get_message.c **** 	SET(MCP2515_CS);
+ 136               		.loc 1 106 0 is_stmt 1
+ 137 006e 289A      		sbi 0x5,0
+ 107:mcp2515_get_message.c **** 	
+ 108:mcp2515_get_message.c **** 	// clear interrupt flag
+ 109:mcp2515_get_message.c **** 	#ifdef RXnBF_FUNKTION
+ 110:mcp2515_get_message.c **** 	if (!IS_SET(MCP2515_RX0BF))
+ 111:mcp2515_get_message.c **** 	#else
+ 112:mcp2515_get_message.c **** 	if (_bit_is_set(status, 6))
+ 113:mcp2515_get_message.c **** 	#endif
+ 114:mcp2515_get_message.c **** 		mcp2515_bit_modify(CANINTF, (1<<RX0IF), 0);
+ 138               		.loc 1 114 0
+ 139 0070 40E0      		ldi r20,0
+ 140 0072 61E0      		ldi r22,lo8(1)
+ 112:mcp2515_get_message.c **** 	#endif
+ 141               		.loc 1 112 0
+ 142 0074 F110      		cpse r15,__zero_reg__
+ 143 0076 00C0      		rjmp .L12
+ 115:mcp2515_get_message.c **** 	else
+ 116:mcp2515_get_message.c **** 		mcp2515_bit_modify(CANINTF, (1<<RX1IF), 0);
+ 144               		.loc 1 116 0
+ 145 0078 62E0      		ldi r22,lo8(2)
+ 146               	.L12:
+ 147 007a 8CE2      		ldi r24,lo8(44)
+ 148 007c 0E94 0000 		call mcp2515_bit_modify
+ 149               	.LVL18:
+ 117:mcp2515_get_message.c **** 	
+ 118:mcp2515_get_message.c **** 	CAN_INDICATE_RX_TRAFFIC_FUNCTION;
+ 119:mcp2515_get_message.c **** 	
+ 120:mcp2515_get_message.c **** 	#ifdef RXnBF_FUNKTION
+ 121:mcp2515_get_message.c **** 		return 1;
+ 122:mcp2515_get_message.c **** 	#else
+ 123:mcp2515_get_message.c **** 		return (status & 0x07) + 1;
+ 150               		.loc 1 123 0
+ 151 0080 8C2F      		mov r24,r28
+ 152 0082 8770      		andi r24,lo8(7)
+ 153 0084 8F5F      		subi r24,lo8(-(1))
+ 154               	.LVL19:
+ 155               	.L1:
+ 156               	/* epilogue start */
+ 124:mcp2515_get_message.c **** 	#endif
+ 125:mcp2515_get_message.c **** }
+ 157               		.loc 1 125 0
+ 158 0086 CDB7      		in r28,__SP_L__
+ 159 0088 DEB7      		in r29,__SP_H__
+ 160               	.LVL20:
+ 161 008a E6E0      		ldi r30, lo8(6)
+ 162 008c 0C94 0000 		jmp __epilogue_restores__ + ((18 - 6) * 2)
+ 163               	.LVL21:
+ 164               	.L7:
+ 165               	.LBB3:
+ 104:mcp2515_get_message.c **** 	}
+ 166               		.loc 1 104 0 discriminator 3
+ 167 0090 8FEF      		ldi r24,lo8(-1)
+ 168 0092 0E94 0000 		call spi_putc
+ 169               	.LVL22:
+ 170 0096 F801      		movw r30,r16
+ 171 0098 8193      		st Z+,r24
+ 172 009a 8F01      		movw r16,r30
+ 103:mcp2515_get_message.c **** 		msg->data[i] = spi_putc(0xff);
+ 173               		.loc 1 103 0 discriminator 3
+ 174 009c DF5F      		subi r29,lo8(-(1))
+ 175               	.LVL23:
+ 176 009e 00C0      		rjmp .L6
+ 177               	.LBE3:
+ 178               		.cfi_endproc
+ 179               	.LFE19:
+ 181               		.text
+ 182               	.Letext0:
+ 183               		.file 2 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 184               		.file 3 "../can.h"
+ 185               		.file 4 "spi.h"
+ 186               		.file 5 "mcp2515_private.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mcp2515_get_message.c
+     /tmp/ccgWAfPz.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccgWAfPz.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccgWAfPz.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccgWAfPz.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccgWAfPz.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccgWAfPz.s:13     .text.can_get_message:0000000000000000 can_get_message
+
+UNDEFINED SYMBOLS
+mcp2515_read_status
+spi_putc
+mcp2515_read_id
+mcp2515_bit_modify
+__epilogue_restores__

@@ -1,0 +1,600 @@
+   1               		.file	"can_buffer.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_buffer_init,"ax",@progbits
+  11               	.global	can_buffer_init
+  13               	can_buffer_init:
+  14               	.LFB16:
+  15               		.file 1 "can_buffer.c"
+   1:can_buffer.c  **** // -----------------------------------------------------------------------------
+   2:can_buffer.c  **** /*
+   3:can_buffer.c  ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:can_buffer.c  ****  *  All rights reserved.
+   5:can_buffer.c  ****  *
+   6:can_buffer.c  ****  * Redistribution and use in source and binary forms, with or without
+   7:can_buffer.c  ****  * modification, are permitted provided that the following conditions
+   8:can_buffer.c  ****  * are met:
+   9:can_buffer.c  ****  * 1. Redistributions of source code must retain the above copyright
+  10:can_buffer.c  ****  *    notice, this list of conditions and the following disclaimer.
+  11:can_buffer.c  ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:can_buffer.c  ****  *    notice, this list of conditions and the following disclaimer in the
+  13:can_buffer.c  ****  *    documentation and/or other materials provided with the distribution.
+  14:can_buffer.c  ****  *
+  15:can_buffer.c  ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:can_buffer.c  ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:can_buffer.c  ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:can_buffer.c  ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:can_buffer.c  ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:can_buffer.c  ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:can_buffer.c  ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:can_buffer.c  ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:can_buffer.c  ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:can_buffer.c  ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:can_buffer.c  ****  * SUCH DAMAGE.
+  26:can_buffer.c  ****  *
+  27:can_buffer.c  ****  * $Id: can_buffer.c 6837 2008-11-16 19:05:15Z fabian $
+  28:can_buffer.c  ****  */
+  29:can_buffer.c  **** // -----------------------------------------------------------------------------
+  30:can_buffer.c  **** 
+  31:can_buffer.c  **** #include "can_private.h"
+  32:can_buffer.c  **** #include "can_buffer.h"
+  33:can_buffer.c  **** #include "utils.h"
+  34:can_buffer.c  **** 
+  35:can_buffer.c  **** #if CAN_RX_BUFFER_SIZE > 0 || CAN_TX_BUFFER_SIZE > 0
+  36:can_buffer.c  **** 
+  37:can_buffer.c  **** // -----------------------------------------------------------------------------
+  38:can_buffer.c  **** void can_buffer_init(can_buffer_t *buf, uint8_t size, can_t *list)
+  39:can_buffer.c  **** {
+  16               		.loc 1 39 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19               	/* prologue: function */
+  20               	/* frame size = 0 */
+  21               	/* stack size = 0 */
+  22               	.L__stack_usage = 0
+  23 0000 FC01      		movw r30,r24
+  24               	.LBB27:
+  40:can_buffer.c  **** 	ENTER_CRITICAL_SECTION;
+  25               		.loc 1 40 0
+  26 0002 8FB7      		in r24,__SREG__
+  27               	.LVL1:
+  28               	.LBB28:
+  29               	.LBB29:
+  30               		.file 2 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+   1:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** /* Copyright (c) 2007 Dean Camera
+   2:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****    All rights reserved.
+   3:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+   4:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****    Redistribution and use in source and binary forms, with or without
+   5:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****    modification, are permitted provided that the following conditions are met:
+   6:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+   7:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****    * Redistributions of source code must retain the above copyright
+   8:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****      notice, this list of conditions and the following disclaimer.
+   9:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  10:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****    * Redistributions in binary form must reproduce the above copyright
+  11:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****      notice, this list of conditions and the following disclaimer in
+  12:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****      the documentation and/or other materials provided with the
+  13:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****      distribution.
+  14:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  15:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****    * Neither the name of the copyright holders nor the names of
+  16:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****      contributors may be used to endorse or promote products derived
+  17:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****      from this software without specific prior written permission.
+  18:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  19:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  20:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  21:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  22:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  23:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  24:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  25:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  26:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  27:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  28:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  29:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****   POSSIBILITY OF SUCH DAMAGE.
+  30:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** */
+  31:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  32:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** /* $Id$ */
+  33:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  34:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** #ifndef _UTIL_ATOMIC_H_
+  35:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** #define _UTIL_ATOMIC_H_ 1
+  36:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  37:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** #include <avr/io.h>
+  38:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** #include <avr/interrupt.h>
+  39:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  40:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** #if !defined(__DOXYGEN__)
+  41:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** /* Internal helper functions. */
+  42:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** static __inline__ uint8_t __iSeiRetVal(void)
+  43:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** {
+  44:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     sei();
+  45:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     return 1;
+  46:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** }
+  47:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  48:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** static __inline__ uint8_t __iCliRetVal(void)
+  49:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** {
+  50:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     cli();
+  31               		.loc 2 50 0
+  32               	/* #APP */
+  33               	 ;  50 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+  34 0004 F894      		cli
+  35               	 ;  0 "" 2
+  36               	.LVL2:
+  37               	/* #NOAPP */
+  38               	.LBE29:
+  39               	.LBE28:
+  41:can_buffer.c  **** 	buf->size = size;
+  40               		.loc 1 41 0
+  41 0006 6283      		std Z+2,r22
+  42:can_buffer.c  **** 	buf->buf = list;
+  42               		.loc 1 42 0
+  43 0008 5183      		std Z+1,r21
+  44 000a 4083      		st Z,r20
+  43:can_buffer.c  **** 	
+  44:can_buffer.c  **** 	buf->head = 0;
+  45               		.loc 1 44 0
+  46 000c 1482      		std Z+4,__zero_reg__
+  45:can_buffer.c  **** 	buf->tail = 0;
+  47               		.loc 1 45 0
+  48 000e 1582      		std Z+5,__zero_reg__
+  46:can_buffer.c  **** 	buf->used = 0;
+  49               		.loc 1 46 0
+  50 0010 1382      		std Z+3,__zero_reg__
+  51               	.LVL3:
+  52               	.LBB30:
+  53               	.LBB31:
+  51:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     return 1;
+  52:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** }
+  53:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  54:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** static __inline__ void __iSeiParam(const uint8_t *__s)
+  55:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** {
+  56:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     sei();
+  57:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+  58:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     (void)__s;
+  59:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** }
+  60:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  61:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** static __inline__ void __iCliParam(const uint8_t *__s)
+  62:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** {
+  63:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     cli();
+  64:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+  65:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     (void)__s;
+  66:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** }
+  67:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** 
+  68:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** static __inline__ void __iRestore(const  uint8_t *__s)
+  69:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h **** {
+  70:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     SREG = *__s;
+  54               		.loc 2 70 0
+  55 0012 8FBF      		out __SREG__,r24
+  71:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+  56               		.loc 2 71 0
+  57               	.LVL4:
+  58               	/* epilogue start */
+  59               	.LBE31:
+  60               	.LBE30:
+  61               	.LBE27:
+  47:can_buffer.c  **** 	LEAVE_CRITICAL_SECTION;
+  48:can_buffer.c  **** }
+  62               		.loc 1 48 0
+  63 0014 0895      		ret
+  64               		.cfi_endproc
+  65               	.LFE16:
+  67               		.section	.text.can_buffer_empty,"ax",@progbits
+  68               	.global	can_buffer_empty
+  70               	can_buffer_empty:
+  71               	.LFB17:
+  49:can_buffer.c  **** 
+  50:can_buffer.c  **** // -----------------------------------------------------------------------------
+  51:can_buffer.c  **** bool can_buffer_empty(can_buffer_t *buf)
+  52:can_buffer.c  **** {
+  72               		.loc 1 52 0
+  73               		.cfi_startproc
+  74               	.LVL5:
+  75               	/* prologue: function */
+  76               	/* frame size = 0 */
+  77               	/* stack size = 0 */
+  78               	.L__stack_usage = 0
+  79               	.LBB32:
+  53:can_buffer.c  **** 	uint8_t used;
+  54:can_buffer.c  **** 	
+  55:can_buffer.c  **** 	ENTER_CRITICAL_SECTION;
+  80               		.loc 1 55 0
+  81 0000 2FB7      		in r18,__SREG__
+  82               	.LVL6:
+  83               	.LBB33:
+  84               	.LBB34:
+  50:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     return 1;
+  85               		.loc 2 50 0
+  86               	/* #APP */
+  87               	 ;  50 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+  88 0002 F894      		cli
+  89               	 ;  0 "" 2
+  90               	.LVL7:
+  91               	/* #NOAPP */
+  92               	.LBE34:
+  93               	.LBE33:
+  56:can_buffer.c  **** 	used = buf->used;
+  94               		.loc 1 56 0
+  95 0004 FC01      		movw r30,r24
+  96 0006 9381      		ldd r25,Z+3
+  97               	.LVL8:
+  98               	.LBB35:
+  99               	.LBB36:
+  70:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+ 100               		.loc 2 70 0
+ 101 0008 2FBF      		out __SREG__,r18
+ 102               		.loc 2 71 0
+ 103               	.LVL9:
+ 104               	.LBE36:
+ 105               	.LBE35:
+ 106               	.LBE32:
+  57:can_buffer.c  **** 	LEAVE_CRITICAL_SECTION;
+  58:can_buffer.c  **** 	
+  59:can_buffer.c  **** 	if (used == 0)
+ 107               		.loc 1 59 0
+ 108 000a 81E0      		ldi r24,lo8(1)
+ 109               	.LVL10:
+ 110 000c 9111      		cpse r25,__zero_reg__
+ 111 000e 80E0      		ldi r24,0
+ 112               	.L3:
+ 113               	/* epilogue start */
+  60:can_buffer.c  **** 		return true;
+  61:can_buffer.c  **** 	else
+  62:can_buffer.c  **** 		return false;
+  63:can_buffer.c  **** }
+ 114               		.loc 1 63 0
+ 115 0010 0895      		ret
+ 116               		.cfi_endproc
+ 117               	.LFE17:
+ 119               		.section	.text.can_buffer_full,"ax",@progbits
+ 120               	.global	can_buffer_full
+ 122               	can_buffer_full:
+ 123               	.LFB18:
+  64:can_buffer.c  **** 
+  65:can_buffer.c  **** // -----------------------------------------------------------------------------
+  66:can_buffer.c  **** bool can_buffer_full(can_buffer_t *buf)
+  67:can_buffer.c  **** {
+ 124               		.loc 1 67 0
+ 125               		.cfi_startproc
+ 126               	.LVL11:
+ 127               	/* prologue: function */
+ 128               	/* frame size = 0 */
+ 129               	/* stack size = 0 */
+ 130               	.L__stack_usage = 0
+ 131               	.LBB37:
+  68:can_buffer.c  **** 	uint8_t used;
+  69:can_buffer.c  **** 	uint8_t size;
+  70:can_buffer.c  **** 	
+  71:can_buffer.c  **** 	ENTER_CRITICAL_SECTION;
+ 132               		.loc 1 71 0
+ 133 0000 3FB7      		in r19,__SREG__
+ 134               	.LVL12:
+ 135               	.LBB38:
+ 136               	.LBB39:
+  50:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     return 1;
+ 137               		.loc 2 50 0
+ 138               	/* #APP */
+ 139               	 ;  50 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+ 140 0002 F894      		cli
+ 141               	 ;  0 "" 2
+ 142               	.LVL13:
+ 143               	/* #NOAPP */
+ 144               	.LBE39:
+ 145               	.LBE38:
+  72:can_buffer.c  **** 	used = buf->used;
+ 146               		.loc 1 72 0
+ 147 0004 FC01      		movw r30,r24
+ 148 0006 2381      		ldd r18,Z+3
+ 149               	.LVL14:
+  73:can_buffer.c  **** 	size = buf->size;
+ 150               		.loc 1 73 0
+ 151 0008 9281      		ldd r25,Z+2
+ 152               	.LVL15:
+ 153               	.LBB40:
+ 154               	.LBB41:
+  70:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+ 155               		.loc 2 70 0
+ 156 000a 3FBF      		out __SREG__,r19
+ 157               		.loc 2 71 0
+ 158               	.LVL16:
+ 159               	.LBE41:
+ 160               	.LBE40:
+ 161               	.LBE37:
+  74:can_buffer.c  **** 	LEAVE_CRITICAL_SECTION;
+  75:can_buffer.c  **** 	
+  76:can_buffer.c  **** 	if (used >= size)
+ 162               		.loc 1 76 0
+ 163 000c 81E0      		ldi r24,lo8(1)
+ 164               	.LVL17:
+ 165 000e 2917      		cp r18,r25
+ 166 0010 00F4      		brsh .L8
+ 167 0012 80E0      		ldi r24,0
+ 168               	.L8:
+ 169               	/* epilogue start */
+  77:can_buffer.c  **** 		return true;
+  78:can_buffer.c  **** 	else
+  79:can_buffer.c  **** 		return false;
+  80:can_buffer.c  **** }
+ 170               		.loc 1 80 0
+ 171 0014 0895      		ret
+ 172               		.cfi_endproc
+ 173               	.LFE18:
+ 175               		.section	.text.can_buffer_get_enqueue_ptr,"ax",@progbits
+ 176               	.global	can_buffer_get_enqueue_ptr
+ 178               	can_buffer_get_enqueue_ptr:
+ 179               	.LFB19:
+  81:can_buffer.c  **** 
+  82:can_buffer.c  **** // -----------------------------------------------------------------------------
+  83:can_buffer.c  **** can_t *can_buffer_get_enqueue_ptr(can_buffer_t *buf)
+  84:can_buffer.c  **** {
+ 180               		.loc 1 84 0
+ 181               		.cfi_startproc
+ 182               	.LVL18:
+ 183 0000 CF93      		push r28
+ 184               	.LCFI0:
+ 185               		.cfi_def_cfa_offset 3
+ 186               		.cfi_offset 28, -2
+ 187 0002 DF93      		push r29
+ 188               	.LCFI1:
+ 189               		.cfi_def_cfa_offset 4
+ 190               		.cfi_offset 29, -3
+ 191               	/* prologue: function */
+ 192               	/* frame size = 0 */
+ 193               	/* stack size = 2 */
+ 194               	.L__stack_usage = 2
+ 195 0004 EC01      		movw r28,r24
+  85:can_buffer.c  **** 	if (can_buffer_full( buf ))
+ 196               		.loc 1 85 0
+ 197 0006 0E94 0000 		call can_buffer_full
+ 198               	.LVL19:
+ 199 000a 8111      		cpse r24,__zero_reg__
+ 200 000c 00C0      		rjmp .L11
+  86:can_buffer.c  **** 		return NULL;
+  87:can_buffer.c  **** 	
+  88:can_buffer.c  **** 	return &buf->buf[buf->head];
+ 201               		.loc 1 88 0
+ 202 000e 2C81      		ldd r18,Y+4
+ 203 0010 8881      		ld r24,Y
+ 204 0012 9981      		ldd r25,Y+1
+ 205 0014 3CE0      		ldi r19,lo8(12)
+ 206 0016 239F      		mul r18,r19
+ 207 0018 800D      		add r24,r0
+ 208 001a 911D      		adc r25,r1
+ 209 001c 1124      		clr __zero_reg__
+ 210               	.L9:
+ 211               	/* epilogue start */
+  89:can_buffer.c  **** }
+ 212               		.loc 1 89 0
+ 213 001e DF91      		pop r29
+ 214 0020 CF91      		pop r28
+ 215               	.LVL20:
+ 216 0022 0895      		ret
+ 217               	.LVL21:
+ 218               	.L11:
+  86:can_buffer.c  **** 		return NULL;
+ 219               		.loc 1 86 0
+ 220 0024 90E0      		ldi r25,0
+ 221 0026 80E0      		ldi r24,0
+ 222 0028 00C0      		rjmp .L9
+ 223               		.cfi_endproc
+ 224               	.LFE19:
+ 226               		.section	.text.can_buffer_enqueue,"ax",@progbits
+ 227               	.global	can_buffer_enqueue
+ 229               	can_buffer_enqueue:
+ 230               	.LFB20:
+  90:can_buffer.c  **** 
+  91:can_buffer.c  **** // -----------------------------------------------------------------------------
+  92:can_buffer.c  **** void can_buffer_enqueue(can_buffer_t *buf)
+  93:can_buffer.c  **** {
+ 231               		.loc 1 93 0
+ 232               		.cfi_startproc
+ 233               	.LVL22:
+ 234               	/* prologue: function */
+ 235               	/* frame size = 0 */
+ 236               	/* stack size = 0 */
+ 237               	.L__stack_usage = 0
+ 238 0000 FC01      		movw r30,r24
+ 239               	.LBB42:
+  94:can_buffer.c  **** 	ENTER_CRITICAL_SECTION;
+ 240               		.loc 1 94 0
+ 241 0002 9FB7      		in r25,__SREG__
+ 242               	.LVL23:
+ 243               	.LBB43:
+ 244               	.LBB44:
+  50:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     return 1;
+ 245               		.loc 2 50 0
+ 246               	/* #APP */
+ 247               	 ;  50 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+ 248 0004 F894      		cli
+ 249               	 ;  0 "" 2
+ 250               	.LVL24:
+ 251               	/* #NOAPP */
+ 252               	.LBE44:
+ 253               	.LBE43:
+  95:can_buffer.c  **** 	buf->used ++;
+ 254               		.loc 1 95 0
+ 255 0006 8381      		ldd r24,Z+3
+ 256               	.LVL25:
+ 257 0008 8F5F      		subi r24,lo8(-(1))
+ 258 000a 8383      		std Z+3,r24
+  96:can_buffer.c  **** 	if (++buf->head >= buf->size)
+ 259               		.loc 1 96 0
+ 260 000c 8481      		ldd r24,Z+4
+ 261 000e 8F5F      		subi r24,lo8(-(1))
+ 262 0010 8483      		std Z+4,r24
+ 263 0012 2281      		ldd r18,Z+2
+ 264 0014 8217      		cp r24,r18
+ 265 0016 00F0      		brlo .L13
+  97:can_buffer.c  **** 		buf->head = 0;
+ 266               		.loc 1 97 0
+ 267 0018 1482      		std Z+4,__zero_reg__
+ 268               	.L13:
+ 269               	.LVL26:
+ 270               	.LBB45:
+ 271               	.LBB46:
+  70:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+ 272               		.loc 2 70 0 discriminator 2
+ 273 001a 9FBF      		out __SREG__,r25
+ 274               		.loc 2 71 0 discriminator 2
+ 275               	.LVL27:
+ 276               	/* epilogue start */
+ 277               	.LBE46:
+ 278               	.LBE45:
+ 279               	.LBE42:
+  98:can_buffer.c  **** 	LEAVE_CRITICAL_SECTION;
+  99:can_buffer.c  **** }
+ 280               		.loc 1 99 0 discriminator 2
+ 281 001c 0895      		ret
+ 282               		.cfi_endproc
+ 283               	.LFE20:
+ 285               		.section	.text.can_buffer_get_dequeue_ptr,"ax",@progbits
+ 286               	.global	can_buffer_get_dequeue_ptr
+ 288               	can_buffer_get_dequeue_ptr:
+ 289               	.LFB21:
+ 100:can_buffer.c  **** 
+ 101:can_buffer.c  **** // -----------------------------------------------------------------------------
+ 102:can_buffer.c  **** can_t *can_buffer_get_dequeue_ptr(can_buffer_t *buf)
+ 103:can_buffer.c  **** {
+ 290               		.loc 1 103 0
+ 291               		.cfi_startproc
+ 292               	.LVL28:
+ 293 0000 CF93      		push r28
+ 294               	.LCFI2:
+ 295               		.cfi_def_cfa_offset 3
+ 296               		.cfi_offset 28, -2
+ 297 0002 DF93      		push r29
+ 298               	.LCFI3:
+ 299               		.cfi_def_cfa_offset 4
+ 300               		.cfi_offset 29, -3
+ 301               	/* prologue: function */
+ 302               	/* frame size = 0 */
+ 303               	/* stack size = 2 */
+ 304               	.L__stack_usage = 2
+ 305 0004 EC01      		movw r28,r24
+ 104:can_buffer.c  **** 	if (can_buffer_empty( buf ))
+ 306               		.loc 1 104 0
+ 307 0006 0E94 0000 		call can_buffer_empty
+ 308               	.LVL29:
+ 309 000a 8111      		cpse r24,__zero_reg__
+ 310 000c 00C0      		rjmp .L16
+ 105:can_buffer.c  **** 		return NULL;
+ 106:can_buffer.c  **** 	
+ 107:can_buffer.c  **** 	return &buf->buf[buf->tail];
+ 311               		.loc 1 107 0
+ 312 000e 2D81      		ldd r18,Y+5
+ 313 0010 8881      		ld r24,Y
+ 314 0012 9981      		ldd r25,Y+1
+ 315 0014 3CE0      		ldi r19,lo8(12)
+ 316 0016 239F      		mul r18,r19
+ 317 0018 800D      		add r24,r0
+ 318 001a 911D      		adc r25,r1
+ 319 001c 1124      		clr __zero_reg__
+ 320               	.L14:
+ 321               	/* epilogue start */
+ 108:can_buffer.c  **** }
+ 322               		.loc 1 108 0
+ 323 001e DF91      		pop r29
+ 324 0020 CF91      		pop r28
+ 325               	.LVL30:
+ 326 0022 0895      		ret
+ 327               	.LVL31:
+ 328               	.L16:
+ 105:can_buffer.c  **** 		return NULL;
+ 329               		.loc 1 105 0
+ 330 0024 90E0      		ldi r25,0
+ 331 0026 80E0      		ldi r24,0
+ 332 0028 00C0      		rjmp .L14
+ 333               		.cfi_endproc
+ 334               	.LFE21:
+ 336               		.section	.text.can_buffer_dequeue,"ax",@progbits
+ 337               	.global	can_buffer_dequeue
+ 339               	can_buffer_dequeue:
+ 340               	.LFB22:
+ 109:can_buffer.c  **** 
+ 110:can_buffer.c  **** // -----------------------------------------------------------------------------
+ 111:can_buffer.c  **** void can_buffer_dequeue(can_buffer_t *buf)
+ 112:can_buffer.c  **** {
+ 341               		.loc 1 112 0
+ 342               		.cfi_startproc
+ 343               	.LVL32:
+ 344               	/* prologue: function */
+ 345               	/* frame size = 0 */
+ 346               	/* stack size = 0 */
+ 347               	.L__stack_usage = 0
+ 348 0000 FC01      		movw r30,r24
+ 349               	.LBB47:
+ 113:can_buffer.c  **** 	ENTER_CRITICAL_SECTION;
+ 350               		.loc 1 113 0
+ 351 0002 9FB7      		in r25,__SREG__
+ 352               	.LVL33:
+ 353               	.LBB48:
+ 354               	.LBB49:
+  50:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     return 1;
+ 355               		.loc 2 50 0
+ 356               	/* #APP */
+ 357               	 ;  50 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+ 358 0004 F894      		cli
+ 359               	 ;  0 "" 2
+ 360               	.LVL34:
+ 361               	/* #NOAPP */
+ 362               	.LBE49:
+ 363               	.LBE48:
+ 114:can_buffer.c  **** 	buf->used --;
+ 364               		.loc 1 114 0
+ 365 0006 8381      		ldd r24,Z+3
+ 366               	.LVL35:
+ 367 0008 8150      		subi r24,lo8(-(-1))
+ 368 000a 8383      		std Z+3,r24
+ 115:can_buffer.c  **** 	if (++buf->tail >= buf->size)
+ 369               		.loc 1 115 0
+ 370 000c 8581      		ldd r24,Z+5
+ 371 000e 8F5F      		subi r24,lo8(-(1))
+ 372 0010 8583      		std Z+5,r24
+ 373 0012 2281      		ldd r18,Z+2
+ 374 0014 8217      		cp r24,r18
+ 375 0016 00F0      		brlo .L18
+ 116:can_buffer.c  **** 		buf->tail = 0;
+ 376               		.loc 1 116 0
+ 377 0018 1582      		std Z+5,__zero_reg__
+ 378               	.L18:
+ 379               	.LVL36:
+ 380               	.LBB50:
+ 381               	.LBB51:
+  70:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+ 382               		.loc 2 70 0 discriminator 2
+ 383 001a 9FBF      		out __SREG__,r25
+ 384               		.loc 2 71 0 discriminator 2
+ 385               	.LVL37:
+ 386               	/* epilogue start */
+ 387               	.LBE51:
+ 388               	.LBE50:
+ 389               	.LBE47:
+ 117:can_buffer.c  **** 	LEAVE_CRITICAL_SECTION;
+ 118:can_buffer.c  **** }
+ 390               		.loc 1 118 0 discriminator 2
+ 391 001c 0895      		ret
+ 392               		.cfi_endproc
+ 393               	.LFE22:
+ 395               		.text
+ 396               	.Letext0:
+ 397               		.file 3 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 398               		.file 4 "../can.h"
+ 399               		.file 5 "can_buffer.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 can_buffer.c
+     /tmp/ccLql2li.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccLql2li.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccLql2li.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccLql2li.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccLql2li.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccLql2li.s:13     .text.can_buffer_init:0000000000000000 can_buffer_init
+     /tmp/ccLql2li.s:70     .text.can_buffer_empty:0000000000000000 can_buffer_empty
+     /tmp/ccLql2li.s:122    .text.can_buffer_full:0000000000000000 can_buffer_full
+     /tmp/ccLql2li.s:178    .text.can_buffer_get_enqueue_ptr:0000000000000000 can_buffer_get_enqueue_ptr
+     /tmp/ccLql2li.s:229    .text.can_buffer_enqueue:0000000000000000 can_buffer_enqueue
+     /tmp/ccLql2li.s:288    .text.can_buffer_get_dequeue_ptr:0000000000000000 can_buffer_get_dequeue_ptr
+     /tmp/ccLql2li.s:339    .text.can_buffer_dequeue:0000000000000000 can_buffer_dequeue
+
+NO UNDEFINED SYMBOLS

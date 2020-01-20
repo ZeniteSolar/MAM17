@@ -1,0 +1,629 @@
+   1               		.file	"mcp2515_set_dyn_filter.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_set_filter,"ax",@progbits
+  11               	.global	can_set_filter
+  13               	can_set_filter:
+  14               	.LFB19:
+  15               		.file 1 "mcp2515_set_dyn_filter.c"
+   1:mcp2515_set_dyn_filter.c **** // ----------------------------------------------------------------------------
+   2:mcp2515_set_dyn_filter.c **** /*
+   3:mcp2515_set_dyn_filter.c ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_set_dyn_filter.c ****  *  All rights reserved.
+   5:mcp2515_set_dyn_filter.c ****  *
+   6:mcp2515_set_dyn_filter.c ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_set_dyn_filter.c ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_set_dyn_filter.c ****  * are met:
+   9:mcp2515_set_dyn_filter.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_set_dyn_filter.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_set_dyn_filter.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_set_dyn_filter.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_set_dyn_filter.c ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_set_dyn_filter.c ****  *
+  15:mcp2515_set_dyn_filter.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_set_dyn_filter.c ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_set_dyn_filter.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_set_dyn_filter.c ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_set_dyn_filter.c ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_set_dyn_filter.c ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_set_dyn_filter.c ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_set_dyn_filter.c ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_set_dyn_filter.c ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_set_dyn_filter.c ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_set_dyn_filter.c ****  * SUCH DAMAGE.
+  26:mcp2515_set_dyn_filter.c ****  *
+  27:mcp2515_set_dyn_filter.c ****  * $Id: mcp2515_set_dyn_filter.c 6837 2008-11-16 19:05:15Z fabian $
+  28:mcp2515_set_dyn_filter.c ****  */
+  29:mcp2515_set_dyn_filter.c **** // ----------------------------------------------------------------------------
+  30:mcp2515_set_dyn_filter.c **** 
+  31:mcp2515_set_dyn_filter.c **** #include "mcp2515_private.h"
+  32:mcp2515_set_dyn_filter.c **** #ifdef	SUPPORT_FOR_MCP2515__
+  33:mcp2515_set_dyn_filter.c **** 
+  34:mcp2515_set_dyn_filter.c **** #include <util/delay.h>
+  35:mcp2515_set_dyn_filter.c **** 
+  36:mcp2515_set_dyn_filter.c **** // ----------------------------------------------------------------------------
+  37:mcp2515_set_dyn_filter.c **** // set a filter
+  38:mcp2515_set_dyn_filter.c **** 
+  39:mcp2515_set_dyn_filter.c **** bool mcp2515_set_filter(uint8_t number, const can_filter_t *filter)
+  40:mcp2515_set_dyn_filter.c **** {
+  16               		.loc 1 40 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19 0000 FF92      		push r15
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 3
+  22               		.cfi_offset 15, -2
+  23 0002 0F93      		push r16
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 4
+  26               		.cfi_offset 16, -3
+  27 0004 1F93      		push r17
+  28               	.LCFI2:
+  29               		.cfi_def_cfa_offset 5
+  30               		.cfi_offset 17, -4
+  31 0006 CF93      		push r28
+  32               	.LCFI3:
+  33               		.cfi_def_cfa_offset 6
+  34               		.cfi_offset 28, -5
+  35 0008 DF93      		push r29
+  36               	.LCFI4:
+  37               		.cfi_def_cfa_offset 7
+  38               		.cfi_offset 29, -6
+  39               	/* prologue: function */
+  40               	/* frame size = 0 */
+  41               	/* stack size = 5 */
+  42               	.L__stack_usage = 5
+  43 000a C82F      		mov r28,r24
+  44 000c 8B01      		movw r16,r22
+  45               	.LVL1:
+  41:mcp2515_set_dyn_filter.c **** 	uint8_t mask_address = 0;
+  42:mcp2515_set_dyn_filter.c **** 	uint8_t mode = mcp2515_read_register(CANSTAT);
+  46               		.loc 1 42 0
+  47 000e 8EE0      		ldi r24,lo8(14)
+  48               	.LVL2:
+  49 0010 0E94 0000 		call mcp2515_read_register
+  50               	.LVL3:
+  51 0014 D82F      		mov r29,r24
+  52               	.LVL4:
+  43:mcp2515_set_dyn_filter.c **** 	
+  44:mcp2515_set_dyn_filter.c **** 	if (number > 5)
+  45:mcp2515_set_dyn_filter.c **** 		return false;
+  53               		.loc 1 45 0
+  54 0016 80E0      		ldi r24,0
+  55               	.LVL5:
+  44:mcp2515_set_dyn_filter.c **** 		return false;
+  56               		.loc 1 44 0
+  57 0018 C630      		cpi r28,lo8(6)
+  58 001a 00F0      		brlo .+2
+  59 001c 00C0      		rjmp .L1
+  60               	.LVL6:
+  61               	.LBB47:
+  62               	.LBB48:
+  63               		.file 2 "mcp2515_private.h"
+   1:mcp2515_private.h **** // ----------------------------------------------------------------------------
+   2:mcp2515_private.h **** /*
+   3:mcp2515_private.h ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_private.h ****  *  All rights reserved.
+   5:mcp2515_private.h ****  *
+   6:mcp2515_private.h ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_private.h ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_private.h ****  * are met:
+   9:mcp2515_private.h ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_private.h ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_private.h ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_private.h ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_private.h ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_private.h ****  *
+  15:mcp2515_private.h ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_private.h ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_private.h ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_private.h ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_private.h ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_private.h ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_private.h ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_private.h ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_private.h ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_private.h ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_private.h ****  * SUCH DAMAGE.
+  26:mcp2515_private.h ****  *
+  27:mcp2515_private.h ****  * $Id: mcp2515_private.h 6910 2008-11-30 21:13:14Z fabian $
+  28:mcp2515_private.h ****  */
+  29:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  30:mcp2515_private.h **** 
+  31:mcp2515_private.h **** #ifndef	MCP2515_PRIVATE_H
+  32:mcp2515_private.h **** #define	MCP2515_PRIVATE_H
+  33:mcp2515_private.h **** 
+  34:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  35:mcp2515_private.h **** /**
+  36:mcp2515_private.h ****  * \brief	defines only used inside the library
+  37:mcp2515_private.h ****  *
+  38:mcp2515_private.h ****  * \author	Fabian Greif <fabian.greif@rwth-aachen.de>
+  39:mcp2515_private.h ****  * \version	$Id: mcp2515_private.h 6910 2008-11-30 21:13:14Z fabian $
+  40:mcp2515_private.h ****  *
+  41:mcp2515_private.h ****  * \todo	MCP2515_TXRTSn Pins nutzbar machen.
+  42:mcp2515_private.h ****  */
+  43:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  44:mcp2515_private.h **** 
+  45:mcp2515_private.h **** #include <avr/io.h>
+  46:mcp2515_private.h **** #include <avr/pgmspace.h>
+  47:mcp2515_private.h **** #include <inttypes.h>
+  48:mcp2515_private.h **** #include <stdbool.h>
+  49:mcp2515_private.h **** 
+  50:mcp2515_private.h **** #include "can.h"
+  51:mcp2515_private.h **** #include "utils.h"
+  52:mcp2515_private.h **** 
+  53:mcp2515_private.h **** #include "can_private.h"
+  54:mcp2515_private.h **** #include "spi.h"
+  55:mcp2515_private.h **** 
+  56:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  57:mcp2515_private.h **** 
+  58:mcp2515_private.h **** #if (BUILD_FOR_MCP2515 == 1)
+  59:mcp2515_private.h **** 	#if defined(__AVR_ATmega16__) || defined(__AVR_ATmega32__) || defined(__AVR_ATmega644__)
+  60:mcp2515_private.h **** 		#define	P_MOSI	B,5
+  61:mcp2515_private.h **** 		#define	P_MISO	B,6
+  62:mcp2515_private.h **** 		#define	P_SCK	B,7
+  63:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  64:mcp2515_private.h **** 	#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+  65:mcp2515_private.h **** 		#define P_MOSI  B,2
+  66:mcp2515_private.h **** 		#define P_MISO  B,3
+  67:mcp2515_private.h **** 		#define P_SCK   B,1
+  68:mcp2515_private.h **** 		#define SUPPORT_FOR_MCP2515__
+  69:mcp2515_private.h **** 	#elif defined(__AVR_ATmega8__)  || defined(__AVR_ATmega48__) || \
+  70:mcp2515_private.h **** 		  defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
+  71:mcp2515_private.h **** 		#define	P_MOSI	B,3
+  72:mcp2515_private.h **** 		#define	P_MISO	B,4
+  73:mcp2515_private.h **** 		#define	P_SCK	B,5
+  74:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  75:mcp2515_private.h **** 	#elif defined(__AVR_ATmega128__)
+  76:mcp2515_private.h **** 		#define	P_MOSI	B,2
+  77:mcp2515_private.h **** 		#define	P_MISO	B,3
+  78:mcp2515_private.h **** 		#define	P_SCK	B,1
+  79:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  80:mcp2515_private.h **** 	#elif defined(__AVR_ATtiny45__) || defined(__AVR_ATtiny85__)
+  81:mcp2515_private.h **** 		#define	P_MOSI	B,0
+  82:mcp2515_private.h **** 		#define	P_MISO	B,1
+  83:mcp2515_private.h **** 		#define	P_SCK	B,2
+  84:mcp2515_private.h **** 		
+  85:mcp2515_private.h **** 		#define	USE_SOFTWARE_SPI		1
+  86:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  87:mcp2515_private.h **** 	#else
+  88:mcp2515_private.h **** 		#error	choosen AVR-type is not supported yet!
+  89:mcp2515_private.h **** 	#endif
+  90:mcp2515_private.h **** #endif
+  91:mcp2515_private.h **** 
+  92:mcp2515_private.h **** 
+  93:mcp2515_private.h **** #ifdef  SUPPORT_FOR_MCP2515__
+  94:mcp2515_private.h **** 
+  95:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  96:mcp2515_private.h **** // load some default values
+  97:mcp2515_private.h **** 
+  98:mcp2515_private.h **** #ifndef	MCP2515_CLKOUT_PRESCALER
+  99:mcp2515_private.h **** 	#define	MCP2515_CLKOUT_PRESCALER	0
+ 100:mcp2515_private.h **** #endif
+ 101:mcp2515_private.h **** #ifndef	MCP2515_INTERRUPTS
+ 102:mcp2515_private.h **** 	#define	MCP2515_INTERRUPTS			(1<<RX1IE)|(1<<RX0IE)
+ 103:mcp2515_private.h **** #endif
+ 104:mcp2515_private.h **** 
+ 105:mcp2515_private.h **** // ----------------------------------------------------------------------------
+ 106:mcp2515_private.h **** // TODO: this file is imcompatible with the at90can
+ 107:mcp2515_private.h **** #include "mcp2515_defs.h"
+ 108:mcp2515_private.h **** 
+ 109:mcp2515_private.h **** #ifndef	MCP2515_CS
+ 110:mcp2515_private.h **** 	#error	MCP2515_CS ist nicht definiert!
+ 111:mcp2515_private.h **** #endif
+ 112:mcp2515_private.h **** 
+ 113:mcp2515_private.h **** #if defined(MCP2515_RX0BF) && !defined(MCP2515_RX1BF)
+ 114:mcp2515_private.h **** 	#warning	only MCP2515_RX0BF but not MCP2515_RX1BF defined!
+ 115:mcp2515_private.h **** #elif !defined(MCP2515_RX0BF) && defined(MCP2515_RX1BF)
+ 116:mcp2515_private.h **** 	#warning	only MCP2515_RX1BF but not MCP2515_RX0BF defined!
+ 117:mcp2515_private.h **** #elif defined(MCP2515_RX0BF) && defined(MCP2515_RX1BF)
+ 118:mcp2515_private.h **** 	#define	RXnBF_FUNKTION
+ 119:mcp2515_private.h **** #endif
+ 120:mcp2515_private.h **** 
+ 121:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 122:mcp2515_private.h **** /**
+ 123:mcp2515_private.h ****  * \brief	Beschreiben von internen Registern
+ 124:mcp2515_private.h ****  */
+ 125:mcp2515_private.h **** extern void mcp2515_write_register( uint8_t adress, uint8_t data );
+ 126:mcp2515_private.h **** 
+ 127:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 128:mcp2515_private.h **** /**
+ 129:mcp2515_private.h ****  * \brief	Lesen der internen Register
+ 130:mcp2515_private.h ****  */
+ 131:mcp2515_private.h **** extern uint8_t mcp2515_read_register(uint8_t adress);
+ 132:mcp2515_private.h **** 
+ 133:mcp2515_private.h **** extern uint8_t mcp2515_read_status(uint8_t type);
+ 134:mcp2515_private.h **** 
+ 135:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 136:mcp2515_private.h **** /**
+ 137:mcp2515_private.h ****  * \brief	Setzten/loeschen einzelner Bits
+ 138:mcp2515_private.h ****  *
+ 139:mcp2515_private.h ****  * Diese Funktionen laesst sich nur auf die Register BFPCTRL, 
+ 140:mcp2515_private.h ****  * TXRTSCTRL, CANCTRL, CNF1, CNF2, CNF3, CANINTE, CANINTF, EFLG,
+ 141:mcp2515_private.h ****  * TXB0CTRL, TXB1CTRL, TXB2CTRL, RXB0CTRL und RXB1CTRL anwenden.
+ 142:mcp2515_private.h ****  *
+ 143:mcp2515_private.h ****  * \see		Datenblatt des MCP2515, Registerbersichtstabelle
+ 144:mcp2515_private.h ****  */
+ 145:mcp2515_private.h **** extern void mcp2515_bit_modify(uint8_t adress, uint8_t mask, uint8_t data);
+ 146:mcp2515_private.h **** 
+ 147:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 148:mcp2515_private.h **** extern __attribute__ ((gnu_inline)) inline void mcp2515_change_operation_mode(uint8_t mode)
+ 149:mcp2515_private.h **** {
+ 150:mcp2515_private.h **** 	mcp2515_bit_modify(CANCTRL, 0xe0, mode);
+  64               		.loc 2 150 0
+  65 001e 40E8      		ldi r20,lo8(-128)
+  66 0020 60EE      		ldi r22,lo8(-32)
+  67 0022 8FE0      		ldi r24,lo8(15)
+  68 0024 0E94 0000 		call mcp2515_bit_modify
+  69               	.LVL7:
+  70               	.L3:
+ 151:mcp2515_private.h **** 	while ((mcp2515_read_register(CANSTAT) & 0xe0) != (mode & 0xe0))
+  71               		.loc 2 151 0
+  72 0028 8EE0      		ldi r24,lo8(14)
+  73 002a 0E94 0000 		call mcp2515_read_register
+  74               	.LVL8:
+  75 002e 8058      		subi r24,lo8(-(-128))
+  76 0030 807E      		andi r24,lo8(-32)
+  77 0032 01F4      		brne .L3
+  78               	.LVL9:
+  79               	.LBE48:
+  80               	.LBE47:
+  46:mcp2515_set_dyn_filter.c **** 	
+  47:mcp2515_set_dyn_filter.c **** 	// change to configuration mode
+  48:mcp2515_set_dyn_filter.c **** 	mcp2515_change_operation_mode( (1<<REQOP2) );
+  49:mcp2515_set_dyn_filter.c **** 	
+  50:mcp2515_set_dyn_filter.c **** 	// set filter mask
+  51:mcp2515_set_dyn_filter.c **** 	if (number == 0)
+  81               		.loc 1 51 0
+  82 0034 C111      		cpse r28,__zero_reg__
+  83 0036 00C0      		rjmp .L4
+  84               	.LVL10:
+  52:mcp2515_set_dyn_filter.c **** 	{
+  53:mcp2515_set_dyn_filter.c **** 		mask_address = RXM0SIDH;
+  54:mcp2515_set_dyn_filter.c **** 		
+  55:mcp2515_set_dyn_filter.c **** 		#if SUPPORT_EXTENDED_CANID
+  56:mcp2515_set_dyn_filter.c **** 			if (filter->flags.extended == 0x3) {
+  57:mcp2515_set_dyn_filter.c **** 				// only extended identifier
+  58:mcp2515_set_dyn_filter.c **** 				mcp2515_write_register(RXB0CTRL, (1<<RXM1));
+  59:mcp2515_set_dyn_filter.c **** 			}
+  60:mcp2515_set_dyn_filter.c **** 			else if (filter->flags.extended == 0x2) {
+  61:mcp2515_set_dyn_filter.c **** 				// only standard identifier
+  62:mcp2515_set_dyn_filter.c **** 				mcp2515_write_register(RXB0CTRL, (1<<RXM0));
+  63:mcp2515_set_dyn_filter.c **** 			}
+  64:mcp2515_set_dyn_filter.c **** 			else {
+  65:mcp2515_set_dyn_filter.c **** 				// receive all messages
+  66:mcp2515_set_dyn_filter.c **** 				mcp2515_write_register(RXB0CTRL, 0);
+  67:mcp2515_set_dyn_filter.c **** 			}
+  68:mcp2515_set_dyn_filter.c **** 		#else
+  69:mcp2515_set_dyn_filter.c **** 			// Buffer 0: Empfangen aller Nachrichten mit Standard Identifier 
+  70:mcp2515_set_dyn_filter.c **** 			// die den Filter Kriterien gengen
+  71:mcp2515_set_dyn_filter.c **** 			mcp2515_write_register(RXB0CTRL, (1<<RXM0));
+  85               		.loc 1 71 0
+  86 0038 60E2      		ldi r22,lo8(32)
+  87 003a 80E6      		ldi r24,lo8(96)
+  88 003c 0E94 0000 		call mcp2515_write_register
+  89               	.LVL11:
+  53:mcp2515_set_dyn_filter.c **** 		
+  90               		.loc 1 53 0
+  91 0040 20E2      		ldi r18,lo8(32)
+  92 0042 F22E      		mov r15,r18
+  93               	.LVL12:
+  94               	.L5:
+  72:mcp2515_set_dyn_filter.c **** 		#endif
+  73:mcp2515_set_dyn_filter.c **** 	}
+  74:mcp2515_set_dyn_filter.c **** 	else if (number == 2)
+  75:mcp2515_set_dyn_filter.c **** 	{
+  76:mcp2515_set_dyn_filter.c **** 		mask_address = RXM1SIDH;
+  77:mcp2515_set_dyn_filter.c **** 		
+  78:mcp2515_set_dyn_filter.c **** 		#if SUPPORT_EXTENDED_CANID
+  79:mcp2515_set_dyn_filter.c **** 			if (filter->flags.extended == 0x3) {
+  80:mcp2515_set_dyn_filter.c **** 				// only extended identifier
+  81:mcp2515_set_dyn_filter.c **** 				mcp2515_write_register(RXB1CTRL, (1<<RXM1));
+  82:mcp2515_set_dyn_filter.c **** 			}
+  83:mcp2515_set_dyn_filter.c **** 			else if (filter->flags.extended == 0x2) {
+  84:mcp2515_set_dyn_filter.c **** 				// only standard identifier
+  85:mcp2515_set_dyn_filter.c **** 				mcp2515_write_register(RXB1CTRL, (1<<RXM0));
+  86:mcp2515_set_dyn_filter.c **** 			}
+  87:mcp2515_set_dyn_filter.c **** 			else {
+  88:mcp2515_set_dyn_filter.c **** 				mcp2515_write_register(RXB1CTRL, 0);
+  89:mcp2515_set_dyn_filter.c **** 			}
+  90:mcp2515_set_dyn_filter.c **** 		#else
+  91:mcp2515_set_dyn_filter.c **** 			// Buffer 1: Empfangen aller Nachrichten mit Standard Identifier 
+  92:mcp2515_set_dyn_filter.c **** 			// die den Filter Kriterien gengen
+  93:mcp2515_set_dyn_filter.c **** 			mcp2515_write_register(RXB1CTRL, (1<<RXM0));
+  94:mcp2515_set_dyn_filter.c **** 		#endif
+  95:mcp2515_set_dyn_filter.c **** 	}
+  96:mcp2515_set_dyn_filter.c **** 	
+  97:mcp2515_set_dyn_filter.c **** 	if (mask_address)
+  98:mcp2515_set_dyn_filter.c **** 	{
+  99:mcp2515_set_dyn_filter.c **** 		RESET(MCP2515_CS);
+  95               		.loc 1 99 0
+  96 0044 2898      		cbi 0x5,0
+ 100:mcp2515_set_dyn_filter.c **** 		spi_putc(SPI_WRITE);
+  97               		.loc 1 100 0
+  98 0046 82E0      		ldi r24,lo8(2)
+  99 0048 0E94 0000 		call spi_putc
+ 100               	.LVL13:
+ 101:mcp2515_set_dyn_filter.c **** 		spi_putc(mask_address);
+ 101               		.loc 1 101 0
+ 102 004c 8F2D      		mov r24,r15
+ 103 004e 0E94 0000 		call spi_putc
+ 104               	.LVL14:
+ 102:mcp2515_set_dyn_filter.c **** 		#if SUPPORT_EXTENDED_CANID
+ 103:mcp2515_set_dyn_filter.c **** 			mcp2515_write_id(&filter->mask, (filter->flags.extended == 0x2) ? 0 : 1);
+ 104:mcp2515_set_dyn_filter.c **** 		#else
+ 105:mcp2515_set_dyn_filter.c **** 			mcp2515_write_id(&filter->mask);
+ 105               		.loc 1 105 0
+ 106 0052 C801      		movw r24,r16
+ 107 0054 0296      		adiw r24,2
+ 108 0056 0E94 0000 		call mcp2515_write_id
+ 109               	.LVL15:
+ 106:mcp2515_set_dyn_filter.c **** 		#endif
+ 107:mcp2515_set_dyn_filter.c **** 		SET(MCP2515_CS);
+ 110               		.loc 1 107 0
+ 111 005a 289A      		sbi 0x5,0
+ 112               	.LVL16:
+ 113               	.LBB49:
+ 114               	.LBB50:
+ 115               	.LBB51:
+ 116               	.LBB52:
+ 117               		.file 3 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+   1:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    Copyright (c) 2007 Joerg Wunsch
+   3:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    All rights reserved.
+   4:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+   5:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    Redistribution and use in source and binary forms, with or without
+   6:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    modification, are permitted provided that the following conditions are met:
+   7:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+   8:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    * Redistributions of source code must retain the above copyright
+   9:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer.
+  10:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  11:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    * Redistributions in binary form must reproduce the above copyright
+  12:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer in
+  13:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      the documentation and/or other materials provided with the
+  14:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      distribution.
+  15:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  16:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****    * Neither the name of the copyright holders nor the names of
+  17:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      contributors may be used to endorse or promote products derived
+  18:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****      from this software without specific prior written permission.
+  19:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  20:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  31:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  32:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /* $Id$ */
+  33:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  34:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #ifndef _UTIL_DELAY_BASIC_H_
+  35:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #define _UTIL_DELAY_BASIC_H_ 1
+  36:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  37:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #include <inttypes.h>
+  38:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  39:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #if !defined(__DOXYGEN__)
+  40:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** static __inline__ void _delay_loop_1(uint8_t __count) __attribute__((__always_inline__));
+  41:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** static __inline__ void _delay_loop_2(uint16_t __count) __attribute__((__always_inline__));
+  42:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** #endif
+  43:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  44:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /** \file */
+  45:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /** \defgroup util_delay_basic <util/delay_basic.h>: Basic busy-wait delay loops
+  46:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     \code
+  47:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     #include <util/delay_basic.h>
+  48:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     \endcode
+  49:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  50:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     The functions in this header file implement simple delay loops
+  51:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     that perform a busy-waiting.  They are typically used to
+  52:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     facilitate short delays in the program execution.  They are
+  53:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     implemented as count-down loops with a well-known CPU cycle
+  54:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     count per loop iteration.  As such, no other processing can
+  55:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     occur simultaneously.  It should be kept in mind that the
+  56:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     functions described here do not disable interrupts.
+  57:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  58:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     In general, for long delays, the use of hardware timers is
+  59:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     much preferrable, as they free the CPU, and allow for
+  60:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     concurrent processing of other events while the timer is
+  61:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     running.  However, in particular for very short delays, the
+  62:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     overhead of setting up a hardware timer is too much compared
+  63:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     to the overall delay time.
+  64:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  65:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     Two inline functions are provided for the actual delay algorithms.
+  66:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  67:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** */
+  68:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  69:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  70:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  71:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     Delay loop using an 8-bit counter \c __count, so up to 256
+  72:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     iterations are possible.  (The value 256 would have to be passed
+  73:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     as 0.)  The loop executes three CPU cycles per iteration, not
+  74:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     including the overhead the compiler needs to setup the counter
+  75:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     register.
+  76:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 
+  77:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to 768 microseconds
+  78:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h ****     can be achieved.
+  79:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** */
+  80:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** void
+  81:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** _delay_loop_1(uint8_t __count)
+  82:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** {
+  83:/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/avr/include/util/delay_basic.h **** 	__asm__ volatile (
+ 118               		.loc 3 83 0
+ 119 005c 85E0      		ldi r24,lo8(5)
+ 120               	/* #APP */
+ 121               	 ;  83 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+ 122 005e 8A95      		1: dec r24
+ 123 0060 01F4      		brne 1b
+ 124               	 ;  0 "" 2
+ 125               	.LVL17:
+ 126               	/* #NOAPP */
+ 127               	.L6:
+ 128               	.LBE52:
+ 129               	.LBE51:
+ 130               	.LBE50:
+ 131               	.LBE49:
+ 108:mcp2515_set_dyn_filter.c **** 		
+ 109:mcp2515_set_dyn_filter.c **** 		_delay_us(1);
+ 110:mcp2515_set_dyn_filter.c **** 	}
+ 111:mcp2515_set_dyn_filter.c **** 	
+ 112:mcp2515_set_dyn_filter.c **** 	// write filter
+ 113:mcp2515_set_dyn_filter.c **** 	uint8_t filter_address;
+ 114:mcp2515_set_dyn_filter.c **** 	if (number >= 3) {
+ 115:mcp2515_set_dyn_filter.c **** 		number -= 3;
+ 116:mcp2515_set_dyn_filter.c **** 		filter_address = RXF3SIDH;
+ 117:mcp2515_set_dyn_filter.c **** 	}
+ 118:mcp2515_set_dyn_filter.c **** 	else {
+ 119:mcp2515_set_dyn_filter.c **** 		filter_address = RXF0SIDH;
+ 132               		.loc 1 119 0
+ 133 0062 F12C      		mov r15,__zero_reg__
+ 114:mcp2515_set_dyn_filter.c **** 		number -= 3;
+ 134               		.loc 1 114 0
+ 135 0064 C330      		cpi r28,lo8(3)
+ 136 0066 00F0      		brlo .L7
+ 115:mcp2515_set_dyn_filter.c **** 		filter_address = RXF3SIDH;
+ 137               		.loc 1 115 0
+ 138 0068 C350      		subi r28,lo8(-(-3))
+ 139               	.LVL18:
+ 116:mcp2515_set_dyn_filter.c **** 	}
+ 140               		.loc 1 116 0
+ 141 006a 80E1      		ldi r24,lo8(16)
+ 142 006c F82E      		mov r15,r24
+ 143               	.LVL19:
+ 144               	.L7:
+ 120:mcp2515_set_dyn_filter.c **** 	}
+ 121:mcp2515_set_dyn_filter.c **** 	
+ 122:mcp2515_set_dyn_filter.c **** 	RESET(MCP2515_CS);
+ 145               		.loc 1 122 0
+ 146 006e 2898      		cbi 0x5,0
+ 123:mcp2515_set_dyn_filter.c **** 	spi_putc(SPI_WRITE);
+ 147               		.loc 1 123 0
+ 148 0070 82E0      		ldi r24,lo8(2)
+ 149 0072 0E94 0000 		call spi_putc
+ 150               	.LVL20:
+ 124:mcp2515_set_dyn_filter.c **** 	spi_putc(filter_address | (number * 4));
+ 151               		.loc 1 124 0
+ 152 0076 8C2F      		mov r24,r28
+ 153 0078 880F      		lsl r24
+ 154 007a 880F      		lsl r24
+ 155 007c 8F29      		or r24,r15
+ 156 007e 0E94 0000 		call spi_putc
+ 157               	.LVL21:
+ 125:mcp2515_set_dyn_filter.c **** 	#if SUPPORT_EXTENDED_CANID
+ 126:mcp2515_set_dyn_filter.c **** 		mcp2515_write_id(&filter->id, (filter->flags.extended == 0x2) ? 0 : 1);
+ 127:mcp2515_set_dyn_filter.c **** 	#else
+ 128:mcp2515_set_dyn_filter.c **** 		mcp2515_write_id(&filter->id);
+ 158               		.loc 1 128 0
+ 159 0082 C801      		movw r24,r16
+ 160 0084 0E94 0000 		call mcp2515_write_id
+ 161               	.LVL22:
+ 129:mcp2515_set_dyn_filter.c **** 	#endif
+ 130:mcp2515_set_dyn_filter.c **** 	SET(MCP2515_CS);
+ 162               		.loc 1 130 0
+ 163 0088 289A      		sbi 0x5,0
+ 164               	.LVL23:
+ 165               	.LBB53:
+ 166               	.LBB54:
+ 167               	.LBB55:
+ 168               	.LBB56:
+ 169               		.loc 3 83 0
+ 170 008a 85E0      		ldi r24,lo8(5)
+ 171               	/* #APP */
+ 172               	 ;  83 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino
+ 173 008c 8A95      		1: dec r24
+ 174 008e 01F4      		brne 1b
+ 175               	 ;  0 "" 2
+ 176               	.LVL24:
+ 177               	/* #NOAPP */
+ 178               	.LBE56:
+ 179               	.LBE55:
+ 180               	.LBE54:
+ 181               	.LBE53:
+ 182               	.LBB57:
+ 183               	.LBB58:
+ 150:mcp2515_private.h **** 	while ((mcp2515_read_register(CANSTAT) & 0xe0) != (mode & 0xe0))
+ 184               		.loc 2 150 0
+ 185 0090 4D2F      		mov r20,r29
+ 186 0092 60EE      		ldi r22,lo8(-32)
+ 187 0094 8FE0      		ldi r24,lo8(15)
+ 188 0096 0E94 0000 		call mcp2515_bit_modify
+ 189               	.LVL25:
+ 190               	.L8:
+ 191               		.loc 2 151 0
+ 192 009a 8EE0      		ldi r24,lo8(14)
+ 193 009c 0E94 0000 		call mcp2515_read_register
+ 194               	.LVL26:
+ 195 00a0 8D27      		eor r24,r29
+ 196 00a2 807E      		andi r24,lo8(-32)
+ 197 00a4 01F4      		brne .L8
+ 198               	.LBE58:
+ 199               	.LBE57:
+ 131:mcp2515_set_dyn_filter.c **** 	
+ 132:mcp2515_set_dyn_filter.c **** 	_delay_us(1);
+ 133:mcp2515_set_dyn_filter.c **** 	
+ 134:mcp2515_set_dyn_filter.c **** 	// restore previous mode
+ 135:mcp2515_set_dyn_filter.c **** 	mcp2515_change_operation_mode( mode );
+ 136:mcp2515_set_dyn_filter.c **** 	
+ 137:mcp2515_set_dyn_filter.c **** 	return true;
+ 200               		.loc 1 137 0
+ 201 00a6 81E0      		ldi r24,lo8(1)
+ 202               	.LVL27:
+ 203               	.L1:
+ 204               	/* epilogue start */
+ 138:mcp2515_set_dyn_filter.c **** }
+ 205               		.loc 1 138 0
+ 206 00a8 CDB7      		in r28,__SP_L__
+ 207 00aa DEB7      		in r29,__SP_H__
+ 208               	.LVL28:
+ 209 00ac E5E0      		ldi r30, lo8(5)
+ 210 00ae 0C94 0000 		jmp __epilogue_restores__ + ((18 - 5) * 2)
+ 211               	.LVL29:
+ 212               	.L4:
+  74:mcp2515_set_dyn_filter.c **** 	{
+ 213               		.loc 1 74 0
+ 214 00b2 C230      		cpi r28,lo8(2)
+ 215 00b4 01F4      		brne .L6
+ 216               	.LVL30:
+  93:mcp2515_set_dyn_filter.c **** 		#endif
+ 217               		.loc 1 93 0
+ 218 00b6 60E2      		ldi r22,lo8(32)
+ 219 00b8 80E7      		ldi r24,lo8(112)
+ 220 00ba 0E94 0000 		call mcp2515_write_register
+ 221               	.LVL31:
+  76:mcp2515_set_dyn_filter.c **** 		
+ 222               		.loc 1 76 0
+ 223 00be 94E2      		ldi r25,lo8(36)
+ 224 00c0 F92E      		mov r15,r25
+ 225 00c2 00C0      		rjmp .L5
+ 226               		.cfi_endproc
+ 227               	.LFE19:
+ 229               		.text
+ 230               	.Letext0:
+ 231               		.file 4 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 232               		.file 5 "../can.h"
+ 233               		.file 6 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 234               		.file 7 "spi.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mcp2515_set_dyn_filter.c
+     /tmp/ccZqEqPk.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccZqEqPk.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccZqEqPk.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccZqEqPk.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccZqEqPk.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccZqEqPk.s:13     .text.can_set_filter:0000000000000000 can_set_filter
+
+UNDEFINED SYMBOLS
+mcp2515_read_register
+mcp2515_bit_modify
+mcp2515_write_register
+spi_putc
+mcp2515_write_id
+__epilogue_restores__

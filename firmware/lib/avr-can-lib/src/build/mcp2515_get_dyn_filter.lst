@@ -1,0 +1,502 @@
+   1               		.file	"mcp2515_get_dyn_filter.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_get_filter,"ax",@progbits
+  11               	.global	can_get_filter
+  13               	can_get_filter:
+  14               	.LFB19:
+  15               		.file 1 "mcp2515_get_dyn_filter.c"
+   1:mcp2515_get_dyn_filter.c **** // ----------------------------------------------------------------------------
+   2:mcp2515_get_dyn_filter.c **** /*
+   3:mcp2515_get_dyn_filter.c ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_get_dyn_filter.c ****  *  All rights reserved.
+   5:mcp2515_get_dyn_filter.c ****  *
+   6:mcp2515_get_dyn_filter.c ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_get_dyn_filter.c ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_get_dyn_filter.c ****  * are met:
+   9:mcp2515_get_dyn_filter.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_get_dyn_filter.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_get_dyn_filter.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_get_dyn_filter.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_get_dyn_filter.c ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_get_dyn_filter.c ****  *
+  15:mcp2515_get_dyn_filter.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_get_dyn_filter.c ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_get_dyn_filter.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_get_dyn_filter.c ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_get_dyn_filter.c ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_get_dyn_filter.c ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_get_dyn_filter.c ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_get_dyn_filter.c ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_get_dyn_filter.c ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_get_dyn_filter.c ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_get_dyn_filter.c ****  * SUCH DAMAGE.
+  26:mcp2515_get_dyn_filter.c ****  *
+  27:mcp2515_get_dyn_filter.c ****  * $Id: mcp2515_get_dyn_filter.c 6837 2008-11-16 19:05:15Z fabian $
+  28:mcp2515_get_dyn_filter.c ****  */
+  29:mcp2515_get_dyn_filter.c **** // ----------------------------------------------------------------------------
+  30:mcp2515_get_dyn_filter.c **** 
+  31:mcp2515_get_dyn_filter.c **** #include "mcp2515_private.h"
+  32:mcp2515_get_dyn_filter.c **** #ifdef	SUPPORT_FOR_MCP2515__
+  33:mcp2515_get_dyn_filter.c **** 
+  34:mcp2515_get_dyn_filter.c **** // ----------------------------------------------------------------------------
+  35:mcp2515_get_dyn_filter.c **** // get a filter
+  36:mcp2515_get_dyn_filter.c **** 
+  37:mcp2515_get_dyn_filter.c **** uint8_t mcp2515_get_filter(uint8_t number, can_filter_t *filter)
+  38:mcp2515_get_dyn_filter.c **** {
+  16               		.loc 1 38 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19 0000 FF92      		push r15
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 3
+  22               		.cfi_offset 15, -2
+  23 0002 0F93      		push r16
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 4
+  26               		.cfi_offset 16, -3
+  27 0004 1F93      		push r17
+  28               	.LCFI2:
+  29               		.cfi_def_cfa_offset 5
+  30               		.cfi_offset 17, -4
+  31 0006 CF93      		push r28
+  32               	.LCFI3:
+  33               		.cfi_def_cfa_offset 6
+  34               		.cfi_offset 28, -5
+  35 0008 DF93      		push r29
+  36               	.LCFI4:
+  37               		.cfi_def_cfa_offset 7
+  38               		.cfi_offset 29, -6
+  39               	/* prologue: function */
+  40               	/* frame size = 0 */
+  41               	/* stack size = 5 */
+  42               	.L__stack_usage = 5
+  43 000a C82F      		mov r28,r24
+  44 000c 8B01      		movw r16,r22
+  39:mcp2515_get_dyn_filter.c **** 	uint8_t mask_address;
+  40:mcp2515_get_dyn_filter.c **** 	uint8_t filter_address;
+  41:mcp2515_get_dyn_filter.c **** 	uint8_t temp;
+  42:mcp2515_get_dyn_filter.c **** 	uint8_t mode = mcp2515_read_register(CANSTAT);
+  45               		.loc 1 42 0
+  46 000e 8EE0      		ldi r24,lo8(14)
+  47               	.LVL1:
+  48 0010 0E94 0000 		call mcp2515_read_register
+  49               	.LVL2:
+  50 0014 D82F      		mov r29,r24
+  51               	.LVL3:
+  43:mcp2515_get_dyn_filter.c **** 	
+  44:mcp2515_get_dyn_filter.c **** 	if (number > 5)
+  45:mcp2515_get_dyn_filter.c **** 		return 0;
+  52               		.loc 1 45 0
+  53 0016 80E0      		ldi r24,0
+  54               	.LVL4:
+  44:mcp2515_get_dyn_filter.c **** 		return 0;
+  55               		.loc 1 44 0
+  56 0018 C630      		cpi r28,lo8(6)
+  57 001a 00F4      		brsh .L1
+  58               	.LVL5:
+  59               	.LBB6:
+  60               	.LBB7:
+  61               		.file 2 "mcp2515_private.h"
+   1:mcp2515_private.h **** // ----------------------------------------------------------------------------
+   2:mcp2515_private.h **** /*
+   3:mcp2515_private.h ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_private.h ****  *  All rights reserved.
+   5:mcp2515_private.h ****  *
+   6:mcp2515_private.h ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_private.h ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_private.h ****  * are met:
+   9:mcp2515_private.h ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_private.h ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_private.h ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_private.h ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_private.h ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_private.h ****  *
+  15:mcp2515_private.h ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_private.h ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_private.h ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_private.h ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_private.h ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_private.h ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_private.h ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_private.h ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_private.h ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_private.h ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_private.h ****  * SUCH DAMAGE.
+  26:mcp2515_private.h ****  *
+  27:mcp2515_private.h ****  * $Id: mcp2515_private.h 6910 2008-11-30 21:13:14Z fabian $
+  28:mcp2515_private.h ****  */
+  29:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  30:mcp2515_private.h **** 
+  31:mcp2515_private.h **** #ifndef	MCP2515_PRIVATE_H
+  32:mcp2515_private.h **** #define	MCP2515_PRIVATE_H
+  33:mcp2515_private.h **** 
+  34:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  35:mcp2515_private.h **** /**
+  36:mcp2515_private.h ****  * \brief	defines only used inside the library
+  37:mcp2515_private.h ****  *
+  38:mcp2515_private.h ****  * \author	Fabian Greif <fabian.greif@rwth-aachen.de>
+  39:mcp2515_private.h ****  * \version	$Id: mcp2515_private.h 6910 2008-11-30 21:13:14Z fabian $
+  40:mcp2515_private.h ****  *
+  41:mcp2515_private.h ****  * \todo	MCP2515_TXRTSn Pins nutzbar machen.
+  42:mcp2515_private.h ****  */
+  43:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  44:mcp2515_private.h **** 
+  45:mcp2515_private.h **** #include <avr/io.h>
+  46:mcp2515_private.h **** #include <avr/pgmspace.h>
+  47:mcp2515_private.h **** #include <inttypes.h>
+  48:mcp2515_private.h **** #include <stdbool.h>
+  49:mcp2515_private.h **** 
+  50:mcp2515_private.h **** #include "can.h"
+  51:mcp2515_private.h **** #include "utils.h"
+  52:mcp2515_private.h **** 
+  53:mcp2515_private.h **** #include "can_private.h"
+  54:mcp2515_private.h **** #include "spi.h"
+  55:mcp2515_private.h **** 
+  56:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  57:mcp2515_private.h **** 
+  58:mcp2515_private.h **** #if (BUILD_FOR_MCP2515 == 1)
+  59:mcp2515_private.h **** 	#if defined(__AVR_ATmega16__) || defined(__AVR_ATmega32__) || defined(__AVR_ATmega644__)
+  60:mcp2515_private.h **** 		#define	P_MOSI	B,5
+  61:mcp2515_private.h **** 		#define	P_MISO	B,6
+  62:mcp2515_private.h **** 		#define	P_SCK	B,7
+  63:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  64:mcp2515_private.h **** 	#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+  65:mcp2515_private.h **** 		#define P_MOSI  B,2
+  66:mcp2515_private.h **** 		#define P_MISO  B,3
+  67:mcp2515_private.h **** 		#define P_SCK   B,1
+  68:mcp2515_private.h **** 		#define SUPPORT_FOR_MCP2515__
+  69:mcp2515_private.h **** 	#elif defined(__AVR_ATmega8__)  || defined(__AVR_ATmega48__) || \
+  70:mcp2515_private.h **** 		  defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
+  71:mcp2515_private.h **** 		#define	P_MOSI	B,3
+  72:mcp2515_private.h **** 		#define	P_MISO	B,4
+  73:mcp2515_private.h **** 		#define	P_SCK	B,5
+  74:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  75:mcp2515_private.h **** 	#elif defined(__AVR_ATmega128__)
+  76:mcp2515_private.h **** 		#define	P_MOSI	B,2
+  77:mcp2515_private.h **** 		#define	P_MISO	B,3
+  78:mcp2515_private.h **** 		#define	P_SCK	B,1
+  79:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  80:mcp2515_private.h **** 	#elif defined(__AVR_ATtiny45__) || defined(__AVR_ATtiny85__)
+  81:mcp2515_private.h **** 		#define	P_MOSI	B,0
+  82:mcp2515_private.h **** 		#define	P_MISO	B,1
+  83:mcp2515_private.h **** 		#define	P_SCK	B,2
+  84:mcp2515_private.h **** 		
+  85:mcp2515_private.h **** 		#define	USE_SOFTWARE_SPI		1
+  86:mcp2515_private.h **** 		#define	SUPPORT_FOR_MCP2515__
+  87:mcp2515_private.h **** 	#else
+  88:mcp2515_private.h **** 		#error	choosen AVR-type is not supported yet!
+  89:mcp2515_private.h **** 	#endif
+  90:mcp2515_private.h **** #endif
+  91:mcp2515_private.h **** 
+  92:mcp2515_private.h **** 
+  93:mcp2515_private.h **** #ifdef  SUPPORT_FOR_MCP2515__
+  94:mcp2515_private.h **** 
+  95:mcp2515_private.h **** // ----------------------------------------------------------------------------
+  96:mcp2515_private.h **** // load some default values
+  97:mcp2515_private.h **** 
+  98:mcp2515_private.h **** #ifndef	MCP2515_CLKOUT_PRESCALER
+  99:mcp2515_private.h **** 	#define	MCP2515_CLKOUT_PRESCALER	0
+ 100:mcp2515_private.h **** #endif
+ 101:mcp2515_private.h **** #ifndef	MCP2515_INTERRUPTS
+ 102:mcp2515_private.h **** 	#define	MCP2515_INTERRUPTS			(1<<RX1IE)|(1<<RX0IE)
+ 103:mcp2515_private.h **** #endif
+ 104:mcp2515_private.h **** 
+ 105:mcp2515_private.h **** // ----------------------------------------------------------------------------
+ 106:mcp2515_private.h **** // TODO: this file is imcompatible with the at90can
+ 107:mcp2515_private.h **** #include "mcp2515_defs.h"
+ 108:mcp2515_private.h **** 
+ 109:mcp2515_private.h **** #ifndef	MCP2515_CS
+ 110:mcp2515_private.h **** 	#error	MCP2515_CS ist nicht definiert!
+ 111:mcp2515_private.h **** #endif
+ 112:mcp2515_private.h **** 
+ 113:mcp2515_private.h **** #if defined(MCP2515_RX0BF) && !defined(MCP2515_RX1BF)
+ 114:mcp2515_private.h **** 	#warning	only MCP2515_RX0BF but not MCP2515_RX1BF defined!
+ 115:mcp2515_private.h **** #elif !defined(MCP2515_RX0BF) && defined(MCP2515_RX1BF)
+ 116:mcp2515_private.h **** 	#warning	only MCP2515_RX1BF but not MCP2515_RX0BF defined!
+ 117:mcp2515_private.h **** #elif defined(MCP2515_RX0BF) && defined(MCP2515_RX1BF)
+ 118:mcp2515_private.h **** 	#define	RXnBF_FUNKTION
+ 119:mcp2515_private.h **** #endif
+ 120:mcp2515_private.h **** 
+ 121:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 122:mcp2515_private.h **** /**
+ 123:mcp2515_private.h ****  * \brief	Beschreiben von internen Registern
+ 124:mcp2515_private.h ****  */
+ 125:mcp2515_private.h **** extern void mcp2515_write_register( uint8_t adress, uint8_t data );
+ 126:mcp2515_private.h **** 
+ 127:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 128:mcp2515_private.h **** /**
+ 129:mcp2515_private.h ****  * \brief	Lesen der internen Register
+ 130:mcp2515_private.h ****  */
+ 131:mcp2515_private.h **** extern uint8_t mcp2515_read_register(uint8_t adress);
+ 132:mcp2515_private.h **** 
+ 133:mcp2515_private.h **** extern uint8_t mcp2515_read_status(uint8_t type);
+ 134:mcp2515_private.h **** 
+ 135:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 136:mcp2515_private.h **** /**
+ 137:mcp2515_private.h ****  * \brief	Setzten/loeschen einzelner Bits
+ 138:mcp2515_private.h ****  *
+ 139:mcp2515_private.h ****  * Diese Funktionen laesst sich nur auf die Register BFPCTRL, 
+ 140:mcp2515_private.h ****  * TXRTSCTRL, CANCTRL, CNF1, CNF2, CNF3, CANINTE, CANINTF, EFLG,
+ 141:mcp2515_private.h ****  * TXB0CTRL, TXB1CTRL, TXB2CTRL, RXB0CTRL und RXB1CTRL anwenden.
+ 142:mcp2515_private.h ****  *
+ 143:mcp2515_private.h ****  * \see		Datenblatt des MCP2515, Registerbersichtstabelle
+ 144:mcp2515_private.h ****  */
+ 145:mcp2515_private.h **** extern void mcp2515_bit_modify(uint8_t adress, uint8_t mask, uint8_t data);
+ 146:mcp2515_private.h **** 
+ 147:mcp2515_private.h **** // -------------------------------------------------------------------------
+ 148:mcp2515_private.h **** extern __attribute__ ((gnu_inline)) inline void mcp2515_change_operation_mode(uint8_t mode)
+ 149:mcp2515_private.h **** {
+ 150:mcp2515_private.h **** 	mcp2515_bit_modify(CANCTRL, 0xe0, mode);
+  62               		.loc 2 150 0
+  63 001c 40E8      		ldi r20,lo8(-128)
+  64 001e 60EE      		ldi r22,lo8(-32)
+  65 0020 8FE0      		ldi r24,lo8(15)
+  66 0022 0E94 0000 		call mcp2515_bit_modify
+  67               	.LVL6:
+  68               	.L3:
+ 151:mcp2515_private.h **** 	while ((mcp2515_read_register(CANSTAT) & 0xe0) != (mode & 0xe0))
+  69               		.loc 2 151 0
+  70 0026 8EE0      		ldi r24,lo8(14)
+  71 0028 0E94 0000 		call mcp2515_read_register
+  72               	.LVL7:
+  73 002c 8058      		subi r24,lo8(-(-128))
+  74 002e 807E      		andi r24,lo8(-32)
+  75 0030 01F4      		brne .L3
+  76               	.LVL8:
+  77               	.LBE7:
+  78               	.LBE6:
+  46:mcp2515_get_dyn_filter.c **** 	
+  47:mcp2515_get_dyn_filter.c **** 	// change to configuration mode
+  48:mcp2515_get_dyn_filter.c **** 	mcp2515_change_operation_mode( (1<<REQOP2) );
+  49:mcp2515_get_dyn_filter.c **** 	
+  50:mcp2515_get_dyn_filter.c **** 	if (number <= 1)
+  79               		.loc 1 50 0
+  80 0032 C230      		cpi r28,lo8(2)
+  81 0034 00F4      		brsh .L4
+  82               	.LVL9:
+  51:mcp2515_get_dyn_filter.c **** 	{
+  52:mcp2515_get_dyn_filter.c **** 		mask_address = RXM0SIDH;
+  53:mcp2515_get_dyn_filter.c **** 		temp = mcp2515_read_register(RXB0CTRL);
+  83               		.loc 1 53 0
+  84 0036 80E6      		ldi r24,lo8(96)
+  85 0038 0E94 0000 		call mcp2515_read_register
+  86               	.LVL10:
+  52:mcp2515_get_dyn_filter.c **** 		temp = mcp2515_read_register(RXB0CTRL);
+  87               		.loc 1 52 0
+  88 003c 20E2      		ldi r18,lo8(32)
+  89 003e F22E      		mov r15,r18
+  90               	.LVL11:
+  91               	.L5:
+  54:mcp2515_get_dyn_filter.c **** 	}
+  55:mcp2515_get_dyn_filter.c **** 	else
+  56:mcp2515_get_dyn_filter.c **** 	{
+  57:mcp2515_get_dyn_filter.c **** 		mask_address = RXM1SIDH;
+  58:mcp2515_get_dyn_filter.c **** 		temp = mcp2515_read_register(RXB1CTRL);
+  59:mcp2515_get_dyn_filter.c **** 	}
+  60:mcp2515_get_dyn_filter.c **** 	
+  61:mcp2515_get_dyn_filter.c **** 	temp &= (1<<RXM1)|(1<<RXM0);
+  92               		.loc 1 61 0
+  93 0040 8076      		andi r24,lo8(96)
+  94               	.LVL12:
+  62:mcp2515_get_dyn_filter.c **** 	
+  63:mcp2515_get_dyn_filter.c **** 	if (temp == 0) {
+  95               		.loc 1 63 0
+  96 0042 01F4      		brne .L6
+  64:mcp2515_get_dyn_filter.c **** 		// filter and masks are disabled
+  65:mcp2515_get_dyn_filter.c **** 		#if SUPPORT_EXTENDED_CANID
+  66:mcp2515_get_dyn_filter.c **** 		filter->flags.extended = 0;
+  67:mcp2515_get_dyn_filter.c **** 		#endif
+  68:mcp2515_get_dyn_filter.c **** 		filter->flags.rtr = 0;
+  97               		.loc 1 68 0
+  98 0044 F801      		movw r30,r16
+  99 0046 8481      		ldd r24,Z+4
+ 100               	.LVL13:
+ 101 0048 8C7F      		andi r24,lo8(-4)
+ 102 004a 8483      		std Z+4,r24
+  69:mcp2515_get_dyn_filter.c **** 		filter->mask = 0;
+ 103               		.loc 1 69 0
+ 104 004c 1382      		std Z+3,__zero_reg__
+ 105 004e 1282      		std Z+2,__zero_reg__
+  70:mcp2515_get_dyn_filter.c **** 		filter->id = 0;
+ 106               		.loc 1 70 0
+ 107 0050 1182      		std Z+1,__zero_reg__
+ 108 0052 1082      		st Z,__zero_reg__
+ 109               	.LVL14:
+ 110               	.L14:
+  71:mcp2515_get_dyn_filter.c **** 		
+  72:mcp2515_get_dyn_filter.c **** 		return 1;
+  73:mcp2515_get_dyn_filter.c **** 	}
+  74:mcp2515_get_dyn_filter.c **** 	
+  75:mcp2515_get_dyn_filter.c **** 	#if SUPPORT_EXTENDED_CANID
+  76:mcp2515_get_dyn_filter.c **** 	// transform bits so that they match the format from can.h
+  77:mcp2515_get_dyn_filter.c **** 	temp >>= 5;
+  78:mcp2515_get_dyn_filter.c **** 	temp = ~temp;
+  79:mcp2515_get_dyn_filter.c **** 	if (temp & 1) temp = 0x3;
+  80:mcp2515_get_dyn_filter.c **** 	
+  81:mcp2515_get_dyn_filter.c **** 	filter->flags.extended = temp;
+  82:mcp2515_get_dyn_filter.c **** 	#endif
+  83:mcp2515_get_dyn_filter.c **** 	
+  84:mcp2515_get_dyn_filter.c **** 	// read mask
+  85:mcp2515_get_dyn_filter.c **** 	RESET(MCP2515_CS);
+  86:mcp2515_get_dyn_filter.c **** 	spi_putc(SPI_READ);
+  87:mcp2515_get_dyn_filter.c **** 	spi_putc(mask_address);
+  88:mcp2515_get_dyn_filter.c **** 	mcp2515_read_id(&filter->mask);
+  89:mcp2515_get_dyn_filter.c **** 	SET(MCP2515_CS);
+  90:mcp2515_get_dyn_filter.c **** 	
+  91:mcp2515_get_dyn_filter.c **** 	if (number <= 2)
+  92:mcp2515_get_dyn_filter.c **** 	{
+  93:mcp2515_get_dyn_filter.c **** 		filter_address = RXF0SIDH + number * 4;
+  94:mcp2515_get_dyn_filter.c **** 	}
+  95:mcp2515_get_dyn_filter.c **** 	else
+  96:mcp2515_get_dyn_filter.c **** 	{
+  97:mcp2515_get_dyn_filter.c **** 		filter_address = RXF3SIDH + (number - 3) * 4;
+  98:mcp2515_get_dyn_filter.c **** 	}
+  99:mcp2515_get_dyn_filter.c **** 	
+ 100:mcp2515_get_dyn_filter.c **** 	// read filter
+ 101:mcp2515_get_dyn_filter.c **** 	RESET(MCP2515_CS);
+ 102:mcp2515_get_dyn_filter.c **** 	spi_putc(SPI_READ);
+ 103:mcp2515_get_dyn_filter.c **** 	spi_putc(filter_address);
+ 104:mcp2515_get_dyn_filter.c **** 	mcp2515_read_id(&filter->id);
+ 105:mcp2515_get_dyn_filter.c **** 	SET(MCP2515_CS);
+ 106:mcp2515_get_dyn_filter.c **** 	
+ 107:mcp2515_get_dyn_filter.c **** 	// restore previous mode
+ 108:mcp2515_get_dyn_filter.c **** 	mcp2515_change_operation_mode( mode );
+ 109:mcp2515_get_dyn_filter.c **** 	
+ 110:mcp2515_get_dyn_filter.c **** 	return 1;
+ 111               		.loc 1 110 0
+ 112 0054 81E0      		ldi r24,lo8(1)
+ 113               	.LVL15:
+ 114               	.L1:
+ 115               	/* epilogue start */
+ 111:mcp2515_get_dyn_filter.c **** }
+ 116               		.loc 1 111 0
+ 117 0056 CDB7      		in r28,__SP_L__
+ 118 0058 DEB7      		in r29,__SP_H__
+ 119 005a E5E0      		ldi r30, lo8(5)
+ 120 005c 0C94 0000 		jmp __epilogue_restores__ + ((18 - 5) * 2)
+ 121               	.LVL16:
+ 122               	.L4:
+  58:mcp2515_get_dyn_filter.c **** 	}
+ 123               		.loc 1 58 0
+ 124 0060 80E7      		ldi r24,lo8(112)
+ 125 0062 0E94 0000 		call mcp2515_read_register
+ 126               	.LVL17:
+  57:mcp2515_get_dyn_filter.c **** 		temp = mcp2515_read_register(RXB1CTRL);
+ 127               		.loc 1 57 0
+ 128 0066 94E2      		ldi r25,lo8(36)
+ 129 0068 F92E      		mov r15,r25
+ 130 006a 00C0      		rjmp .L5
+ 131               	.LVL18:
+ 132               	.L6:
+  85:mcp2515_get_dyn_filter.c **** 	spi_putc(SPI_READ);
+ 133               		.loc 1 85 0
+ 134 006c 2898      		cbi 0x5,0
+  86:mcp2515_get_dyn_filter.c **** 	spi_putc(mask_address);
+ 135               		.loc 1 86 0
+ 136 006e 83E0      		ldi r24,lo8(3)
+ 137               	.LVL19:
+ 138 0070 0E94 0000 		call spi_putc
+ 139               	.LVL20:
+  87:mcp2515_get_dyn_filter.c **** 	mcp2515_read_id(&filter->mask);
+ 140               		.loc 1 87 0
+ 141 0074 8F2D      		mov r24,r15
+ 142 0076 0E94 0000 		call spi_putc
+ 143               	.LVL21:
+  88:mcp2515_get_dyn_filter.c **** 	SET(MCP2515_CS);
+ 144               		.loc 1 88 0
+ 145 007a C801      		movw r24,r16
+ 146 007c 0296      		adiw r24,2
+ 147 007e 0E94 0000 		call mcp2515_read_id
+ 148               	.LVL22:
+  89:mcp2515_get_dyn_filter.c **** 	
+ 149               		.loc 1 89 0
+ 150 0082 289A      		sbi 0x5,0
+  91:mcp2515_get_dyn_filter.c **** 	{
+ 151               		.loc 1 91 0
+ 152 0084 C330      		cpi r28,lo8(3)
+ 153 0086 00F4      		brsh .L7
+ 154               	.LVL23:
+ 155               	.L13:
+  97:mcp2515_get_dyn_filter.c **** 	}
+ 156               		.loc 1 97 0
+ 157 0088 CC0F      		lsl r28
+ 158 008a CC0F      		lsl r28
+ 159               	.LVL24:
+ 101:mcp2515_get_dyn_filter.c **** 	spi_putc(SPI_READ);
+ 160               		.loc 1 101 0
+ 161 008c 2898      		cbi 0x5,0
+ 102:mcp2515_get_dyn_filter.c **** 	spi_putc(filter_address);
+ 162               		.loc 1 102 0
+ 163 008e 83E0      		ldi r24,lo8(3)
+ 164 0090 0E94 0000 		call spi_putc
+ 165               	.LVL25:
+ 103:mcp2515_get_dyn_filter.c **** 	mcp2515_read_id(&filter->id);
+ 166               		.loc 1 103 0
+ 167 0094 8C2F      		mov r24,r28
+ 168 0096 0E94 0000 		call spi_putc
+ 169               	.LVL26:
+ 104:mcp2515_get_dyn_filter.c **** 	SET(MCP2515_CS);
+ 170               		.loc 1 104 0
+ 171 009a C801      		movw r24,r16
+ 172 009c 0E94 0000 		call mcp2515_read_id
+ 173               	.LVL27:
+ 105:mcp2515_get_dyn_filter.c **** 	
+ 174               		.loc 1 105 0
+ 175 00a0 289A      		sbi 0x5,0
+ 176               	.LVL28:
+ 177               	.LBB8:
+ 178               	.LBB9:
+ 150:mcp2515_private.h **** 	while ((mcp2515_read_register(CANSTAT) & 0xe0) != (mode & 0xe0))
+ 179               		.loc 2 150 0
+ 180 00a2 4D2F      		mov r20,r29
+ 181 00a4 60EE      		ldi r22,lo8(-32)
+ 182 00a6 8FE0      		ldi r24,lo8(15)
+ 183 00a8 0E94 0000 		call mcp2515_bit_modify
+ 184               	.LVL29:
+ 185               	.L9:
+ 186               		.loc 2 151 0
+ 187 00ac 8EE0      		ldi r24,lo8(14)
+ 188 00ae 0E94 0000 		call mcp2515_read_register
+ 189               	.LVL30:
+ 190 00b2 8D27      		eor r24,r29
+ 191 00b4 807E      		andi r24,lo8(-32)
+ 192 00b6 01F4      		brne .L9
+ 193 00b8 00C0      		rjmp .L14
+ 194               	.LVL31:
+ 195               	.L7:
+ 196               	.LBE9:
+ 197               	.LBE8:
+  97:mcp2515_get_dyn_filter.c **** 	}
+ 198               		.loc 1 97 0
+ 199 00ba CF5F      		subi r28,lo8(-(1))
+ 200               	.LVL32:
+ 201 00bc 00C0      		rjmp .L13
+ 202               		.cfi_endproc
+ 203               	.LFE19:
+ 205               		.text
+ 206               	.Letext0:
+ 207               		.file 3 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 208               		.file 4 "../can.h"
+ 209               		.file 5 "spi.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mcp2515_get_dyn_filter.c
+     /tmp/ccstAgCE.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccstAgCE.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccstAgCE.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccstAgCE.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccstAgCE.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccstAgCE.s:13     .text.can_get_filter:0000000000000000 can_get_filter
+
+UNDEFINED SYMBOLS
+mcp2515_read_register
+mcp2515_bit_modify
+__epilogue_restores__
+spi_putc
+mcp2515_read_id

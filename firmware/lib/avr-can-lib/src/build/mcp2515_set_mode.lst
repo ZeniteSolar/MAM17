@@ -1,0 +1,143 @@
+   1               		.file	"mcp2515_set_mode.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_set_mode,"ax",@progbits
+  11               	.global	can_set_mode
+  13               	can_set_mode:
+  14               	.LFB19:
+  15               		.file 1 "mcp2515_set_mode.c"
+   1:mcp2515_set_mode.c **** // ----------------------------------------------------------------------------
+   2:mcp2515_set_mode.c **** /*
+   3:mcp2515_set_mode.c ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_set_mode.c ****  *  All rights reserved.
+   5:mcp2515_set_mode.c ****  *
+   6:mcp2515_set_mode.c ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_set_mode.c ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_set_mode.c ****  * are met:
+   9:mcp2515_set_mode.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_set_mode.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_set_mode.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_set_mode.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_set_mode.c ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_set_mode.c ****  *
+  15:mcp2515_set_mode.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_set_mode.c ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_set_mode.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_set_mode.c ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_set_mode.c ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_set_mode.c ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_set_mode.c ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_set_mode.c ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_set_mode.c ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_set_mode.c ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_set_mode.c ****  * SUCH DAMAGE.
+  26:mcp2515_set_mode.c ****  *
+  27:mcp2515_set_mode.c ****  * $Id: mcp2515_set_mode.c 8086 2009-07-14 14:08:25Z fabian $
+  28:mcp2515_set_mode.c ****  */
+  29:mcp2515_set_mode.c **** // ----------------------------------------------------------------------------
+  30:mcp2515_set_mode.c **** 
+  31:mcp2515_set_mode.c **** #include "mcp2515_private.h"
+  32:mcp2515_set_mode.c **** #ifdef	SUPPORT_FOR_MCP2515__
+  33:mcp2515_set_mode.c **** 
+  34:mcp2515_set_mode.c **** // ----------------------------------------------------------------------------
+  35:mcp2515_set_mode.c **** void
+  36:mcp2515_set_mode.c **** mcp2515_set_mode(can_mode_t mode)
+  37:mcp2515_set_mode.c **** {
+  16               		.loc 1 37 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19 0000 CF93      		push r28
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 3
+  22               		.cfi_offset 28, -2
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25               	/* stack size = 1 */
+  26               	.L__stack_usage = 1
+  27               	.LVL1:
+  38:mcp2515_set_mode.c **** 	uint8_t reg = 0;
+  39:mcp2515_set_mode.c **** 	
+  40:mcp2515_set_mode.c **** 	if (mode == LISTEN_ONLY_MODE) {
+  41:mcp2515_set_mode.c **** 		reg = (1<<REQOP1)|(1<<REQOP0);
+  28               		.loc 1 41 0
+  29 0002 C0E6      		ldi r28,lo8(96)
+  40:mcp2515_set_mode.c **** 		reg = (1<<REQOP1)|(1<<REQOP0);
+  30               		.loc 1 40 0
+  31 0004 8823      		tst r24
+  32 0006 01F0      		breq .L2
+  42:mcp2515_set_mode.c **** 	}
+  43:mcp2515_set_mode.c **** 	else if (mode == LOOPBACK_MODE) {
+  44:mcp2515_set_mode.c **** 		reg = (1<<REQOP1);
+  33               		.loc 1 44 0
+  34 0008 C0E4      		ldi r28,lo8(64)
+  43:mcp2515_set_mode.c **** 		reg = (1<<REQOP1);
+  35               		.loc 1 43 0
+  36 000a 8130      		cpi r24,lo8(1)
+  37 000c 01F0      		breq .L2
+  45:mcp2515_set_mode.c **** 	}
+  46:mcp2515_set_mode.c **** 	else if (mode == SLEEP_MODE) {
+  47:mcp2515_set_mode.c **** 		reg = (1<<REQOP0);
+  38               		.loc 1 47 0
+  39 000e C0E2      		ldi r28,lo8(32)
+  46:mcp2515_set_mode.c **** 		reg = (1<<REQOP0);
+  40               		.loc 1 46 0
+  41 0010 8330      		cpi r24,lo8(3)
+  42 0012 01F0      		breq .L2
+  38:mcp2515_set_mode.c **** 	
+  43               		.loc 1 38 0
+  44 0014 C0E0      		ldi r28,0
+  45               	.L2:
+  46               	.LVL2:
+  48:mcp2515_set_mode.c **** 	}
+  49:mcp2515_set_mode.c **** 		
+  50:mcp2515_set_mode.c **** 	// set the new mode
+  51:mcp2515_set_mode.c **** 	mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0), reg);
+  47               		.loc 1 51 0
+  48 0016 4C2F      		mov r20,r28
+  49 0018 60EE      		ldi r22,lo8(-32)
+  50 001a 8FE0      		ldi r24,lo8(15)
+  51               	.LVL3:
+  52 001c 0E94 0000 		call mcp2515_bit_modify
+  53               	.LVL4:
+  54               	.L3:
+  52:mcp2515_set_mode.c **** 	while ((mcp2515_read_register(CANSTAT) & 0xe0) != reg) {
+  55               		.loc 1 52 0 discriminator 1
+  56 0020 8EE0      		ldi r24,lo8(14)
+  57 0022 0E94 0000 		call mcp2515_read_register
+  58               	.LVL5:
+  59 0026 807E      		andi r24,lo8(-32)
+  60 0028 C813      		cpse r28,r24
+  61 002a 00C0      		rjmp .L3
+  62               	/* epilogue start */
+  53:mcp2515_set_mode.c **** 		// wait for the new mode to become active
+  54:mcp2515_set_mode.c **** 	}
+  55:mcp2515_set_mode.c **** }
+  63               		.loc 1 55 0
+  64 002c CF91      		pop r28
+  65               	.LVL6:
+  66 002e 0895      		ret
+  67               		.cfi_endproc
+  68               	.LFE19:
+  70               		.text
+  71               	.Letext0:
+  72               		.file 2 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+  73               		.file 3 "../can.h"
+  74               		.file 4 "mcp2515_private.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mcp2515_set_mode.c
+     /tmp/ccNHhDj5.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccNHhDj5.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccNHhDj5.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccNHhDj5.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccNHhDj5.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccNHhDj5.s:13     .text.can_set_mode:0000000000000000 can_set_mode
+
+UNDEFINED SYMBOLS
+mcp2515_bit_modify
+mcp2515_read_register

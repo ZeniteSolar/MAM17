@@ -1,0 +1,245 @@
+   1               		.file	"mcp2515_static_filter.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.can_static_filter,"ax",@progbits
+  11               	.global	can_static_filter
+  13               	can_static_filter:
+  14               	.LFB19:
+  15               		.file 1 "mcp2515_static_filter.c"
+   1:mcp2515_static_filter.c **** // ----------------------------------------------------------------------------
+   2:mcp2515_static_filter.c **** /*
+   3:mcp2515_static_filter.c ****  * Copyright (c) 2007 Fabian Greif, Roboterclub Aachen e.V.
+   4:mcp2515_static_filter.c ****  *  All rights reserved.
+   5:mcp2515_static_filter.c ****  *
+   6:mcp2515_static_filter.c ****  * Redistribution and use in source and binary forms, with or without
+   7:mcp2515_static_filter.c ****  * modification, are permitted provided that the following conditions
+   8:mcp2515_static_filter.c ****  * are met:
+   9:mcp2515_static_filter.c ****  * 1. Redistributions of source code must retain the above copyright
+  10:mcp2515_static_filter.c ****  *    notice, this list of conditions and the following disclaimer.
+  11:mcp2515_static_filter.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  12:mcp2515_static_filter.c ****  *    notice, this list of conditions and the following disclaimer in the
+  13:mcp2515_static_filter.c ****  *    documentation and/or other materials provided with the distribution.
+  14:mcp2515_static_filter.c ****  *
+  15:mcp2515_static_filter.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  16:mcp2515_static_filter.c ****  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  17:mcp2515_static_filter.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  18:mcp2515_static_filter.c ****  * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+  19:mcp2515_static_filter.c ****  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  20:mcp2515_static_filter.c ****  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  21:mcp2515_static_filter.c ****  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  22:mcp2515_static_filter.c ****  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  23:mcp2515_static_filter.c ****  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  24:mcp2515_static_filter.c ****  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  25:mcp2515_static_filter.c ****  * SUCH DAMAGE.
+  26:mcp2515_static_filter.c ****  *
+  27:mcp2515_static_filter.c ****  * $Id: mcp2515_static_filter.c 6564 2008-06-14 11:33:57Z fabian $
+  28:mcp2515_static_filter.c ****  */
+  29:mcp2515_static_filter.c **** // ----------------------------------------------------------------------------
+  30:mcp2515_static_filter.c **** 
+  31:mcp2515_static_filter.c **** #include "mcp2515_private.h"
+  32:mcp2515_static_filter.c **** #ifdef	SUPPORT_FOR_MCP2515__
+  33:mcp2515_static_filter.c **** 
+  34:mcp2515_static_filter.c **** // ----------------------------------------------------------------------------
+  35:mcp2515_static_filter.c **** // Filter setzen
+  36:mcp2515_static_filter.c **** 
+  37:mcp2515_static_filter.c **** void mcp2515_static_filter(const uint8_t *filter)
+  38:mcp2515_static_filter.c **** {
+  16               		.loc 1 38 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19 0000 CF92      		push r12
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 3
+  22               		.cfi_offset 12, -2
+  23 0002 DF92      		push r13
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 4
+  26               		.cfi_offset 13, -3
+  27 0004 EF92      		push r14
+  28               	.LCFI2:
+  29               		.cfi_def_cfa_offset 5
+  30               		.cfi_offset 14, -4
+  31 0006 FF92      		push r15
+  32               	.LCFI3:
+  33               		.cfi_def_cfa_offset 6
+  34               		.cfi_offset 15, -5
+  35 0008 1F93      		push r17
+  36               	.LCFI4:
+  37               		.cfi_def_cfa_offset 7
+  38               		.cfi_offset 17, -6
+  39 000a CF93      		push r28
+  40               	.LCFI5:
+  41               		.cfi_def_cfa_offset 8
+  42               		.cfi_offset 28, -7
+  43 000c DF93      		push r29
+  44               	.LCFI6:
+  45               		.cfi_def_cfa_offset 9
+  46               		.cfi_offset 29, -8
+  47               	/* prologue: function */
+  48               	/* frame size = 0 */
+  49               	/* stack size = 7 */
+  50               	.L__stack_usage = 7
+  51 000e 7C01      		movw r14,r24
+  39:mcp2515_static_filter.c **** 	// change to configuration mode
+  40:mcp2515_static_filter.c **** 	mcp2515_bit_modify(CANCTRL, 0xe0, (1<<REQOP2));
+  52               		.loc 1 40 0
+  53 0010 40E8      		ldi r20,lo8(-128)
+  54 0012 60EE      		ldi r22,lo8(-32)
+  55 0014 8FE0      		ldi r24,lo8(15)
+  56               	.LVL1:
+  57 0016 0E94 0000 		call mcp2515_bit_modify
+  58               	.LVL2:
+  59               	.L2:
+  41:mcp2515_static_filter.c **** 	while ((mcp2515_read_register(CANSTAT) & 0xe0) != (1<<REQOP2))
+  60               		.loc 1 41 0 discriminator 1
+  61 001a 8EE0      		ldi r24,lo8(14)
+  62 001c 0E94 0000 		call mcp2515_read_register
+  63               	.LVL3:
+  64 0020 807E      		andi r24,lo8(-32)
+  65 0022 8038      		cpi r24,lo8(-128)
+  66 0024 01F4      		brne .L2
+  42:mcp2515_static_filter.c **** 		;
+  43:mcp2515_static_filter.c **** 	
+  44:mcp2515_static_filter.c **** 	mcp2515_write_register(RXB0CTRL, (1<<BUKT));
+  67               		.loc 1 44 0
+  68 0026 64E0      		ldi r22,lo8(4)
+  69 0028 80E6      		ldi r24,lo8(96)
+  70 002a 0E94 0000 		call mcp2515_write_register
+  71               	.LVL4:
+  45:mcp2515_static_filter.c **** 	mcp2515_write_register(RXB1CTRL, 0);
+  72               		.loc 1 45 0
+  73 002e 60E0      		ldi r22,0
+  74 0030 80E7      		ldi r24,lo8(112)
+  75 0032 0E94 0000 		call mcp2515_write_register
+  76               	.LVL5:
+  46:mcp2515_static_filter.c ****     
+  47:mcp2515_static_filter.c **** 	uint8_t i, j;
+  48:mcp2515_static_filter.c **** 	for (i = 0; i < 0x30; i += 0x10)
+  77               		.loc 1 48 0
+  78 0036 10E0      		ldi r17,0
+  79               	.LVL6:
+  80               	.L6:
+  49:mcp2515_static_filter.c **** 	{
+  50:mcp2515_static_filter.c **** 		RESET(MCP2515_CS);
+  81               		.loc 1 50 0
+  82 0038 2898      		cbi 0x5,0
+  51:mcp2515_static_filter.c **** 		spi_putc(SPI_WRITE);
+  83               		.loc 1 51 0
+  84 003a 82E0      		ldi r24,lo8(2)
+  85 003c 0E94 0000 		call spi_putc
+  86               	.LVL7:
+  52:mcp2515_static_filter.c **** 		spi_putc(i);
+  87               		.loc 1 52 0
+  88 0040 812F      		mov r24,r17
+  89 0042 0E94 0000 		call spi_putc
+  90               	.LVL8:
+  91 0046 6701      		movw r12,r14
+  92 0048 8CE0      		ldi r24,12
+  93 004a C80E      		add r12,r24
+  94 004c D11C      		adc r13,__zero_reg__
+  95 004e E701      		movw r28,r14
+  96               	.LVL9:
+  97               	.L5:
+  53:mcp2515_static_filter.c **** 		
+  54:mcp2515_static_filter.c **** 		for (j = 0; j < 12; j++) 
+  55:mcp2515_static_filter.c **** 		{
+  56:mcp2515_static_filter.c **** 			if (i == 0x20 && j >= 0x08)
+  98               		.loc 1 56 0
+  99 0050 1032      		cpi r17,lo8(32)
+ 100 0052 01F4      		brne .L3
+ 101               		.loc 1 56 0 is_stmt 0 discriminator 1
+ 102 0054 8C2F      		mov r24,r28
+ 103 0056 8E19      		sub r24,r14
+ 104 0058 8830      		cpi r24,lo8(8)
+ 105 005a 00F4      		brsh .L4
+ 106               	.L3:
+ 107               	.LVL10:
+ 108               	.LBB2:
+  57:mcp2515_static_filter.c **** 				break;
+  58:mcp2515_static_filter.c **** 			
+  59:mcp2515_static_filter.c **** 			spi_putc(pgm_read_byte(filter++));
+ 109               		.loc 1 59 0 is_stmt 1 discriminator 2
+ 110 005c 2196      		adiw r28,1
+ 111               	.LVL11:
+ 112 005e FE01      		movw r30,r28
+ 113 0060 3197      		sbiw r30,1
+ 114               	/* #APP */
+ 115               	 ;  59 "mcp2515_static_filter.c" 1
+ 116 0062 8491      		lpm r24, Z
+ 117               		
+ 118               	 ;  0 "" 2
+ 119               	.LVL12:
+ 120               	/* #NOAPP */
+ 121               	.LBE2:
+ 122 0064 0E94 0000 		call spi_putc
+ 123               	.LVL13:
+  54:mcp2515_static_filter.c **** 		{
+ 124               		.loc 1 54 0 discriminator 2
+ 125 0068 CC15      		cp r28,r12
+ 126 006a DD05      		cpc r29,r13
+ 127 006c 01F4      		brne .L5
+ 128               	.LVL14:
+ 129               	.L4:
+  60:mcp2515_static_filter.c **** 		}
+  61:mcp2515_static_filter.c **** 		SET(MCP2515_CS);
+ 130               		.loc 1 61 0 discriminator 2
+ 131 006e 289A      		sbi 0x5,0
+  48:mcp2515_static_filter.c **** 	{
+ 132               		.loc 1 48 0 discriminator 2
+ 133 0070 105F      		subi r17,lo8(-(16))
+ 134               	.LVL15:
+ 135 0072 1033      		cpi r17,lo8(48)
+ 136 0074 01F4      		brne .L7
+ 137               	.LVL16:
+  62:mcp2515_static_filter.c **** 	}
+  63:mcp2515_static_filter.c **** 	
+  64:mcp2515_static_filter.c **** 	mcp2515_bit_modify(CANCTRL, 0xe0, 0);
+ 138               		.loc 1 64 0
+ 139 0076 40E0      		ldi r20,0
+ 140 0078 60EE      		ldi r22,lo8(-32)
+ 141 007a 8FE0      		ldi r24,lo8(15)
+ 142 007c 0E94 0000 		call mcp2515_bit_modify
+ 143               	.LVL17:
+ 144               	/* epilogue start */
+  65:mcp2515_static_filter.c **** }
+ 145               		.loc 1 65 0
+ 146 0080 DF91      		pop r29
+ 147 0082 CF91      		pop r28
+ 148               	.LVL18:
+ 149 0084 1F91      		pop r17
+ 150 0086 FF90      		pop r15
+ 151 0088 EF90      		pop r14
+ 152 008a DF90      		pop r13
+ 153 008c CF90      		pop r12
+ 154 008e 0895      		ret
+ 155               	.LVL19:
+ 156               	.L7:
+ 157 0090 7E01      		movw r14,r28
+ 158 0092 00C0      		rjmp .L6
+ 159               		.cfi_endproc
+ 160               	.LFE19:
+ 162               		.text
+ 163               	.Letext0:
+ 164               		.file 2 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+ 165               		.file 3 "mcp2515_private.h"
+ 166               		.file 4 "spi.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mcp2515_static_filter.c
+     /tmp/ccHbOAf2.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccHbOAf2.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccHbOAf2.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccHbOAf2.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccHbOAf2.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccHbOAf2.s:13     .text.can_static_filter:0000000000000000 can_static_filter
+
+UNDEFINED SYMBOLS
+mcp2515_bit_modify
+mcp2515_read_register
+mcp2515_write_register
+spi_putc
