@@ -47,11 +47,11 @@ inline void can_app_send_state(void)
 {
     can_t msg;
     msg.id                                  = CAN_MSG_MAM19_STATE_ID;
-    msg.length                              = CAN_LENGTH_MSG_STATE;
+    msg.length                              = CAN_MSG_GENERIC_STATE_LENGTH;
 
-    msg.data[CAN_SIGNATURE_BYTE]            = CAN_SIGNATURE_SELF;
-    msg.data[CAN_STATE_MSG_STATE_BYTE]      = (uint8_t) state_machine;
-    msg.data[CAN_STATE_MSG_ERROR_BYTE]      = error_flags.all;
+    msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]            = CAN_SIGNATURE_SELF;
+    msg.data[CAN_MSG_GENERIC_STATE_STATE_BYTE]      = (uint8_t) state_machine;
+    msg.data[CAN_MSG_GENERIC_STATE_ERROR_BYTE]      = error_flags.all;
 
     can_send_message(&msg);
 }
@@ -59,12 +59,12 @@ inline void can_app_send_state(void)
 inline void can_app_send_motor(void)
 {
     can_t msg;
-    msg.id                                  = CAN_MSG_MAM19_MOTOR;
-    msg.length                              = CAN_LENGTH_MSG_MAM19_MOTOR;
+    msg.id                                  = CAN_MSG_MAM19_MOTOR_ID;
+    msg.length                              = CAN_MSG_MAM19_MOTOR_LENGTH;
 
-    msg.data[CAN_SIGNATURE_BYTE]            = CAN_SIGNATURE_SELF;
+    msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]            = CAN_SIGNATURE_SELF;
     msg.data[CAN_MSG_MAM19_MOTOR_D_BYTE]    = control.D;
-    msg.data[CAN_MSG_MAM19_MOTOR_LIM_BYTE]  = control.I;    
+    msg.data[CAN_MSG_MAM19_MOTOR_I_BYTE]  = control.I;    
 
     can_send_message(&msg); 
 }
@@ -77,9 +77,9 @@ inline void can_app_extractor_mic17_state(can_t *msg)
 {
     // TODO:
     //  - se tiver em erro, desligar acionamento
-    if(msg->data[CAN_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
+    if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
         // zerar contador
-        if(msg->data[CAN_STATE_MSG_ERROR_BYTE]){
+        if(msg->data[CAN_MSG_GENERIC_STATE_ERROR_BYTE]){
             //ERROR!!!
         }
         /*if(contador == maximo)*/{
@@ -104,7 +104,7 @@ inline void can_app_extractor_mic17_state(can_t *msg)
 */ 
 inline void can_app_extractor_mic17_motor(can_t *msg)
 {
-    if(msg->data[CAN_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
+    if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
         
         can_app_checks_without_mic17_msg = 0;
 
@@ -131,9 +131,9 @@ inline void can_app_extractor_mic17_motor(can_t *msg)
  */
 inline void can_app_msg_extractors_switch(can_t *msg)
 {
-    if(msg->data[CAN_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
+    if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
         switch(msg->id){
-            case CAN_MSG_MIC19_MOTOR:
+            case CAN_MSG_MIC19_MOTOR_ID:
                 VERBOSE_MSG_CAN_APP(usart_send_string("got a motor msg: "));
                 VERBOSE_MSG_CAN_APP(can_app_print_msg(msg));
                 can_app_extractor_mic17_motor(msg);

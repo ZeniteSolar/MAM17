@@ -10,6 +10,8 @@
 #ifndef CONF_H
 #define CONF_H
 
+#include "can_ids.h"
+
 // CONFIGURACOES DE COMPILACAO
 //#define DEBUG_ON
 //#define VERBOSE_ON
@@ -19,7 +21,6 @@
 //#define VERBOSE_ON_PWM
 #define VERBOSE_ON_INIT
 #define VERBOSE_ON_ERROR
-
 
 // MODULES ACTIVATION
 #define USART_ON
@@ -103,6 +104,6 @@
  */
 #define	SUPPORT_TIMESTAMPS		0
 
-
+#define CAN_SIGNATURE_SELF CAN_SIGNATURE_MAM19
 
 #endif /* ifndef CONF_H */
