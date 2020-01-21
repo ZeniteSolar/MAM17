@@ -69,13 +69,13 @@ const uint8_t can_filter[] PROGMEM =
 {
     // Group 0
     MCP2515_FILTER(CAN_MSG_MIC19_STATE_ID), // Filter 0
-    MCP2515_FILTER(CAN_MSG_MIC19_MOTOR), // Filter 1
+    MCP2515_FILTER(CAN_MSG_MIC19_MOTOR_ID), // Filter 1
 
     // Group 1
     MCP2515_FILTER(CAN_MSG_MIC19_STATE_ID), // Filter 2
-    MCP2515_FILTER(CAN_MSG_MIC19_MOTOR), // Filter 3
+    MCP2515_FILTER(CAN_MSG_MIC19_MOTOR_ID), // Filter 3
     MCP2515_FILTER(CAN_MSG_MIC19_STATE_ID), // Filter 4
-    MCP2515_FILTER(CAN_MSG_MIC19_MOTOR), // Filter 5
+    MCP2515_FILTER(CAN_MSG_MIC19_MOTOR_ID), // Filter 5
 
     MCP2515_FILTER(CAN_MASK_MIC19),             // Mask 0 (for group 0)
     MCP2515_FILTER(CAN_MASK_MIC19),             // Mask 1 (for group 1)
