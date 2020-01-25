@@ -22,8 +22,10 @@ void can_app_print_msg(can_t *msg);
 void can_app_task(void);
 void can_app_send_state(void);
 void can_app_send_motor(void);
-void can_app_extractor_mic17_state(can_t *msg);
-void can_app_extractor_mic17_motor(can_t *msg);
+void can_app_extractor_mic19_state(can_t *msg);
+void can_app_extractor_mic19_motor(can_t *msg);
+void can_app_extractor_mswi19_state(can_t *msg);
+void can_app_extractor_mswi19_motor(can_t *msg);
 void can_app_msg_extractors_switch(can_t *msg);
 void check_can(void);
 
@@ -32,7 +34,10 @@ void check_can(void);
 
 uint8_t can_app_send_state_clk_div;
 uint8_t can_app_send_motor_clk_div;
-uint16_t can_app_checks_without_mic17_msg;
+uint16_t can_app_checks_without_mic19_msg;
 #define CAN_APP_CHECKS_WITHOUT_MIC19_MSG 100
+uint16_t can_app_checks_without_mswi19_msg;
+#define CAN_APP_CHECKS_WITHOUT_MSWI19_MSG 200
+uint8_t mswi19_connected;
 
 #endif /* ifndef CAN_APP_H */

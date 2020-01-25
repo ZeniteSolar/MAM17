@@ -346,12 +346,12 @@
  145               		.file 3 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_read_id.c
-     /tmp/ccJoo0WP.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccJoo0WP.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccJoo0WP.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccJoo0WP.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccJoo0WP.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccJoo0WP.s:13     .text.mcp2515_read_id:0000000000000000 mcp2515_read_id
+     /tmp/ccYTJAsh.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccYTJAsh.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccYTJAsh.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccYTJAsh.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccYTJAsh.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccYTJAsh.s:13     .text.mcp2515_read_id:0000000000000000 mcp2515_read_id
 
 UNDEFINED SYMBOLS
 spi_putc

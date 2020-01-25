@@ -18,7 +18,7 @@
 #include "dbg_vrb.h"
 #include "machine.h"
 
-// // pwm macros
+// pwm macros
 #define set_pwm_duty_cycle(d)       OCR1A = d      //!< apply duty cycle 'd'
 #define set_pwm_off()               set_pwm_duty_cycle(0)      //!< d = 0
 
@@ -29,7 +29,7 @@ void pwm_compute(void);
 void pwm_treat_fault(void);
 uint8_t pwm_zero_width(uint16_t duty_cycle);
 
-// // pwm variables
+// pwm variables
 uint8_t pwm_d_clk_div;
 
 #endif /* ifndef PWM_H */

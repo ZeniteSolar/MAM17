@@ -397,7 +397,7 @@
  132               	.L6:
   85:mcp2515_get_dyn_filter.c **** 	spi_putc(SPI_READ);
  133               		.loc 1 85 0
- 134 006c 2898      		cbi 0x5,0
+ 134 006c 2A98      		cbi 0x5,2
   86:mcp2515_get_dyn_filter.c **** 	spi_putc(mask_address);
  135               		.loc 1 86 0
  136 006e 83E0      		ldi r24,lo8(3)
@@ -417,7 +417,7 @@
  148               	.LVL22:
   89:mcp2515_get_dyn_filter.c **** 	
  149               		.loc 1 89 0
- 150 0082 289A      		sbi 0x5,0
+ 150 0082 2A9A      		sbi 0x5,2
   91:mcp2515_get_dyn_filter.c **** 	{
  151               		.loc 1 91 0
  152 0084 C330      		cpi r28,lo8(3)
@@ -431,7 +431,7 @@
  159               	.LVL24:
  101:mcp2515_get_dyn_filter.c **** 	spi_putc(SPI_READ);
  160               		.loc 1 101 0
- 161 008c 2898      		cbi 0x5,0
+ 161 008c 2A98      		cbi 0x5,2
  102:mcp2515_get_dyn_filter.c **** 	spi_putc(filter_address);
  162               		.loc 1 102 0
  163 008e 83E0      		ldi r24,lo8(3)
@@ -449,7 +449,7 @@
  173               	.LVL27:
  105:mcp2515_get_dyn_filter.c **** 	
  174               		.loc 1 105 0
- 175 00a0 289A      		sbi 0x5,0
+ 175 00a0 2A9A      		sbi 0x5,2
  176               	.LVL28:
  177               	.LBB8:
  178               	.LBB9:
@@ -487,12 +487,12 @@
  209               		.file 5 "spi.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_get_dyn_filter.c
-     /tmp/ccstAgCE.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccstAgCE.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccstAgCE.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccstAgCE.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccstAgCE.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccstAgCE.s:13     .text.can_get_filter:0000000000000000 can_get_filter
+     /tmp/ccxSZDxa.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccxSZDxa.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccxSZDxa.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccxSZDxa.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccxSZDxa.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccxSZDxa.s:13     .text.can_get_filter:0000000000000000 can_get_filter
 
 UNDEFINED SYMBOLS
 mcp2515_read_register

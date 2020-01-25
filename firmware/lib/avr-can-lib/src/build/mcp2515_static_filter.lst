@@ -128,7 +128,7 @@
   49:mcp2515_static_filter.c **** 	{
   50:mcp2515_static_filter.c **** 		RESET(MCP2515_CS);
   81               		.loc 1 50 0
-  82 0038 2898      		cbi 0x5,0
+  82 0038 2A98      		cbi 0x5,2
   51:mcp2515_static_filter.c **** 		spi_putc(SPI_WRITE);
   83               		.loc 1 51 0
   84 003a 82E0      		ldi r24,lo8(2)
@@ -189,7 +189,7 @@
   60:mcp2515_static_filter.c **** 		}
   61:mcp2515_static_filter.c **** 		SET(MCP2515_CS);
  130               		.loc 1 61 0 discriminator 2
- 131 006e 289A      		sbi 0x5,0
+ 131 006e 2A9A      		sbi 0x5,2
   48:mcp2515_static_filter.c **** 	{
  132               		.loc 1 48 0 discriminator 2
  133 0070 105F      		subi r17,lo8(-(16))
@@ -231,12 +231,12 @@
  166               		.file 4 "spi.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_static_filter.c
-     /tmp/ccHbOAf2.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccHbOAf2.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccHbOAf2.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccHbOAf2.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccHbOAf2.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccHbOAf2.s:13     .text.can_static_filter:0000000000000000 can_static_filter
+     /tmp/ccGUX53y.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccGUX53y.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccGUX53y.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccGUX53y.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccGUX53y.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccGUX53y.s:13     .text.can_static_filter:0000000000000000 can_static_filter
 
 UNDEFINED SYMBOLS
 mcp2515_bit_modify

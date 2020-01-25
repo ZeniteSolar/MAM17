@@ -144,13 +144,13 @@
   86               		.file 3 "../can.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_sleep.c
-     /tmp/ccmp9knB.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccmp9knB.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccmp9knB.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccmp9knB.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccmp9knB.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccmp9knB.s:13     .text.can_sleep:0000000000000000 can_sleep
-     /tmp/ccmp9knB.s:47     .text.can_wakeup:0000000000000000 can_wakeup
+     /tmp/ccA0SmhO.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccA0SmhO.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccA0SmhO.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccA0SmhO.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccA0SmhO.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccA0SmhO.s:13     .text.can_sleep:0000000000000000 can_sleep
+     /tmp/ccA0SmhO.s:47     .text.can_wakeup:0000000000000000 can_wakeup
 
 UNDEFINED SYMBOLS
 mcp2515_bit_modify

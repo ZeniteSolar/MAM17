@@ -102,7 +102,7 @@
   32 0006 C62F      		mov r28,r22
   72:mcp2515.c     **** 	RESET(MCP2515_CS);
   33               		.loc 1 72 0
-  34 0008 2898      		cbi 0x5,0
+  34 0008 2A98      		cbi 0x5,2
   73:mcp2515.c     **** 	
   74:mcp2515.c     **** 	spi_putc(SPI_WRITE);
   35               		.loc 1 74 0
@@ -123,7 +123,7 @@
   77:mcp2515.c     **** 	
   78:mcp2515.c     **** 	SET(MCP2515_CS);
   48               		.loc 1 78 0
-  49 001c 289A      		sbi 0x5,0
+  49 001c 2A9A      		sbi 0x5,2
   50               	/* epilogue start */
   79:mcp2515.c     **** }
   51               		.loc 1 79 0
@@ -158,7 +158,7 @@
   85:mcp2515.c     **** 	
   86:mcp2515.c     **** 	RESET(MCP2515_CS);
   77               		.loc 1 86 0
-  78 0004 2898      		cbi 0x5,0
+  78 0004 2A98      		cbi 0x5,2
   87:mcp2515.c     **** 	
   88:mcp2515.c     **** 	spi_putc(SPI_READ);
   79               		.loc 1 88 0
@@ -180,7 +180,7 @@
   92:mcp2515.c     **** 	
   93:mcp2515.c     **** 	SET(MCP2515_CS);
   92               		.loc 1 93 0
-  93 0018 289A      		sbi 0x5,0
+  93 0018 2A9A      		sbi 0x5,2
   94               	/* epilogue start */
   94:mcp2515.c     **** 	
   95:mcp2515.c     **** 	return data;
@@ -223,7 +223,7 @@
  128 000a C42F      		mov r28,r20
  101:mcp2515.c     **** 	RESET(MCP2515_CS);
  129               		.loc 1 101 0
- 130 000c 2898      		cbi 0x5,0
+ 130 000c 2A98      		cbi 0x5,2
  102:mcp2515.c     **** 	
  103:mcp2515.c     **** 	spi_putc(SPI_BIT_MODIFY);
  131               		.loc 1 103 0
@@ -249,7 +249,7 @@
  107:mcp2515.c     **** 	
  108:mcp2515.c     **** 	SET(MCP2515_CS);
  148               		.loc 1 108 0
- 149 0026 289A      		sbi 0x5,0
+ 149 0026 2A9A      		sbi 0x5,2
  150               	/* epilogue start */
  109:mcp2515.c     **** }
  151               		.loc 1 109 0
@@ -281,7 +281,7 @@
  115:mcp2515.c     **** 	
  116:mcp2515.c     **** 	RESET(MCP2515_CS);
  174               		.loc 1 116 0
- 175 0000 2898      		cbi 0x5,0
+ 175 0000 2A98      		cbi 0x5,2
  117:mcp2515.c     **** 	
  118:mcp2515.c     **** 	spi_putc(type);
  176               		.loc 1 118 0
@@ -295,7 +295,7 @@
  120:mcp2515.c     **** 	
  121:mcp2515.c     **** 	SET(MCP2515_CS);
  183               		.loc 1 121 0
- 184 000c 289A      		sbi 0x5,0
+ 184 000c 2A9A      		sbi 0x5,2
  185               	/* epilogue start */
  122:mcp2515.c     **** 	
  123:mcp2515.c     **** 	return data;
@@ -398,10 +398,10 @@
  176:mcp2515.c     **** 	
  177:mcp2515.c     **** 	SET(MCP2515_CS);
  232               		.loc 1 177 0
- 233 0014 289A      		sbi 0x5,0
+ 233 0014 2A9A      		sbi 0x5,2
  178:mcp2515.c     **** 	SET_OUTPUT(MCP2515_CS);
  234               		.loc 1 178 0
- 235 0016 209A      		sbi 0x4,0
+ 235 0016 229A      		sbi 0x4,2
  179:mcp2515.c     **** 	
  180:mcp2515.c     **** 	// Aktivieren der Pins fuer das SPI Interface
  181:mcp2515.c     **** 	RESET(P_SCK);
@@ -434,7 +434,7 @@
  193:mcp2515.c     **** 	// danach ist er automatisch im Konfigurations Modus
  194:mcp2515.c     **** 	RESET(MCP2515_CS);
  251               		.loc 1 194 0
- 252 0028 2898      		cbi 0x5,0
+ 252 0028 2A98      		cbi 0x5,2
  195:mcp2515.c     **** 	spi_putc(SPI_RESET);
  253               		.loc 1 195 0
  254 002a 80EC      		ldi r24,lo8(-64)
@@ -569,7 +569,7 @@
  198:mcp2515.c     **** 	
  199:mcp2515.c     **** 	SET(MCP2515_CS);
  276               		.loc 1 199 0
- 277 0038 289A      		sbi 0x5,0
+ 277 0038 2A9A      		sbi 0x5,2
  278               	.LVL29:
  279               	.LBB25:
  280               	.LBB26:
@@ -596,7 +596,7 @@
  204:mcp2515.c     **** 	// CNF1..3 Register laden (Bittiming)
  205:mcp2515.c     **** 	RESET(MCP2515_CS);
  297               		.loc 1 205 0
- 298 0042 2898      		cbi 0x5,0
+ 298 0042 2A98      		cbi 0x5,2
  206:mcp2515.c     **** 	spi_putc(SPI_WRITE);
  299               		.loc 1 206 0
  300 0044 82E0      		ldi r24,lo8(2)
@@ -660,7 +660,7 @@
  351               	.LVL38:
  213:mcp2515.c     **** 	SET(MCP2515_CS);
  352               		.loc 1 213 0
- 353 0086 289A      		sbi 0x5,0
+ 353 0086 2A9A      		sbi 0x5,2
  214:mcp2515.c     **** 	
  215:mcp2515.c     **** 	// TXnRTS Bits als Inputs schalten
  216:mcp2515.c     **** 	mcp2515_write_register(TXRTSCTRL, 0);
@@ -673,10 +673,10 @@
  218:mcp2515.c     **** 	#if defined(MCP2515_INT)
  219:mcp2515.c     **** 		SET_INPUT(MCP2515_INT);
  359               		.loc 1 219 0
- 360 0090 2198      		cbi 0x4,1
+ 360 0090 2098      		cbi 0x4,0
  220:mcp2515.c     **** 		SET(MCP2515_INT);
  361               		.loc 1 220 0
- 362 0092 299A      		sbi 0x5,1
+ 362 0092 289A      		sbi 0x5,0
  221:mcp2515.c     **** 	#endif
  222:mcp2515.c     **** 	
  223:mcp2515.c     **** 	#ifdef RXnBF_FUNKTION
@@ -813,17 +813,17 @@
  453               		.file 6 "spi.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515.c
-     /tmp/ccA8PpIP.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccA8PpIP.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccA8PpIP.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccA8PpIP.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccA8PpIP.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccA8PpIP.s:13     .text.mcp2515_write_register:0000000000000000 mcp2515_write_register
-     /tmp/ccA8PpIP.s:63     .text.mcp2515_read_register:0000000000000000 mcp2515_read_register
-     /tmp/ccA8PpIP.s:105    .text.mcp2515_bit_modify:0000000000000000 mcp2515_bit_modify
-     /tmp/ccA8PpIP.s:165    .text.mcp2515_read_status:0000000000000000 mcp2515_read_status
-     /tmp/ccA8PpIP.s:194    .text.can_init:0000000000000000 can_init
-     /tmp/ccA8PpIP.s:423    .progmem.data._mcp2515_cnf:0000000000000000 _mcp2515_cnf
+     /tmp/ccv3xwIV.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccv3xwIV.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccv3xwIV.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccv3xwIV.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccv3xwIV.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccv3xwIV.s:13     .text.mcp2515_write_register:0000000000000000 mcp2515_write_register
+     /tmp/ccv3xwIV.s:63     .text.mcp2515_read_register:0000000000000000 mcp2515_read_register
+     /tmp/ccv3xwIV.s:105    .text.mcp2515_bit_modify:0000000000000000 mcp2515_bit_modify
+     /tmp/ccv3xwIV.s:165    .text.mcp2515_read_status:0000000000000000 mcp2515_read_status
+     /tmp/ccv3xwIV.s:194    .text.can_init:0000000000000000 can_init
+     /tmp/ccv3xwIV.s:423    .progmem.data._mcp2515_cnf:0000000000000000 _mcp2515_cnf
 
 UNDEFINED SYMBOLS
 spi_putc

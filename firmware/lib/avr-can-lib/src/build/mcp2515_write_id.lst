@@ -219,12 +219,12 @@
   78               		.file 3 "spi.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_write_id.c
-     /tmp/cczSHxNt.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/cczSHxNt.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/cczSHxNt.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/cczSHxNt.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/cczSHxNt.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/cczSHxNt.s:13     .text.mcp2515_write_id:0000000000000000 mcp2515_write_id
+     /tmp/ccniRsaU.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccniRsaU.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccniRsaU.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccniRsaU.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccniRsaU.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccniRsaU.s:13     .text.mcp2515_write_id:0000000000000000 mcp2515_write_id
 
 UNDEFINED SYMBOLS
 spi_putc

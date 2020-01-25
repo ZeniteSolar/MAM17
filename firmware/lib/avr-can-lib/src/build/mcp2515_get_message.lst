@@ -139,7 +139,7 @@
   64:mcp2515_get_message.c **** 	
   65:mcp2515_get_message.c **** 	RESET(MCP2515_CS);
   75               		.loc 1 65 0
-  76 002a 2898      		cbi 0x5,0
+  76 002a 2A98      		cbi 0x5,2
   66:mcp2515_get_message.c **** 	spi_putc(addr);
   77               		.loc 1 66 0
   78 002c 0E94 0000 		call spi_putc
@@ -161,7 +161,7 @@
   74:mcp2515_get_message.c **** 			// Nachrichten mit extended ID verwerfen
   75:mcp2515_get_message.c **** 			SET(MCP2515_CS);
   87               		.loc 1 75 0
-  88 003a 289A      		sbi 0x5,0
+  88 003a 2A9A      		sbi 0x5,2
   76:mcp2515_get_message.c **** 			#ifdef	RXnBF_FUNKTION
   77:mcp2515_get_message.c **** 			if (!IS_SET(MCP2515_RX0BF))
   78:mcp2515_get_message.c **** 			#else
@@ -242,7 +242,7 @@
  105:mcp2515_get_message.c **** 	}
  106:mcp2515_get_message.c **** 	SET(MCP2515_CS);
  136               		.loc 1 106 0 is_stmt 1
- 137 006e 289A      		sbi 0x5,0
+ 137 006e 2A9A      		sbi 0x5,2
  107:mcp2515_get_message.c **** 	
  108:mcp2515_get_message.c **** 	// clear interrupt flag
  109:mcp2515_get_message.c **** 	#ifdef RXnBF_FUNKTION
@@ -315,12 +315,12 @@
  186               		.file 5 "mcp2515_private.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_get_message.c
-     /tmp/ccgWAfPz.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccgWAfPz.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccgWAfPz.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccgWAfPz.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccgWAfPz.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccgWAfPz.s:13     .text.can_get_message:0000000000000000 can_get_message
+     /tmp/ccP2N5IG.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccP2N5IG.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccP2N5IG.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccP2N5IG.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccP2N5IG.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccP2N5IG.s:13     .text.can_get_message:0000000000000000 can_get_message
 
 UNDEFINED SYMBOLS
 mcp2515_read_status

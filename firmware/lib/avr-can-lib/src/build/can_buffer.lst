@@ -584,17 +584,17 @@
  399               		.file 5 "can_buffer.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 can_buffer.c
-     /tmp/ccLql2li.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccLql2li.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccLql2li.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccLql2li.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccLql2li.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccLql2li.s:13     .text.can_buffer_init:0000000000000000 can_buffer_init
-     /tmp/ccLql2li.s:70     .text.can_buffer_empty:0000000000000000 can_buffer_empty
-     /tmp/ccLql2li.s:122    .text.can_buffer_full:0000000000000000 can_buffer_full
-     /tmp/ccLql2li.s:178    .text.can_buffer_get_enqueue_ptr:0000000000000000 can_buffer_get_enqueue_ptr
-     /tmp/ccLql2li.s:229    .text.can_buffer_enqueue:0000000000000000 can_buffer_enqueue
-     /tmp/ccLql2li.s:288    .text.can_buffer_get_dequeue_ptr:0000000000000000 can_buffer_get_dequeue_ptr
-     /tmp/ccLql2li.s:339    .text.can_buffer_dequeue:0000000000000000 can_buffer_dequeue
+     /tmp/cc9bWKeA.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc9bWKeA.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc9bWKeA.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc9bWKeA.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc9bWKeA.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc9bWKeA.s:13     .text.can_buffer_init:0000000000000000 can_buffer_init
+     /tmp/cc9bWKeA.s:70     .text.can_buffer_empty:0000000000000000 can_buffer_empty
+     /tmp/cc9bWKeA.s:122    .text.can_buffer_full:0000000000000000 can_buffer_full
+     /tmp/cc9bWKeA.s:178    .text.can_buffer_get_enqueue_ptr:0000000000000000 can_buffer_get_enqueue_ptr
+     /tmp/cc9bWKeA.s:229    .text.can_buffer_enqueue:0000000000000000 can_buffer_enqueue
+     /tmp/cc9bWKeA.s:288    .text.can_buffer_get_dequeue_ptr:0000000000000000 can_buffer_get_dequeue_ptr
+     /tmp/cc9bWKeA.s:339    .text.can_buffer_dequeue:0000000000000000 can_buffer_dequeue
 
 NO UNDEFINED SYMBOLS

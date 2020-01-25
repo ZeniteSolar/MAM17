@@ -573,12 +573,12 @@
  347               		.file 4 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_regdump.c
-     /tmp/ccTez7II.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccTez7II.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccTez7II.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccTez7II.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccTez7II.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccTez7II.s:20     .text.mcp2515_regdump:0000000000000000 mcp2515_regdump
+     /tmp/cciAtg02.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cciAtg02.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cciAtg02.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cciAtg02.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cciAtg02.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cciAtg02.s:20     .text.mcp2515_regdump:0000000000000000 mcp2515_regdump
 
 UNDEFINED SYMBOLS
 __prologue_saves__

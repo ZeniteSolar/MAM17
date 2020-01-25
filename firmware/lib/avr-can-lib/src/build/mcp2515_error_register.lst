@@ -90,12 +90,12 @@
   49               		.file 4 "mcp2515_private.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_error_register.c
-     /tmp/ccGv8LUb.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccGv8LUb.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccGv8LUb.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccGv8LUb.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccGv8LUb.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccGv8LUb.s:13     .text.can_read_error_register:0000000000000000 can_read_error_register
+     /tmp/ccxjRiYF.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccxjRiYF.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccxjRiYF.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccxjRiYF.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccxjRiYF.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccxjRiYF.s:13     .text.can_read_error_register:0000000000000000 can_read_error_register
 
 UNDEFINED SYMBOLS
 mcp2515_read_register

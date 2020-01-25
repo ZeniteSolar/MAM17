@@ -344,7 +344,7 @@
   98:mcp2515_set_dyn_filter.c **** 	{
   99:mcp2515_set_dyn_filter.c **** 		RESET(MCP2515_CS);
   95               		.loc 1 99 0
-  96 0044 2898      		cbi 0x5,0
+  96 0044 2A98      		cbi 0x5,2
  100:mcp2515_set_dyn_filter.c **** 		spi_putc(SPI_WRITE);
   97               		.loc 1 100 0
   98 0046 82E0      		ldi r24,lo8(2)
@@ -367,7 +367,7 @@
  106:mcp2515_set_dyn_filter.c **** 		#endif
  107:mcp2515_set_dyn_filter.c **** 		SET(MCP2515_CS);
  110               		.loc 1 107 0
- 111 005a 289A      		sbi 0x5,0
+ 111 005a 2A9A      		sbi 0x5,2
  112               	.LVL16:
  113               	.LBB49:
  114               	.LBB50:
@@ -503,7 +503,7 @@
  121:mcp2515_set_dyn_filter.c **** 	
  122:mcp2515_set_dyn_filter.c **** 	RESET(MCP2515_CS);
  145               		.loc 1 122 0
- 146 006e 2898      		cbi 0x5,0
+ 146 006e 2A98      		cbi 0x5,2
  123:mcp2515_set_dyn_filter.c **** 	spi_putc(SPI_WRITE);
  147               		.loc 1 123 0
  148 0070 82E0      		ldi r24,lo8(2)
@@ -528,7 +528,7 @@
  129:mcp2515_set_dyn_filter.c **** 	#endif
  130:mcp2515_set_dyn_filter.c **** 	SET(MCP2515_CS);
  162               		.loc 1 130 0
- 163 0088 289A      		sbi 0x5,0
+ 163 0088 2A9A      		sbi 0x5,2
  164               	.LVL23:
  165               	.LBB53:
  166               	.LBB54:
@@ -613,12 +613,12 @@
  234               		.file 7 "spi.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_set_dyn_filter.c
-     /tmp/ccZqEqPk.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccZqEqPk.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccZqEqPk.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccZqEqPk.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccZqEqPk.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccZqEqPk.s:13     .text.can_set_filter:0000000000000000 can_set_filter
+     /tmp/cclf3rGM.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cclf3rGM.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cclf3rGM.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cclf3rGM.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cclf3rGM.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cclf3rGM.s:13     .text.can_set_filter:0000000000000000 can_set_filter
 
 UNDEFINED SYMBOLS
 mcp2515_read_register

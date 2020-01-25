@@ -69,7 +69,7 @@ inline void pwm_compute(void)
     if(control.fault){
         control.fault = 0;
         if(control.D_raw >= 2)     control.D_raw -= 2;
-        else                        control.D_raw = 0;
+        else                       control.D_raw = 0;
     }
 
     // converts to OCR1A range.
@@ -107,7 +107,7 @@ inline void pwm_treat_fault(void)
  *  @ret  retorna 1 se registrador esta em zero por mais de um segundo (para
  *  freq = 35 Hz)
  */
-uint8_t pwm_zero_width(uint16_t duty_cycle)
+inline uint8_t pwm_zero_width(uint16_t duty_cycle)
 {
     //VERBOSE_MSG_PWM(usart_send_string("PWM zero witdh..."));
 

@@ -60,8 +60,7 @@
   40:mcp2515_buffer.c **** 		return ((!IS_SET(MCP2515_INT)) ? true : false);
   22               		.loc 1 40 0
   23 0000 83B1      		in r24,0x3
-  24 0002 8695      		lsr r24
-  25 0004 8170      		andi r24,1
+  24 0002 8095      		com r24
   41:mcp2515_buffer.c **** 	#else
   42:mcp2515_buffer.c **** 		#ifdef RXnBF_FUNKTION
   43:mcp2515_buffer.c **** 			if (!IS_SET(MCP2515_RX0BF) || !IS_SET(MCP2515_RX1BF))
@@ -73,67 +72,66 @@
   49:mcp2515_buffer.c **** 		#endif
   50:mcp2515_buffer.c **** 	#endif
   51:mcp2515_buffer.c **** }
-  26               		.loc 1 51 0
-  27 0006 91E0      		ldi r25,lo8(1)
-  28 0008 8927      		eor r24,r25
-  29               	/* epilogue start */
-  30 000a 0895      		ret
-  31               		.cfi_endproc
-  32               	.LFE19:
-  34               		.section	.text.can_check_free_buffer,"ax",@progbits
-  35               	.global	can_check_free_buffer
-  37               	can_check_free_buffer:
-  38               	.LFB20:
+  25               		.loc 1 51 0
+  26 0004 8170      		andi r24,lo8(1)
+  27               	/* epilogue start */
+  28 0006 0895      		ret
+  29               		.cfi_endproc
+  30               	.LFE19:
+  32               		.section	.text.can_check_free_buffer,"ax",@progbits
+  33               	.global	can_check_free_buffer
+  35               	can_check_free_buffer:
+  36               	.LFB20:
   52:mcp2515_buffer.c **** 
   53:mcp2515_buffer.c **** // ----------------------------------------------------------------------------
   54:mcp2515_buffer.c **** // check if there is a free buffer to send messages
   55:mcp2515_buffer.c **** 
   56:mcp2515_buffer.c **** bool mcp2515_check_free_buffer(void)
   57:mcp2515_buffer.c **** {
-  39               		.loc 1 57 0
-  40               		.cfi_startproc
-  41               	/* prologue: function */
-  42               	/* frame size = 0 */
-  43               	/* stack size = 0 */
-  44               	.L__stack_usage = 0
+  37               		.loc 1 57 0
+  38               		.cfi_startproc
+  39               	/* prologue: function */
+  40               	/* frame size = 0 */
+  41               	/* stack size = 0 */
+  42               	.L__stack_usage = 0
   58:mcp2515_buffer.c **** 	uint8_t status = mcp2515_read_status(SPI_READ_STATUS);
-  45               		.loc 1 58 0
-  46 0000 80EA      		ldi r24,lo8(-96)
-  47 0002 0E94 0000 		call mcp2515_read_status
-  48               	.LVL0:
+  43               		.loc 1 58 0
+  44 0000 80EA      		ldi r24,lo8(-96)
+  45 0002 0E94 0000 		call mcp2515_read_status
+  46               	.LVL0:
   59:mcp2515_buffer.c **** 	
   60:mcp2515_buffer.c **** 	if ((status & 0x54) == 0x54)
-  49               		.loc 1 60 0
-  50 0006 982F      		mov r25,r24
-  51 0008 9475      		andi r25,lo8(84)
-  52 000a 81E0      		ldi r24,lo8(1)
-  53               	.LVL1:
-  54 000c 9435      		cpi r25,lo8(84)
-  55 000e 01F4      		brne .L3
-  56 0010 80E0      		ldi r24,0
-  57               	.L3:
-  58               	/* epilogue start */
+  47               		.loc 1 60 0
+  48 0006 982F      		mov r25,r24
+  49 0008 9475      		andi r25,lo8(84)
+  50 000a 81E0      		ldi r24,lo8(1)
+  51               	.LVL1:
+  52 000c 9435      		cpi r25,lo8(84)
+  53 000e 01F4      		brne .L3
+  54 0010 80E0      		ldi r24,0
+  55               	.L3:
+  56               	/* epilogue start */
   61:mcp2515_buffer.c **** 		return false;		// all buffers used
   62:mcp2515_buffer.c **** 	else
   63:mcp2515_buffer.c **** 		return true;
   64:mcp2515_buffer.c **** }
-  59               		.loc 1 64 0
-  60 0012 0895      		ret
-  61               		.cfi_endproc
-  62               	.LFE20:
-  64               		.text
-  65               	.Letext0:
-  66               		.file 2 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
-  67               		.file 3 "mcp2515_private.h"
+  57               		.loc 1 64 0
+  58 0012 0895      		ret
+  59               		.cfi_endproc
+  60               	.LFE20:
+  62               		.text
+  63               	.Letext0:
+  64               		.file 2 "/home/joaoantoniocardoso/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-ardui
+  65               		.file 3 "mcp2515_private.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_buffer.c
-     /tmp/ccbZsVsa.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccbZsVsa.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccbZsVsa.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccbZsVsa.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccbZsVsa.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccbZsVsa.s:13     .text.can_check_message:0000000000000000 can_check_message
-     /tmp/ccbZsVsa.s:37     .text.can_check_free_buffer:0000000000000000 can_check_free_buffer
+     /tmp/cchWJfQm.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cchWJfQm.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cchWJfQm.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cchWJfQm.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cchWJfQm.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cchWJfQm.s:13     .text.can_check_message:0000000000000000 can_check_message
+     /tmp/cchWJfQm.s:35     .text.can_check_free_buffer:0000000000000000 can_check_free_buffer
 
 UNDEFINED SYMBOLS
 mcp2515_read_status

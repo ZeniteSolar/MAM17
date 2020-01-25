@@ -131,12 +131,12 @@
   74               		.file 4 "mcp2515_private.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mcp2515_set_mode.c
-     /tmp/ccNHhDj5.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccNHhDj5.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccNHhDj5.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccNHhDj5.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccNHhDj5.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccNHhDj5.s:13     .text.can_set_mode:0000000000000000 can_set_mode
+     /tmp/ccB8QWIn.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccB8QWIn.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccB8QWIn.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccB8QWIn.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccB8QWIn.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccB8QWIn.s:13     .text.can_set_mode:0000000000000000 can_set_mode
 
 UNDEFINED SYMBOLS
 mcp2515_bit_modify
