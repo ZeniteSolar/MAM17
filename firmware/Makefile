@@ -44,7 +44,7 @@ MAIN 		= 	main
 MCU 		?=	atmega328p
 F_CPU		?=	16000000UL
 # Optimization
-OPT			=	2
+OPT			=	s
 # Debug
 DEBUG		=	dwarf-2
 # documentation (auto generated)
@@ -100,42 +100,47 @@ $(foreach i,$(SPECIAL_DEFS),$(eval $(call CHECK_ANSWER,$(i))))
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #  -adhlns...:   create assembler listing
 #  INFO: https://www.nongnu.org/avr-libc/user-manual/using_tools.html
-#CFLAGS += $(CDEFS)
 CFLAGS += -O$(OPT)
 #CFLAGS += -g$(DEBUG)
+CGLAGS += -pedantic -Wall -Wextra
+CGLAGS += -Wconversion
+CGLAGS += -Wshadow
+CGLAGS += -Wunsafe-loop-optimizations
+CGLAGS += -Waddress
+CGLAGS += -Wlogical-op
+CGLAGS += -Wstrict-prototypes
+CGLAGS += -Wold-style-definition
+CGLAGS += -Wmissing-prototypes
+CGLAGS += -Wmissing-declarations
+CGLAGS += -Wpacked
+CGLAGS += -Wundef
+CGLAGS += -Wredundant-decls
+CGLAGS += -Wnested-externs
+CGLAGS += -Wunreachable-code
+CGLAGS += -Winline
+CGLAGS += -Woverlength-strings
+CGLAGS += -Wpointer-sign
+CGLAGS += -Wdisabled-optimization
+CGLAGS += -Wvariadic-macros
+CGLAGS += -fstrict-aliasing
+CGLAGS += -Wstrict-overflow=5 -fstrict-overflow
 #CFLAGS += -funsigned-char
 #CFLAGS += -funsigned-bitfields
 #CFLAGS += -fpack-struct
 #CFLAGS += -fshort-enums
-CFLAGS += -Wall
-#CFLAGS += -Wstrict-prototypes
-#CFLAGS += -mshort-calls
-#CFLAGS += -ffunction-sections
-#CFLAGS += -fdata-sections
-#CFLAGS += -ffreestanding
-#CFLAGS += -mcall-prologues
-#CFLAGS += --param inline-call-cost=2
-#CFLAGS += -finline-limit=3
-#CFLAGS += -fno-inline-small-functions
-#CFLAGS += -fno-unit-at-a-time
-#CFLAGS += -Wundef
-#CFLAGS += -Wunreachable-code
-#CFLAGS += -Wsign-compare
-#CFLAGS += -Waddr-space-convert
-#CFLAGS += -Wmisspelled-isr
-#CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
-#CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
+CFLAGS += -Wformat=2
+CFLAGS += -ffunction-sections
+CFLAGS += -fdata-sections
 CFLAGS += -mmcu=$(MCU)
 CFLAGS += -std=gnu99
 CFLAGS += -DF_CPU=$(F_CPU)
-#CFLAGS += -finput-charset=utf-8 -fexec-charset=iso-8859-15
 
 CFLAGSALT += \
 	-D__AVR_DEV_LIB_NAME__=m328pb
 
 LDFLAGS = -Wl,-Map=$(OBJDIR)/$(TARGET).map,--cref
 LDFLAGS += $(patsubst %,-L%,$(EXTRALIBDIRS))
-#LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) 
+#LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB)
 LDFLAGS += $(MATH_LIB)
 LDFLAGS += -static -Llib/avr-can-lib/src/ -lcan
 #LDFLAGS += -static -Llib/DISPLAYS/SSD1306_AVR/ -lssd1306
@@ -157,7 +162,7 @@ HEX_EEPROM_FLAGS = \
 all: directories $(TARGET).elf size
 
 # directories
-directories: 
+directories:
 	$(SILENT) $(MKDIR_P) $(BINDIR) $(OBJDIR) $(DOCDIR) $(LIBDIR) $(SRCDIR)
 
 # size
@@ -187,7 +192,7 @@ MKDIR_P := mkdir -p
 	@echo "hex..:"
 	@echo ""
 	$(SILENT) $(OBJCPY) -O ihex $(HEX_FLASH_FLAGS)
- 
+
 ## Compile
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo "[$(TARGET)] Compiling:" $@...
