@@ -65,8 +65,6 @@ typedef struct control{
 
 }control_t;
 
-control_t control;
-
 // machine checks
 void check_idle_zero_pot(void);
 void check_idle_current(void);
@@ -99,18 +97,19 @@ void set_state_running(void);
 void set_initial_state(void);
 
 // machine variables
-state_machine_t state_machine;
-system_flags_t system_flags;
-error_flags_t error_flags;
-volatile uint8_t machine_clk;
-uint8_t total_errors;   // Contagem de ERROS
+extern state_machine_t state_machine;
+extern system_flags_t system_flags;
+extern error_flags_t error_flags;
+extern volatile uint8_t machine_clk;
+extern uint8_t total_errors; // Contagem de ERROS
 
 // pwm variables
-uint8_t pwm_fault_count;
-uint8_t check_pwm_fault_times;
+extern uint8_t pwm_fault_count;
+extern uint8_t check_pwm_fault_times;
 
 // other variables
-uint8_t led_clk_div;
+extern uint8_t led_clk_div;
+extern control_t control;
 
 // ISRs
 ISR(TIMER2_COMPA_vect);

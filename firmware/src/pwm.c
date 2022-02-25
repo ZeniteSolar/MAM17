@@ -1,6 +1,8 @@
 #include "pwm.h"
 #include <util/delay.h>
 
+uint8_t pwm_d_clk_div;
+
 /**
  * @brief configura o PWM usando o timer TC1
  */

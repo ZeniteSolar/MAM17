@@ -1,5 +1,15 @@
 #include "machine.h"
 
+control_t control;
+state_machine_t state_machine;
+system_flags_t system_flags;
+error_flags_t error_flags;
+volatile uint8_t machine_clk;
+uint8_t total_errors; // Contagem de ERROS
+uint8_t pwm_fault_count;
+uint8_t check_pwm_fault_times;
+uint8_t led_clk_div;
+
 /*
  * to-do:
  *      - modularize state sinalization

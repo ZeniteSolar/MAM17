@@ -30,6 +30,6 @@ void pwm_treat_fault(void);
 uint8_t pwm_zero_width(uint16_t duty_cycle);
 
 // pwm variables
-uint8_t pwm_d_clk_div;
+extern uint8_t pwm_d_clk_div;
 
 #endif /* ifndef PWM_H */

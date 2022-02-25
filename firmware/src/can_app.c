@@ -1,5 +1,11 @@
 #include "can_app.h"
 
+uint8_t can_app_send_state_clk_div;
+uint8_t can_app_send_motor_clk_div;
+uint16_t can_app_checks_without_mic19_msg;
+uint16_t can_app_checks_without_mswi19_msg;
+uint8_t mswi19_connected;
+
 /**
  * @brief Prints a can message via usart
  */

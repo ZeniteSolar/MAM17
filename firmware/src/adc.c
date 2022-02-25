@@ -1,5 +1,10 @@
 #include "adc.h"
 
+uint8_t raw_adc[ADC_LAST_CHANNEL]; //*< an array for raw measurements
+volatile cbuf0_t cbuf_adc0;
+uint8_t ma_adc0(void);
+uint8_t avg_adc0;
+
 /**
  * @brief initializes all adc circular buffers.
  */

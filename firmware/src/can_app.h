@@ -32,12 +32,12 @@ void check_can(void);
 #define CAN_APP_SEND_STATE_CLK_DIV  100
 #define CAN_APP_SEND_MOTOR_CLK_DIV  50
 
-uint8_t can_app_send_state_clk_div;
-uint8_t can_app_send_motor_clk_div;
-uint16_t can_app_checks_without_mic19_msg;
+extern uint8_t can_app_send_state_clk_div;
+extern uint8_t can_app_send_motor_clk_div;
+extern uint16_t can_app_checks_without_mic19_msg;
 #define CAN_APP_CHECKS_WITHOUT_MIC19_MSG 100
-uint16_t can_app_checks_without_mswi19_msg;
+extern uint16_t can_app_checks_without_mswi19_msg;
 #define CAN_APP_CHECKS_WITHOUT_MSWI19_MSG 200
-uint8_t mswi19_connected;
+extern uint8_t mswi19_connected;
 
 #endif /* ifndef CAN_APP_H */
