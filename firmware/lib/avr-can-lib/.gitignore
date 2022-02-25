@@ -1,6 +1,9 @@
 # Object files
 *.o
 
+# Prerequisites
+*.d
+
 # Libraries
 *.lib
 *.a
