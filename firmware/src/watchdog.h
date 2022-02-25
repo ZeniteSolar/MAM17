@@ -18,6 +18,8 @@
  */
 void wdt_first(void) __attribute__((naked)) __attribute__((section(".init3")));
 
+void wdt_init(void);
+
 /**
  * @brief Clear SREG_I on hardware reset.
  */
