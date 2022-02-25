@@ -1,5 +1,8 @@
 # Created by https://www.gitignore.io/api/c,linux
 
+src/can_ids.h**
+
+>>>>>>> 7763e53 (Add firmware gitignore)
 ### C ###
 # Prerequisites
 *.d
@@ -76,5 +79,3 @@ dkms.conf
 #keys
 settings/keys
 
-# can_ids:
-src/can_ids.h**
