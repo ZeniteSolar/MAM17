@@ -43,11 +43,12 @@ typedef union system_flags{
 
 typedef union error_flags{
     struct{
-        uint8_t     overcurrent :1;
-        uint8_t     overvoltage :1;
-        uint8_t     overheat    :1;
-        uint8_t     fault       :1;
-        uint8_t     no_canbus   :1;
+        uint8_t     overcurrent     :1;
+        uint8_t     overvoltage     :1;
+        uint8_t     overheat        :1;
+        uint8_t     fault           :1;
+        uint8_t     no_canbus       :1;
+        uint8_t     no_contactor    :1;
     };
         uint8_t   all;
 }error_flags_t;
