@@ -58,6 +58,7 @@ inline void can_app_send_state(void)
 
     msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
     msg.data[CAN_MSG_GENERIC_STATE_STATE_BYTE]      = (uint8_t) state_machine;
+    // msg.data[CAN_MSG_GENERIC_STATE_CONTACTOR_BYTE]    = (uint8_t) state_contactor; // TODO: adicionar?
     msg.data[CAN_MSG_GENERIC_STATE_ERROR_BYTE]      = error_flags.all;
 
     can_send_message(&msg);
@@ -73,8 +74,26 @@ inline void can_app_send_motor(void)
     msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
     msg.data[CAN_MSG_MAM19_MOTOR_D_BYTE]            = control.D;
     msg.data[CAN_MSG_MAM19_MOTOR_I_BYTE]            = control.I;    
+    // msg.data[CAN_MSG_MAM19_MOTOR_R_BYTE]            = control.R; // TODO: adicionar?
 
-    can_send_message(&msg); 
+    can_send_message(&msg);
+}
+
+inline void can_app_send_contactor_request(uint8_t request)
+{
+    can_t msg;
+    msg.id                                  = CAN_MSG_MAM19_CONTACTOR_ID;
+    msg.length                              = CAN_MSG_MAM19_CONTACTOR_LENGTH;
+    msg.flags.rtr = 0;
+
+    msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
+    msg.data[CAN_MSG_MAM19_CONTACTOR_REQUEST_BYTE]  = request;
+
+    can_send_message(&msg);
+
+    contactor.message_received = CONTACTOR_REQUEST_UNKNOWN;
+    contactor.message_sent = request;
+    contactor.timeout_clk_div = 0;
 }
 
 /**
@@ -135,6 +154,10 @@ inline void can_app_extractor_mic19_motor(can_t *msg)
             CAN_MSG_MIC19_MOTOR_MOTOR_BYTE], 
             CAN_MSG_MIC19_MOTOR_MOTOR_DMS_ON_BIT);
          
+        system_flags.reverse        = bit_is_set(msg->data[
+            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE],
+            CAN_MSG_MIC19_MOTOR_MOTOR_REVERSE_BIT);
+
         if(!mswi19_connected){
             control.D_raw_target    = msg->data[CAN_MSG_MIC19_MOTOR_D_BYTE];
         }
