@@ -6,7 +6,7 @@ uint8_t pwm_d_clk_div;
 /**
  * @brief configura o PWM usando o timer TC1
  */
-void pwm_init()
+void pwm_init(void)
 {
     // configuracao do Timer TC1 --> TIMER DO PWM
     //TCCR1B |= ((0<<ICNC1) | (0<<ICES1));
