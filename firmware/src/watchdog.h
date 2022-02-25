@@ -8,7 +8,7 @@
  */
 
 #ifndef WATCHDOG_H
-#define WATCHDOG_H 
+#define WATCHDOG_H
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -30,8 +30,8 @@ void wdt_first(void)
     //http://www.atmel.com/webdoc/AVRLibcReferenceManual/FAQ_1faq_softreset.html
 }
 
-/**	
- * @brief inicializa o watchdog em 8s 
+/**
+ * @brief inicializa o watchdog em 8s
  */
 void wdt_init(void)
 {

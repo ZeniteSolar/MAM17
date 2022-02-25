@@ -21,7 +21,6 @@
 #ifdef CAN_ON
 #include "can.h"
 #include "can_app.h"
-extern const uint8_t can_filter[];
 #endif
 
 typedef enum state_machine{
@@ -110,9 +109,5 @@ extern uint8_t check_pwm_fault_times;
 // other variables
 extern uint8_t led_clk_div;
 extern control_t control;
-
-// ISRs
-ISR(TIMER2_COMPA_vect);
-ISR(PCINT2_vect);
 
 #endif /* ifndef MACHINE_H */
