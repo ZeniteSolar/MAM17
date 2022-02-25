@@ -288,6 +288,7 @@ inline void task_initializing(void)
  */
 inline void task_change_contactor(void)
 {
+    check_reverse();
     set_pwm_off();
 
     if(led_clk_div++ >= 100){
@@ -353,7 +354,8 @@ inline void task_idle(void)
         cpl_led();
         led_clk_div = 0;
     }
- 
+
+    check_reverse();
     check_idle_zero_pot();
     //check_idle_current();
     //check_idle_voltage();
@@ -376,6 +378,7 @@ inline void task_running(void)
         led_clk_div = 0;
     }
 
+    check_reverse();
     //check_pwm_fault();
     //check_running_current();
     //check_running_voltage();
