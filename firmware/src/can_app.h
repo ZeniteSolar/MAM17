@@ -22,11 +22,17 @@ void can_app_print_msg(can_t *msg);
 void can_app_task(void);
 void can_app_send_state(void);
 void can_app_send_motor(void);
+void can_app_send_contactor_request(uint8_t request);
 void can_app_extractor_mic19_state(can_t *msg);
 void can_app_extractor_mic19_motor(can_t *msg);
 void can_app_extractor_mswi19_state(can_t *msg);
 void can_app_extractor_mswi19_motor(can_t *msg);
+void can_app_extractor_mac22_state(can_t *msg);
+void can_app_extractor_mac22_contactor_response(can_t *msg);
 void can_app_msg_extractors_switch(can_t *msg);
+void can_app_msg_mic19_extractors_switch(can_t *msg);
+void can_app_msg_mswi19_extractors_switch(can_t *msg);
+void can_app_msg_mac22_extractors_switch(can_t *msg);
 void check_can(void);
 
 #define CAN_APP_SEND_STATE_CLK_DIV  100
@@ -34,6 +40,9 @@ void check_can(void);
 
 extern uint8_t can_app_send_state_clk_div;
 extern uint8_t can_app_send_motor_clk_div;
+// #define SET_ERROR_WHEN_NO_STATE_MESSAGES_FROM_MAC22   //<!" Consider the lack of MAC22's communication as an ERROR!
+extern uint16_t can_app_checks_without_mac22_msg;
+#define CAN_APP_CHECKS_WITHOUT_MAC_MSG 200
 extern uint16_t can_app_checks_without_mic19_msg;
 #define CAN_APP_CHECKS_WITHOUT_MIC19_MSG 100
 extern uint16_t can_app_checks_without_mswi19_msg;
