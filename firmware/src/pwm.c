@@ -39,6 +39,7 @@ void pwm_init(void)
 inline void pwm_reset(void)
 {
     set_pwm_off();
+    pwm_fault_count = 0;
     control.D_raw = control.D_raw_target = control.D = 0;
     control.I_raw = control.I_raw_target = control.I = 0;
     VERBOSE_MSG_PWM(usart_send_string("PWM turned off!\n"));
