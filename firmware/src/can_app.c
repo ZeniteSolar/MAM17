@@ -48,6 +48,7 @@ inline void can_app_send_state(void)
     can_t msg;
     msg.id                                  = CAN_MSG_MAM19_STATE_ID;
     msg.length                              = CAN_MSG_GENERIC_STATE_LENGTH;
+    msg.flags.rtr = 0;
 
     msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
     msg.data[CAN_MSG_GENERIC_STATE_STATE_BYTE]      = (uint8_t) state_machine;
@@ -61,6 +62,7 @@ inline void can_app_send_motor(void)
     can_t msg;
     msg.id                                  = CAN_MSG_MAM19_MOTOR_ID;
     msg.length                              = CAN_MSG_MAM19_MOTOR_LENGTH;
+    msg.flags.rtr = 0;
 
     msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
     msg.data[CAN_MSG_MAM19_MOTOR_D_BYTE]            = control.D;
