@@ -25,7 +25,7 @@ inline void can_app_print_msg(can_t *msg)
     usart_send_uint16(err.rx);
     usart_send_char(' ');
     usart_send_uint16(err.tx);
-    usart_send_char('\n');                              
+    usart_send_char('\n');
 }
 
 /**
@@ -58,6 +58,7 @@ inline void can_app_send_state(void)
 
     msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
     msg.data[CAN_MSG_GENERIC_STATE_STATE_BYTE]      = (uint8_t) state_machine;
+    // msg.data[CAN_MSG_GENERIC_STATE_CONTACTOR_BYTE]    = (uint8_t) state_contactor; // TODO: adicionar?
     msg.data[CAN_MSG_GENERIC_STATE_ERROR_BYTE]      = error_flags.all;
 
     can_send_message(&msg);
@@ -71,9 +72,28 @@ inline void can_app_send_motor(void)
     msg.flags.rtr = 0;
 
     msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
-    msg.data[CAN_MSG_MAM19_MOTOR_D_BYTE]            = (uint8_t) control.D >> 8;
+    msg.data[CAN_MSG_MAM19_MOTOR_D_BYTE]            = control.D;
+    msg.data[CAN_MSG_MAM19_MOTOR_I_BYTE]            = control.I;
+    // msg.data[CAN_MSG_MAM19_MOTOR_R_BYTE]            = control.R; // TODO: adicionar?
 
-    can_send_message(&msg); 
+    can_send_message(&msg);
+}
+
+inline void can_app_send_contactor_request(uint8_t request)
+{
+    can_t msg;
+    msg.id                                  = CAN_MSG_MAM19_CONTACTOR_ID;
+    msg.length                              = CAN_MSG_MAM19_CONTACTOR_LENGTH;
+    msg.flags.rtr = 0;
+
+    msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
+    msg.data[CAN_MSG_MAM19_CONTACTOR_REQUEST_BYTE]  = request;
+
+    can_send_message(&msg);
+
+    contactor.message_received = CONTACTOR_REQUEST_UNKNOWN;
+    contactor.message_sent = request;
+    contactor.timeout_clk_div = 0;
 }
 
 /**
@@ -91,7 +111,7 @@ inline void can_app_extractor_mic19_state(can_t *msg)
             //ERROR!!!
         }
 
-         
+
     }
 }
 
@@ -106,7 +126,7 @@ inline void can_app_extractor_mswi19_state(can_t *msg)
             //ERROR!!!
         }
 
-         
+
     }
 }
 /**
@@ -120,20 +140,24 @@ inline void can_app_extractor_mswi19_state(can_t *msg)
  * F is the current potentiometer
  *
  * @param *msg pointer to the message to be extracted
-*/ 
+*/
 inline void can_app_extractor_mic19_motor(can_t *msg)
 {
     if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
             can_app_checks_without_mic19_msg = 0;
 
         system_flags.motor_on       = bit_is_set(msg->data[
-            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE], 
+            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE],
             CAN_MSG_MIC19_MOTOR_MOTOR_MOTOR_ON_BIT);
-        
+
         system_flags.dms            = bit_is_set(msg->data[
-            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE], 
+            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE],
             CAN_MSG_MIC19_MOTOR_MOTOR_DMS_ON_BIT);
-         
+
+        system_flags.reverse        = bit_is_set(msg->data[
+            CAN_MSG_MIC19_MOTOR_MOTOR_BYTE],
+            CAN_MSG_MIC19_MOTOR_MOTOR_REVERSE_BIT);
+
         if(!mswi19_connected){
             control.D_raw_target    = msg->data[CAN_MSG_MIC19_MOTOR_D_BYTE];
         }
@@ -153,14 +177,14 @@ inline void can_app_extractor_mswi19_motor(can_t *msg)
             mswi19_connected = 1;
         /*
         system_flags.motor_on       = bit_is_set(msg->data[
-            CAN_MSG_MSWI19_MOTOR_MOTOR_BYTE], 
+            CAN_MSG_MSWI19_MOTOR_MOTOR_BYTE],
             CAN_MSG_MSWI19_MOTOR_MOTOR_MOTOR_ON_BIT);
-        
+
         system_flags.dms            = bit_is_set(msg->data[
-            CAN_MSG_MSWI19_MOTOR_MOTOR_BYTE], 
+            CAN_MSG_MSWI19_MOTOR_MOTOR_BYTE],
             CAN_MSG_MSWI19_MOTOR_MOTOR_DMS_ON_BIT);
         */
-         
+
         control.D_raw_target    = msg->data[CAN_MSG_MSWI19_MOTOR_D_BYTE];
 
         /*
@@ -195,7 +219,7 @@ inline void can_app_msg_extractors_switch(can_t *msg)
                 VERBOSE_MSG_CAN_APP(usart_send_string("got a unknown msg from mic19: "));
                 VERBOSE_MSG_CAN_APP(can_app_print_msg(msg));
                 break;
-        }    
+        }
     }
     if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MSWI19){
         switch(msg->id){
@@ -213,8 +237,8 @@ inline void can_app_msg_extractors_switch(can_t *msg)
                 VERBOSE_MSG_CAN_APP(usart_send_string("got a unknown msg from mswi19: "));
                 VERBOSE_MSG_CAN_APP(can_app_print_msg(msg));
                 break;
-        }    
-    } 
+        }
+    }
 }
 
 /**
@@ -223,7 +247,7 @@ inline void can_app_msg_extractors_switch(can_t *msg)
 inline void check_can(void)
 {
     // If no messages is received from mic19 for
-    // CAN_APP_CHECKS_WITHOUT_MIC19_MSG cycles, than it go to a specific error state. 
+    // CAN_APP_CHECKS_WITHOUT_MIC19_MSG cycles, than it go to a specific error state.
     //VERBOSE_MSG_CAN_APP(usart_send_string("checks: "));
     //VERBOSE_MSG_CAN_APP(usart_send_uint16(can_app_checks_without_mic19_msg));
     if(can_app_checks_without_mic19_msg++ >= CAN_APP_CHECKS_WITHOUT_MIC19_MSG){
@@ -237,8 +261,8 @@ inline void check_can(void)
         VERBOSE_MSG_CAN_APP(usart_send_string("Warning: mswi19 not connected. Using D from mic19."));
         can_app_checks_without_mswi19_msg = 0;
         mswi19_connected = 0;
-    } 
-    
+    }
+
     if(can_check_message()){
         can_t msg;
         if(can_get_message(&msg)){
@@ -246,4 +270,3 @@ inline void check_can(void)
         }
     }
 }
-

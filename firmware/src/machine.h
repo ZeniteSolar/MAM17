@@ -25,6 +25,7 @@
 
 typedef enum state_machine{
     STATE_INITIALIZING,
+    STATE_CONTACTOR,
     STATE_IDLE,
     STATE_RUNNING,
     STATE_ERROR,
@@ -35,6 +36,7 @@ typedef union system_flags{
         uint8_t     motor_on        :1;
         uint8_t     dms             :1;
         uint8_t     pot_zero_width  :1;
+        uint8_t     reverse         :1;
     };
     uint8_t   all__;
 } system_flags_t;
@@ -64,6 +66,27 @@ typedef struct control{
 
 }control_t;
 
+typedef struct contactor{
+    uint8_t message_sent;
+    uint8_t message_received;
+    uint8_t acknowledged;
+    uint16_t timeout_clk_div;
+    uint16_t motor_stop_clk_div;
+}contactor_t;
+
+typedef enum state_contactor{
+    STATE_CONTACTOR_WAITING_MOTOR,
+    STATE_CONTACTOR_SEND_REQUEST,
+    STATE_CONTACTOR_WAITING_RESPONSE,
+}state_contactor_t;
+
+typedef enum contactor_request{
+    CONTACTOR_REQUEST_TURN_OFF,
+    CONTACTOR_REQUEST_SET_FORWARD,
+    CONTACTOR_REQUEST_SET_REVERSE,
+    CONTACTOR_REQUEST_UNKNOWN = 0xFF,
+}contactor_request_t;
+
 // machine checks
 void check_idle_zero_pot(void);
 void check_idle_current(void);
@@ -74,6 +97,7 @@ void check_running_voltage(void);
 void check_running_temperature(void);
 //void check_can(void);         // transfered to can_app.h
 void check_pwm_fault(void);
+void check_reverse(void);
 
 // debug functions
 void print_system_flags(void);
@@ -82,6 +106,7 @@ void print_control(void);
 
 // machine tasks
 void task_initializing(void);
+void task_change_contactor(void);
 void task_idle(void);
 void task_running(void);
 void task_error(void);
@@ -91,6 +116,7 @@ void machine_init(void);
 void machine_run(void);
 void set_state_error(void);
 void set_state_initializing(void);
+void set_state_contactor(void);
 void set_state_idle(void);
 void set_state_running(void);
 void set_initial_state(void);
@@ -109,5 +135,7 @@ extern uint8_t check_pwm_fault_times;
 // other variables
 extern uint8_t led_clk_div;
 extern control_t control;
+extern state_contactor_t state_contactor;
+extern contactor_t contactor;
 
 #endif /* ifndef MACHINE_H */

@@ -22,6 +22,7 @@ void can_app_print_msg(can_t *msg);
 void can_app_task(void);
 void can_app_send_state(void);
 void can_app_send_motor(void);
+void can_app_send_contactor_request(uint8_t request);
 void can_app_extractor_mic19_state(can_t *msg);
 void can_app_extractor_mic19_motor(can_t *msg);
 void can_app_extractor_mswi19_state(can_t *msg);

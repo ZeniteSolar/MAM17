@@ -9,6 +9,8 @@ uint8_t total_errors; // Contagem de ERROS
 uint8_t pwm_fault_count;
 uint8_t check_pwm_fault_times;
 uint8_t led_clk_div;
+state_contactor_t state_contactor;
+contactor_t contactor;
 
 /*
  * to-do:
@@ -43,7 +45,18 @@ inline void check_idle_zero_pot(void)
 {
     system_flags.pot_zero_width = pwm_zero_width(control.D_raw_target)? 1 : 0;
 }
- 
+
+/**
+ * @brief checks if the reverse has changed
+ */
+inline void check_reverse(void)
+{
+    static uint8_t last_reverse = 0;
+    if(last_reverse != system_flags.reverse){
+        set_state_contactor();
+    }
+    last_reverse = system_flags.reverse;
+}
 
 /**
  * @brief checks the quantity of the faults.
@@ -145,6 +158,15 @@ inline void set_state_initializing(void)
 }
 
 /**
+* @brief set contactor state
+*/
+inline void set_state_contactor(void)
+{
+    state_contactor = STATE_CONTACTOR_WAITING_MOTOR;
+    state_machine = STATE_CONTACTOR;
+}
+
+/**
 * @brief set idle state
 */ 
 inline void set_state_idle(void)
@@ -174,6 +196,9 @@ inline void print_system_flags(void)
 
     VERBOSE_MSG_MACHINE(usart_send_string(" Pot_zero: "));
     VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.pot_zero_width)); 
+
+    VERBOSE_MSG_MACHINE(usart_send_string(" Rev: "));
+    VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.reverse));
 }
 
 /**
@@ -250,6 +275,68 @@ inline void task_initializing(void)
     else{
         VERBOSE_MSG_ERROR(usart_send_string("Sorry. I have have found errors in the initialilation process. \n\nI will begin to process it...\n"));
         set_state_error();
+    }
+}
+
+/**
+ * @brief
+ * - sets the duty-cycle to zero,
+ * - waits until the motor stops (based on some experimental time),
+ * - sends the switch task to the contactor,
+ * - waits until the contactor finishes its task, or timeout,
+ * - go to idle state,
+ */
+inline void task_change_contactor(void)
+{
+    set_pwm_off();
+
+    if(led_clk_div++ >= 100){
+        cpl_led();
+        led_clk_div = 0;
+    }
+
+    switch(state_contactor){
+        default: case STATE_CONTACTOR_WAITING_MOTOR:
+            if(contactor.motor_stop_clk_div++ >= 2000){
+                state_contactor = STATE_CONTACTOR_SEND_REQUEST;
+                contactor.motor_stop_clk_div = 0;
+            }
+
+            break;
+        case STATE_CONTACTOR_SEND_REQUEST:
+            contactor_request_t request = CONTACTOR_REQUEST_TURN_OFF;
+
+            if(system_flags.motor_on){
+                if(system_flags.reverse){
+                    request = CONTACTOR_REQUEST_SET_REVERSE;
+                }else{
+                    request = CONTACTOR_REQUEST_SET_FORWARD;
+                }
+            }
+
+            can_app_send_contactor_request((uint8_t)request);
+            state_contactor = STATE_CONTACTOR_WAITING_RESPONSE;
+            contactor.timeout_clk_div = 0;
+
+            break;
+        case STATE_CONTACTOR_WAITING_RESPONSE:
+
+            if(contactor.message_sent == contactor.message_received){
+                contactor.acknowledged = 1;
+                contactor.timeout_clk_div = 0;
+            }
+
+            if(contactor.timeout_clk_div++ >= 1000){
+                VERBOSE_MSG_MACHINE(usart_send_string("Contactor request timeout!\n"));
+                state_contactor = STATE_CONTACTOR_SEND_REQUEST;
+            }
+
+            if(contactor.acknowledged){
+                VERBOSE_MSG_MACHINE(usart_send_string("CHANGE CONTACTOR task done, going to IDLE STATE!\n"));
+                set_state_idle();
+            }
+
+            break;
     }
 }
 
@@ -376,6 +463,10 @@ inline void machine_run(void)
         switch(state_machine){
             case STATE_INITIALIZING:
                 task_initializing();
+
+                break;
+            case STATE_CONTACTOR:
+                task_change_contactor();
 
                 break;
             case STATE_IDLE:
