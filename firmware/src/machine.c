@@ -162,6 +162,7 @@ inline void set_state_initializing(void)
 */
 inline void set_state_contactor(void)
 {
+    pwm_reset();
     state_contactor = STATE_CONTACTOR_WAITING_MOTOR;
     state_machine = STATE_CONTACTOR;
 }
@@ -171,6 +172,7 @@ inline void set_state_contactor(void)
 */ 
 inline void set_state_idle(void)
 {
+    pwm_reset();
     state_machine = STATE_IDLE;
 }
 
@@ -259,8 +261,7 @@ inline void print_control(void)
 inline void task_initializing(void)
 {
     set_led();
-    set_pwm_off();
-    pwm_fault_count = 0;
+    pwm_reset();
 
     //check_buffers();
     //check_idle_current();
@@ -289,7 +290,6 @@ inline void task_initializing(void)
 inline void task_change_contactor(void)
 {
     check_reverse();
-    set_pwm_off();
 
     if(led_clk_div++ >= 100){
         cpl_led();
@@ -387,7 +387,6 @@ inline void task_running(void)
     if(system_flags.motor_on && system_flags.dms){
         pwm_compute();
     }else{
-        pwm_reset();
         set_state_idle();
     }
 
