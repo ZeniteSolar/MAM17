@@ -122,7 +122,7 @@ inline void can_app_extractor_mac22_contactor_response(can_t *msg)
 inline void can_app_extractor_mic19_state(can_t *msg)
 {
     if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MIC19){
-        // zerar contador
+        can_app_checks_without_mic19_msg = 0;
         if(msg->data[CAN_MSG_GENERIC_STATE_ERROR_BYTE]){
             //ERROR!!!
         }
@@ -137,7 +137,7 @@ inline void can_app_extractor_mic19_state(can_t *msg)
 inline void can_app_extractor_mac22_state(can_t *msg)
 {
     if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MAC22){
-        // zerar contador
+        can_app_checks_without_mac22_msg = 0;
         if(msg->data[CAN_MSG_GENERIC_STATE_ERROR_BYTE]){
             //ERROR!!!
         }
@@ -152,7 +152,7 @@ inline void can_app_extractor_mac22_state(can_t *msg)
 inline void can_app_extractor_mswi19_state(can_t *msg)
 {
     if(msg->data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE] == CAN_SIGNATURE_MSWI19){
-        // zerar contador
+        can_app_checks_without_mswi19_msg = 0;
         if(msg->data[CAN_MSG_GENERIC_STATE_ERROR_BYTE]){
             //ERROR!!!
         }
