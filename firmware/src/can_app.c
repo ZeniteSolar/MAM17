@@ -295,7 +295,7 @@ inline void can_app_msg_extractors_switch(can_t *msg)
 inline void check_can(void)
 {
     // If no messages is received from mic19 for
-    // CAN_APP_CHECKS_WITHOUT_MIC19_MSG cycles, than it go to a specific error state. 
+    // CAN_APP_CHECKS_WITHOUT_MIC19_MSG cycles, than it go to a specific error state.
     //VERBOSE_MSG_CAN_APP(usart_send_string("checks: "));
     //VERBOSE_MSG_CAN_APP(usart_send_uint16(can_app_checks_without_mic19_msg));
     if(can_app_checks_without_mic19_msg++ >= CAN_APP_CHECKS_WITHOUT_MIC19_MSG){
@@ -311,7 +311,7 @@ inline void check_can(void)
         mswi19_connected = 0;
     } 
     
-    if(can_app_checks_without_mac22_msg++ >= CAN_APP_CHECKS_WITHOUT_MSWI19_MSG){
+    if(can_app_checks_without_mac22_msg++ >= CAN_APP_CHECKS_WITHOUT_MAC22_MSG){
         VERBOSE_MSG_CAN_APP(usart_send_string("Error: too many cycles without mac22 messages.\n"));
         can_app_checks_without_mac22_msg = 0;
         #ifdef SET_ERROR_WHEN_NO_STATE_MESSAGES_FROM_MAC22

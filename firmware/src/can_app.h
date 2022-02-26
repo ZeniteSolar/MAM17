@@ -42,7 +42,7 @@ extern uint8_t can_app_send_state_clk_div;
 extern uint8_t can_app_send_motor_clk_div;
 // #define SET_ERROR_WHEN_NO_STATE_MESSAGES_FROM_MAC22   //<!" Consider the lack of MAC22's communication as an ERROR!
 extern uint16_t can_app_checks_without_mac22_msg;
-#define CAN_APP_CHECKS_WITHOUT_MAC_MSG 200
+#define CAN_APP_CHECKS_WITHOUT_MAC22_MSG 200
 extern uint16_t can_app_checks_without_mic19_msg;
 #define CAN_APP_CHECKS_WITHOUT_MIC19_MSG 100
 extern uint16_t can_app_checks_without_mswi19_msg;
