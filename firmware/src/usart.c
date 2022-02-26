@@ -45,7 +45,9 @@ inline void usart_send_uint16(uint16_t num)
     char str[LEN] = {FILL};         // ascii zero filled array
     str[i] = '\0';                  // adds string null terminator
     while(i--){
-        str[i] = FILL + (num % BASE);// gets each algarism}
+        #pragma GCC diagnostic ignored "-Wconversion"
+            str[i] = FILL + (num % BASE);// gets each algarism}
+        #pragma GCC diagnostic pop
         num /= BASE;                // prepare the next
     }
     usart_send_string(str);       // sends the string
@@ -83,6 +85,8 @@ inline void usart_init(uint16_t ubrr, uint8_t rx, uint8_t tx)
     UBRR0L = (uint8_t)ubrr;
     
     // Enable RX and TX
-    UCSR0B = ((rx&1)<<RXEN0) | ((tx&1)<<TXEN0);
+    #pragma GCC diagnostic ignored "-Wconversion"
+        UCSR0B = ((rx&1)<<RXEN0) | ((tx&1)<<TXEN0);
+    #pragma GCC diagnostic pop
 }
 

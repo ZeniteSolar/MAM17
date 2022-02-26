@@ -17,7 +17,9 @@ void sleep_init(void);
 
 void sleep_init(void)
 {
-	set_sleep_mode(SLEEP_MODE_IDLE);
+	#pragma GCC diagnostic ignored "-Wconversion"
+		set_sleep_mode(SLEEP_MODE_IDLE);
+	#pragma GCC diagnostic pop
 }
 
 #endif /* ifndef SLEEP_H */

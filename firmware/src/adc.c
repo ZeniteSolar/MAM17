@@ -25,7 +25,9 @@ uint8_t ma_adc0(void)
     for(uint8_t i = cbuf_adc0_SIZE; i; i--){
         sum += CBUF_Get(cbuf_adc0, i);
     }
-    avg_adc0 = sum >> cbuf_adc0_SIZE_2;
+    // Here it is matematically safe to expect sum to fit into uint8_t only because
+    // cbuf_adc0_SIZE and cbuf_adc0_SIZE_2 are coherently defined.
+    avg_adc0 = (uint8_t) (sum >> cbuf_adc0_SIZE_2);
     return avg_adc0;
 }
 
@@ -35,7 +37,9 @@ uint8_t ma_adc0(void)
 void adc_select_channel(adc_channels_t __ch)
 {
     ADC_CHANNEL = __ch;
-    ADMUX = (ADMUX & 0xF8) | ADC_CHANNEL; // clears the bottom 3 bits before ORing
+    #pragma GCC diagnostic ignored "-Wconversion"
+        ADMUX =(ADMUX & 0xF8) | ADC_CHANNEL; // clears the bottom 3 bits before ORing
+    #pragma GCC diagnostic pop
 }
 
 /**

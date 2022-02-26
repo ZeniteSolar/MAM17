@@ -39,8 +39,8 @@ void pwm_init(void)
 inline void pwm_reset(void)
 {
     set_pwm_off();
-    control.D_raw = control.D_raw_target = control.D = 0;
-    control.I_raw = control.I_raw_target = control.I = 0;
+    control.D = control.D_raw = control.D_raw_target = 0;
+    control.I = control.I_raw = control.I_raw_target = 0;
     VERBOSE_MSG_PWM(usart_send_string("PWM turned off!\n"));
 }
 
@@ -75,7 +75,7 @@ inline void pwm_compute(void)
     }
 
     // converts to OCR1A range.
-    control.D = (control.D_raw*PWM_D_LIN_MULT) >> PWM_D_LIN_DIV;
+    control.D = (((uint16_t)control.D_raw)*PWM_D_LIN_MULT) >> PWM_D_LIN_DIV;
 
     // apply some threshhold saturation limits
     if(control.D > PWM_D_MAX_THRESHHOLD)        control.D = PWM_D_MAX;

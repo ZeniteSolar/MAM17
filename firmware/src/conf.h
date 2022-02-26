@@ -33,22 +33,22 @@
 
 
 // PWM DEFINITIONS
-#define INITIAL_D                   0   //!< float value from 0 to 1
-#define PWM_D_DELTA                 1   //!< amount to increase (may interfer on threshholds)
-#define PWM_D_MAX_DELTA             1   //!< clock divisor
-#define PWM_D_MIN                   0   //!< minimum D
-#define PWM_D_MAX                   640 //!< maximum D
-#define PWM_D_MIN_THRESHHOLD        6   //!< minimum D threshhold
-#define PWM_D_MAX_THRESHHOLD        634 //!< maximum D threshhold
-#define PWM_D_LIN_MULT              5   //!< this is A for D = (D*A) >> B
-#define PWM_D_LIN_DIV               1   //!< this is B for D = (D*A) >> B
+#define INITIAL_D                   (uint8_t)0      //!< float value from 0 to 1
+#define PWM_D_DELTA                 (uint8_t)1      //!< amount to increase (may interfer on threshholds)
+#define PWM_D_MAX_DELTA             (uint8_t)1      //!< clock divisor
+#define PWM_D_MIN                   (uint16_t)0     //!< minimum D
+#define PWM_D_MAX                   (uint16_t)640   //!< maximum D
+#define PWM_D_MIN_THRESHHOLD        (uint16_t)6     //!< minimum D threshhold
+#define PWM_D_MAX_THRESHHOLD        (uint16_t)634   //!< maximum D threshhold
+#define PWM_D_LIN_MULT              (uint8_t)5      //!< this is A for D = (D*A) >> B
+#define PWM_D_LIN_DIV               (uint8_t)1      //!< this is B for D = (D*A) >> B
 
-// tempo em que o potenciometro deve ficar zerado para que seja permitido ligar 
-#define MIN_ZERO_WIDTH_TIMES        10     
+// tempo em que o potenciometro deve ficar zerado para que seja permitido ligar
+#define MIN_ZERO_WIDTH_TIMES        (uint8_t)10
 // number of checks before reset the pwm fault counter.
-#define CHECKS_BEFORE_RESET_FAULT_COUNTER 100
+#define CHECKS_BEFORE_RESET_FAULT_COUNTER (uint8_t)100
 // maximum of consecutive faults before state an error
-#define FAULT_COUNT_LIMIT           50
+#define FAULT_COUNT_LIMIT           (uint8_t)50
 
 
 // INPUT PINS DEFINITIONS
