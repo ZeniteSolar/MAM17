@@ -2,6 +2,7 @@
 
 control_t control;
 state_machine_t state_machine;
+state_machine_t last_state;
 system_flags_t system_flags;
 error_flags_t error_flags;
 volatile uint8_t machine_clk;
@@ -162,7 +163,8 @@ inline void set_state_initializing(void)
 */
 inline void set_state_contactor(void)
 {
-    pwm_reset();
+    usart_send_string("SET STATE CONTACTOR\n");
+    set_pwm_off();
     state_contactor = STATE_CONTACTOR_WAITING_MOTOR;
     state_machine = STATE_CONTACTOR;
 }
@@ -172,7 +174,8 @@ inline void set_state_contactor(void)
 */ 
 inline void set_state_idle(void)
 {
-    pwm_reset();
+    set_pwm_off();
+    pwm_zero_width(PWM_D_MIN_THRESHHOLD + 1);   //reset pwm_zero_width state
     state_machine = STATE_IDLE;
 }
 
@@ -181,7 +184,7 @@ inline void set_state_idle(void)
 */ 
 inline void set_state_running(void)
 {
-    pwm_reset();
+    usart_send_string("SET STATE RUNNING\n");
     state_machine = STATE_RUNNING;
 }
 
@@ -190,7 +193,7 @@ inline void set_state_running(void)
 */
 inline void print_system_flags(void)
 {
-    VERBOSE_MSG_MACHINE(usart_send_string("Motor Sw: "));
+	VERBOSE_MSG_MACHINE(usart_send_string(" Motor Sw: "));
     VERBOSE_MSG_MACHINE(usart_send_char(48+system_flags.motor_on));
     
     VERBOSE_MSG_MACHINE(usart_send_string(" DMS Sw: "));
@@ -208,7 +211,7 @@ inline void print_system_flags(void)
 */
 inline void print_error_flags(void)
 {
-    VERBOSE_MSG_MACHINE(usart_send_string("\nOvrI: "));
+    VERBOSE_MSG_MACHINE(usart_send_string("\n OvrI: "));
     VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.overcurrent));
     
     VERBOSE_MSG_MACHINE(usart_send_string(" OvrV: "));
@@ -219,6 +222,7 @@ inline void print_error_flags(void)
 
     VERBOSE_MSG_MACHINE(usart_send_string(" NOCAN: "));
     VERBOSE_MSG_MACHINE(usart_send_char(48+error_flags.no_canbus));
+    VERBOSE_MSG_MACHINE(usart_send_char(' '));
 }
  
 /**
@@ -289,7 +293,7 @@ inline void task_initializing(void)
  */
 inline void task_change_contactor(void)
 {
-    check_reverse();
+    set_pwm_off();
 
     if(led_clk_div++ >= 100){
         cpl_led();
@@ -298,7 +302,7 @@ inline void task_change_contactor(void)
 
     switch(state_contactor){
         default: case STATE_CONTACTOR_WAITING_MOTOR:
-            if(contactor.motor_stop_clk_div++ >= 2000){
+            if(contactor.motor_stop_clk_div++ >= 200){
                 state_contactor = STATE_CONTACTOR_SEND_REQUEST;
                 contactor.motor_stop_clk_div = 0;
             }
@@ -327,7 +331,7 @@ inline void task_change_contactor(void)
                 contactor.timeout_clk_div = 0;
             }
 
-            if(contactor.timeout_clk_div++ >= 1000){
+            if(contactor.timeout_clk_div++ >= 500){
                 VERBOSE_MSG_MACHINE(usart_send_string("Contactor request timeout!\n"));
                 state_contactor = STATE_CONTACTOR_SEND_REQUEST;
             }
@@ -365,8 +369,10 @@ inline void task_idle(void)
         VERBOSE_MSG_MACHINE(usart_send_string("Enjoy, the system is at its RUNNING STATE!!\n"));
         set_state_running();
     }
-}
+    if(!system_flags.motor_on)
+        set_state_contactor();
 
+}
 
 /**
  * @brief running task checks the system and apply the control action to pwm.
@@ -387,6 +393,7 @@ inline void task_running(void)
     if(system_flags.motor_on && system_flags.dms){
         pwm_compute();
     }else{
+        usart_send_string("going to idle");
         set_state_idle();
     }
 
@@ -394,6 +401,7 @@ inline void task_running(void)
 
 void set_initial_state(void)
 {
+	can_app_send_contactor_request(CONTACTOR_REQUEST_TURN_OFF);
     system_flags.all__ = 0;
     error_flags.all = 0;
 
