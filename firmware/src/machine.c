@@ -165,7 +165,7 @@ inline void set_state_initializing(void)
 inline void set_state_contactor(void)
 {
     usart_send_string("SET STATE CONTACTOR\n");
-    pwm_last_value = OCR1A;
+    pwm_last_value = control.D;
     set_pwm_off();
     state_contactor = STATE_CONTACTOR_WAITING_MOTOR;
     state_machine = STATE_CONTACTOR;
