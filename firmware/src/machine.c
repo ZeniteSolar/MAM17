@@ -12,6 +12,7 @@ uint8_t check_pwm_fault_times;
 uint8_t led_clk_div;
 state_contactor_t state_contactor;
 contactor_t contactor;
+uint16_t pwm_last_value; // Used to know the OCR1A before each call of set_state_contactor()
 
 /*
  * to-do:
@@ -164,6 +165,7 @@ inline void set_state_initializing(void)
 inline void set_state_contactor(void)
 {
     usart_send_string("SET STATE CONTACTOR\n");
+    pwm_last_value = OCR1A;
     set_pwm_off();
     state_contactor = STATE_CONTACTOR_WAITING_MOTOR;
     state_machine = STATE_CONTACTOR;
@@ -300,9 +302,17 @@ inline void task_change_contactor(void)
         led_clk_div = 0;
     }
 
+    uint16_t motor_clk_div_max = 0;
+    {
+        // Calculated in pwm_signals.ipynb as y = a*x +b
+        const int a = 4;
+        const int b = 375;
+        motor_clk_div_max = a * pwm_last_value + b;
+    }
+
     switch(state_contactor){
         default: case STATE_CONTACTOR_WAITING_MOTOR:
-            if(contactor.motor_stop_clk_div++ >= 200){
+            if(contactor.motor_stop_clk_div++ >= motor_clk_div_max){
                 state_contactor = STATE_CONTACTOR_SEND_REQUEST;
                 contactor.motor_stop_clk_div = 0;
             }
