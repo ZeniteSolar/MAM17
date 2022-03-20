@@ -165,7 +165,9 @@ inline void set_state_initializing(void)
 inline void set_state_contactor(void)
 {
     usart_send_string("SET STATE CONTACTOR\n");
-    pwm_last_value = OCR1A;
+    pwm_last_value = control.D;
+    usart_send_string("control.D: ");
+    usart_send_uint16(control.D);
     set_pwm_off();
     state_contactor = STATE_CONTACTOR_WAITING_MOTOR;
     state_machine = STATE_CONTACTOR;
@@ -474,9 +476,9 @@ inline void task_error(void)
 inline void machine_run(void)
 {
     can_app_task();
-    print_system_flags();
-    print_error_flags();
-    print_control();
+    //print_system_flags();
+    //print_error_flags();
+    //print_control();
 
     if(machine_clk){
         machine_clk = 0;
