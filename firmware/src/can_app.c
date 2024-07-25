@@ -73,7 +73,7 @@ inline void can_app_send_motor(void)
     msg.flags.rtr = 0;
 
     msg.data[CAN_MSG_GENERIC_STATE_SIGNATURE_BYTE]  = CAN_SIGNATURE_SELF;
-    msg.data[CAN_MSG_MAM19_MOTOR_D_BYTE]            = control.D;
+    msg.data[CAN_MSG_MAM19_MOTOR_D_BYTE]            = control.D_raw;
     msg.data[CAN_MSG_MAM19_MOTOR_I_BYTE]            = control.I;
     // msg.data[CAN_MSG_MAM19_MOTOR_R_BYTE]            = control.R; // TODO: adicionar?
 
